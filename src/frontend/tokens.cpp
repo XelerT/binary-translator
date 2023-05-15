@@ -132,6 +132,7 @@ void insert_token_args (tokens_t *tokens, unsigned int cmd, int arg)
                 } else {
                         log_error(2, "SMTH WRONG %d", cmd);
                 }
+                token->s = 1;
                 break;
         case CMD_MY_POP:
                 if (cmd & ARG_RAM_MASK) {

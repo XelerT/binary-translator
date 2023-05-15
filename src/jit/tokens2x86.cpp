@@ -28,10 +28,10 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
 
 #include "../include/consts_x86.cmds"
 
-#define INSERT_x86_CMD(cmds, indent, x86_cmd, where_is_value)                                                               \
+#define INSERT_x86_CMD(cmds, indent, x86_cmd, value_ptr)                                                               \
                 do {                                                                                                        \
                         cmds[indent] = x86_cmd;                                                                             \
-                        memcpy(cmds[indent].cmd + cmds[indent].length, where_is_value, sizeof(int));           /*mistake?*/\
+                        memcpy(cmds[indent].cmd + cmds[indent].length, value_ptr, sizeof(int));           /*mistake?*/\
                         cmds[indent].length += 4;                                                                           \
                 } while(0)
 
@@ -44,16 +44,20 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
         x86_cmd_t cmds[10] = {};
 
         if (tokens->tokens[n_token].my_cmd == CMD_MY_PUSH && tokens->tokens[n_token + 1].my_cmd == CMD_MY_PUSH) {
-                $d(tokens->tokens[n_token + 2].my_cmd)
-                $d(tokens->tokens[n_token+1].immed)
                 switch (tokens->tokens[n_token + 2].my_cmd) {
                 case CMD_MY_ADD:
-                        $
+                if (tokens->tokens[n_token + 0].use_immed &&
+                    tokens->tokens[n_token + 1].use_immed) {
                         INSERT_x86_CMD(cmds, 0, mov_eax, &tokens->tokens[n_token++].immed);
                         INSERT_x86_CMD(cmds, 1, add_rax, &tokens->tokens[n_token++].immed);
 
                         cmds[2] = push_rax;
                         n_token++;
+                } else {
+$
+                        insert_add2reg(cmds, tokens, n_token);
+                        n_token += 3;
+                }
                         break;
                 case CMD_MY_SUB:
                         INSERT_x86_CMD(cmds, 0, mov_eax, &tokens->tokens[n_token++].immed);
@@ -70,7 +74,6 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                         n_token++;
                         break;
                 default:
-                        $
                         return 0;
                 }
         } else if (tokens->tokens[n_token].my_cmd == CMD_MY_PUSH) {
@@ -173,7 +176,8 @@ void assemble_cmd (x86_cmd_t *cmd, token_t *token, size_t position)
 
         if (cmds_table[position].code2 == 0) {
                 if (cmds_table[position].code1 == ADD)
-                        incode_add(cmd, token, position);
+                        // incode_add(cmd, token, position);
+                        $
         } else {
                 if (cmds_table[position].code1 == IMMED_PUSH ||
                     cmds_table[position].code1 == REG_PUSH_POP) {
@@ -206,12 +210,12 @@ void incode_push_pop (x86_cmd_t *cmd, token_t *token, size_t position)
 
                 cmd->length = 1 + get_sizeof_number2write((size_t) token->immed);                  /* 1 byte for cmd incode and 4 for immed number */
         } else if (token->mode == MODE_REG_ADDRESS) {
-                if (cmds_table[position].code1 == IMMED_PUSH)
+                if (cmds_table[position].code1 == IMMED_PUSH) {
                         cmd->cmd[offset] = MEM_REG_PUSH;
-                else
+                        cmd->cmd[offset + 1]  = IMMED_PUSH << 3;
+                } else
                         cmd->cmd[offset] = MEM_REG_POP;
 
-                cmd->cmd[offset + 1]  = IMMED_PUSH << 3;
                 cmd->cmd[offset + 1] |= token->reg;
 
                 cmd->length = 2 + offset;                        /* 1 for MEM_REG_PUSH, 1 for other incoding*/
@@ -232,15 +236,60 @@ void incode_push_pop (x86_cmd_t *cmd, token_t *token, size_t position)
         }
 }
 
-void incode_add (x86_cmd_t *cmd, token_t *token, size_t position)
+void insert_add2reg (x86_cmd_t *cmds, tokens_t *tokens, size_t position)
 {
-        assert(cmd);
-        assert(token);
+        assert(cmds);
+        assert(tokens);
 
-        $
+        int immed = 0;
+        uint8_t reg  = 0;
+
+        if (tokens->tokens[position + 0].mode == MODE_8_BYTE_IN_ADDRESS &&
+            tokens->tokens[position + 1].mode == MODE_8_BYTE_IN_ADDRESS) {
+$
+                cmds[0].cmd[0]  = ADD_64bit_PREFIX;
+                cmds[0].cmd[1]  = ADD | tokens->tokens[position].s;
+
+                cmds[0].cmd[2]  = MODE_REG_ADDRESS << 6;
+                cmds[0].cmd[2] |= (uint8_t) tokens->tokens[position + 0].reg << 3;
+                cmds[0].cmd[2] |= tokens->tokens[position + 1].reg;
+
+                cmds[0].length = 3;
+
+                x86_cmd_ctor(cmds + 1, tokens->tokens + position);
+        } else {
+                uint8_t offset = 0;
+$
+                if (tokens->tokens[position].use_immed) {
+                        immed = tokens->tokens[position].immed;
+                        reg = tokens->tokens[position + 1].reg;
+                        offset++;
+                } else {
+                        immed = tokens->tokens[position + 1].immed;
+                        reg = tokens->tokens[position].reg;
+                }
+                cmds[0].cmd[0] = ADD_64bit_PREFIX;
+                cmds[0].cmd[1] = ADD | (1 << 7) | tokens->tokens[position].s | (tokens->tokens[position].dest << 1);
+                printf("%x %x\n", cmds[0].cmd[1], tokens->tokens[position].s);
+
+                cmds[0].cmd[2]  = MODE_REG_ADDRESS << 6;
+                cmds[0].cmd[2] |= reg;
+
+                memcpy(cmds[0].cmd + 3, &immed, get_sizeof_number2write((size_t) immed));
+                cmds[0].length = 3 + get_sizeof_number2write((size_t) immed);
+
+                x86_cmd_ctor(cmds + 1, tokens->tokens + position + offset);
+        }
 }
 
-char get_sizeof_number2write (size_t number)
+// void assemble_mov (x86_cmd_t *cmd, tokens_t *tokens, size_t position)
+// {
+//         assert(tokens);
+//
+//         $
+// }
+
+uint8_t get_sizeof_number2write (size_t number)
 {
         if (number <= ASCII_MAX_SYMBOL)
                 return 1;

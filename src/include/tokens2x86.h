@@ -28,8 +28,8 @@ int    x86_cmd_ctor                  (x86_cmd_t *cmd, token_t *token);
 void   assemble_cmd                  (x86_cmd_t *cmd, token_t *token, size_t position);
 void   incode_push_pop               (x86_cmd_t *cmd, token_t *token, size_t position);
 
-void incode_add (x86_cmd_t *cmd, token_t *token, size_t position);
+void   insert_add2reg (x86_cmd_t *cmds, tokens_t *tokens, size_t position);
 
-char get_sizeof_number2write (size_t number);
+uint8_t get_sizeof_number2write (size_t number);
 
 #endif /*TOKENS2X86_H*/

@@ -5,7 +5,8 @@ enum cmd_bit_masks {
         MODE_8_BYTE_IN_ADDRESS = 2,
         MODE_REG_ADDRESS       = 3,
 
-        USE_R_REGS      = 0x41
+        USE_R_REGS       = 0x41,
+        ADD_64bit_PREFIX = 0x48
 };
 
 enum mod_reg_rm_masks {
