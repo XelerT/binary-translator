@@ -1,0 +1,59 @@
+static const x86_cmd_t mov_eax = {
+        .cmd  = {0xb8},
+        .length = 1
+};
+
+static const x86_cmd_t mov_ebx = {
+        .cmd  = {0xbb},
+        .length = 1
+};
+
+static const x86_cmd_t add_rax = {
+        .cmd = {0x48, 0x05},
+        .length = 2
+};
+
+static const x86_cmd_t sub_rax = {
+        .cmd = {0x48, 0x83, 0xE8},
+        .length = 3
+};
+
+static const x86_cmd_t sub_rax_rbx = {
+        .cmd = {0x48, 0x28, 0xD8},
+        .length = 3
+};
+
+static const x86_cmd_t add_rax_rbx = {
+        .cmd = {0x48, 0x01, 0xD8},
+        .length = 3
+};
+
+static const x86_cmd_t div_rbx = {
+        .cmd = {0x48, 0xF7, 0xF3},
+        .length = 3
+};
+
+static const x86_cmd_t mul_rbx = {
+        .cmd = {0x48, 0xF7, 0xE3},
+        .length = 3
+};
+
+static const x86_cmd_t push_rax = {
+        .cmd = {0x50},
+        .length = 1
+};
+
+static const x86_cmd_t pop_rax = {
+        .cmd = {0x58},
+        .length = 1
+};
+
+static const x86_cmd_t pop_rbx = {
+        .cmd = {0x5b},
+        .length = 1
+};
+
+static const x86_cmd_t add_rsp_8 = {
+        .cmd = {0x48, 0x83, 0xC4, 0x08},
+        .length = 4
+};
