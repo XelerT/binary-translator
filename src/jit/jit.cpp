@@ -8,6 +8,11 @@
 #include "../include/jit.h"
 #include "../include/tokens2x86.h"
 
+void run_jit_buffer (void(*buf_func)())
+{
+        buf_func();
+}
+
 int jit (tokens_t *tokens)
 {
         assert(tokens);
@@ -24,6 +29,7 @@ int jit (tokens_t *tokens)
                 printf("%x ", jit_code.buf[i]);
 
         exec_status = make_buf_executive((void*) jit_code.buf, jit_code.capacity);
+        run_jit_buffer((void(*)()) jit_code.buf);
 
         return exec_status;
 }
@@ -37,6 +43,9 @@ int jit_code_ctor (jit_code_t *jit_code, size_t capacity)
                 log_error(1, "MALLOC RETURNED FOR NULL JIT_BUF.");
                 return NULL_CALLOC;
         }
+        // for (size_t i = 0; i < capacity; i++) {
+        //         jit_code->buf[i] = 0;
+        // }
 
 // /*
         *jit_code->buf = 0xCC;

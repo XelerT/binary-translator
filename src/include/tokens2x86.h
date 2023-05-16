@@ -25,10 +25,11 @@ int    fill_jit_code_buf             (jit_code_t *jit_code, tokens_t *tokens);
 size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code_t *jit_code);
 void   paste_cmd_in_jit_buf          (jit_code_t *jit_code, x86_cmd_t *cmd);
 int    x86_cmd_ctor                  (x86_cmd_t *cmd, token_t *token);
-void   assemble_cmd                  (x86_cmd_t *cmd, token_t *token, size_t position);
-void   incode_push_pop               (x86_cmd_t *cmd, token_t *token, size_t position);
+void   assemble_cmd                  (x86_cmd_t *cmd, token_t *token, size_t table_position);
+void   incode_push_pop               (x86_cmd_t *cmd, token_t *token, size_t table_position);
+void   incode_add_sub_mul            (x86_cmd_t *cmd, token_t *token, size_t table_position);
 
-void   insert_add2reg (x86_cmd_t *cmds, tokens_t *tokens, size_t position);
+void   insert_add_sub_mul2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, size_t position);
 
 uint8_t get_sizeof_number2write (size_t number);
 
