@@ -243,6 +243,8 @@ void incode_add_sub_mul (x86_cmd_t *cmd, token_t *token, size_t table_position)
         case MUL:
                 cmd->cmd[indent++] = mul_rdi.cmd[0];
                 cmd->cmd[indent++] = mul_rdi.cmd[1];
+                if (cmds_table[table_position].code2)
+                        cmd->cmd[indent - 1] |= 0xF0;
                 cmd->cmd[indent++] = mul_rdi.cmd[2];
                 cmd->length += add_rax_rdi.length;
                 break;
@@ -316,7 +318,7 @@ uint8_t insert_add_sub_mul2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *token
                 cmd_incode = ADD;
         } else if (my_cmd == CMD_MY_SUB) {
                 cmd_incode = SUB;
-        } else if (my_cmd == CMD_MY_MUL) {
+        } else if (my_cmd == CMD_MY_MUL || my_cmd) {
                 cmd_incode = MUL;
         }
 

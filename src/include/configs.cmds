@@ -55,6 +55,7 @@ const my2x86cmd_t cmds_table[] =
         {.my_name = "add",  .my_incode =  3, .code1 = ADD},
         {.my_name = "sub",  .my_incode =  4, .code1 = SUB},
         {.my_name = "mul",  .my_incode =  5, .code1 = MUL},
+        {.my_name = "div",  .my_incode =  6, .code1 = MUL, .code2 = 0xFF},
         {.my_name = "call", .my_incode = 13, .code1 = MEM_CALL, .code2 = REG_CALL},
         {.my_name = "ret",  .my_incode = 15, .code1 = RET}
 };
