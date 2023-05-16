@@ -37,6 +37,17 @@ enum my_cmds_incode {
         CMD_MY_RET  = 15
 };
 
+enum x86_regs {
+        RAX = 0,
+        RCX = 1,
+        RDX = 2,
+        RBX = 3,
+        RSP = 4,
+        RBP = 5,
+        RSI = 6,
+        RDI = 7
+};
+
 const my2x86cmd_t cmds_table[] =
 {
         {.my_name = "push", .my_incode =  1, .code1 = IMMED_PUSH, .code2 = REG_PUSH_POP, .code3 = MEM_REG_PUSH},

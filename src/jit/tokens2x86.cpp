@@ -59,9 +59,9 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                         n_token++;
                         n_new_cmds = 3;
                 } else {
-                        insert_add_sub_mul2reg(CMD_MY_ADD, cmds, tokens, n_token);
+                        n_new_cmds = insert_add_sub_mul2reg(CMD_MY_ADD, cmds, tokens, n_token);
                         n_token += 3;
-                        n_new_cmds = 3;
+                        n_new_cmds += 3;
                 }
                         break;
                 case CMD_MY_SUB:
@@ -73,9 +73,9 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                                 n_token++;
                                 n_new_cmds = 3;
                         } else {
-                                insert_add_sub_mul2reg(CMD_MY_SUB, cmds, tokens, n_token);
+                                n_new_cmds = insert_add_sub_mul2reg(CMD_MY_SUB, cmds, tokens, n_token);
                                 n_token += 3;
-                                n_new_cmds = 3;
+                                n_new_cmds += 3;
                         }
                         break;
                 case CMD_MY_MUL:
@@ -84,16 +84,16 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                                 INSERT_x86_CMD(cmds, 0, mov_eax, &tokens->tokens[n_token++].immed);
                                 INSERT_x86_CMD(cmds, 1, mov_ebx, &tokens->tokens[n_token++].immed);
 
-                                cmds[2] = mul_rbx;
+                                cmds[2] = mul_rdi;
                                 n_token++;
 
                                 cmds[3] = push_rax;
                                 n_token++;
                                 n_new_cmds = 3;
                         } else {
-                                insert_add_sub_mul2reg(CMD_MY_MUL, cmds, tokens, n_token);
+                                n_new_cmds = insert_add_sub_mul2reg(CMD_MY_MUL, cmds, tokens, n_token);
                                 n_token += 3;
-                                n_new_cmds = 3;
+                                n_new_cmds += 3;
                         }
                         break;
                 default:
@@ -107,20 +107,20 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                     tokens->tokens[n_token].my_cmd == CMD_MY_DIV) {
 
                         cmds[0] = pop_rax;
-                        INSERT_x86_CMD(cmds, 1, mov_ebx, &tokens->tokens[n_token++].immed);
+                        INSERT_x86_CMD(cmds, 1, mov_edi, &tokens->tokens[n_token++].immed);
 
                         switch (tokens->tokens[n_token].my_cmd) {
                         case CMD_MY_ADD:
-                                cmds[2] = add_rax_rbx;
+                                cmds[2] = add_rax_rdi;
                                 break;
                         case CMD_MY_SUB:
-                                cmds[2] = sub_rax_rbx;
+                                cmds[2] = sub_rax_rdi;
                                 break;
                         case CMD_MY_MUL:
-                                cmds[2] = mul_rbx;
+                                cmds[2] = mul_rdi;
                                 break;
                         case CMD_MY_DIV:
-                                cmds[2] = div_rbx;
+                                cmds[2] = div_rdi;
                                 break;
                         default:
                                 log_error(1, "Smth went too wrong.");
@@ -135,22 +135,22 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                     tokens->tokens[n_token].my_cmd == CMD_MY_MUL ||
                     tokens->tokens[n_token].my_cmd == CMD_MY_DIV) {
 
-                        cmds[0] = pop_rbx;
+                        cmds[0] = pop_rdi;
                         cmds[1] = pop_rax;
 
                         switch (tokens->tokens[n_token].my_cmd) {
                         case CMD_MY_ADD:
-                                cmds[2] = add_rax_rbx;
+                                cmds[2] = add_rax_rdi;
                                 break;
                         case CMD_MY_SUB:
-                                cmds[2] = sub_rax_rbx;
+                                cmds[2] = sub_rax_rdi;
                                 break;
                         case CMD_MY_MUL:
                                 $
-                                cmds[2] = mul_rbx;
+                                cmds[2] = mul_rdi;
                                 break;
                         case CMD_MY_DIV:
-                                cmds[2] = div_rbx;
+                                cmds[2] = div_rdi;
                                 break;
                         default:
                                 log_error(1, "Smth went too wrong.");
@@ -191,7 +191,6 @@ int x86_cmd_ctor (x86_cmd_t *cmd, token_t *token)
 
         for (int i = 0; i < N_COMMANDS; i++) {
                 if (token->my_cmd == cmds_table[i].my_incode) {
-                        $
                         assemble_cmd(cmd, token, i);
                 }
         }
@@ -203,7 +202,6 @@ void assemble_cmd (x86_cmd_t *cmd, token_t *token, size_t table_position)
         assert(cmd);
         assert(token);
 
-        printf("\n%x %x\n", cmds_table[table_position].code2, table_position);
         if (cmds_table[table_position].code2 == 0) {
                 if (cmds_table[table_position].code1 == ADD ||
                     cmds_table[table_position].code1 == SUB ||
@@ -224,29 +222,29 @@ void incode_add_sub_mul (x86_cmd_t *cmd, token_t *token, size_t table_position)
         assert(token);
 
         uint8_t indent = 0;
-$
+
         cmd->cmd[indent++] = mov_eax.cmd[0];
-        cmd->cmd[indent++] = mov_ebx.cmd[0];
-        cmd->length = mov_eax.length + mov_ebx.length;
+        cmd->cmd[indent++] = mov_edi.cmd[0];
+        cmd->length = mov_eax.length + mov_edi.length;
 
         switch (cmds_table[table_position].code1) {
         case ADD:
-                cmd->cmd[indent++] = add_rax_rbx.cmd[0];
-                cmd->cmd[indent++] = add_rax_rbx.cmd[1];
-                cmd->cmd[indent++] = add_rax_rbx.cmd[2];
-                cmd->length += add_rax_rbx.length;
+                cmd->cmd[indent++] = add_rax_rdi.cmd[0];
+                cmd->cmd[indent++] = add_rax_rdi.cmd[1];
+                cmd->cmd[indent++] = add_rax_rdi.cmd[2];
+                cmd->length += add_rax_rdi.length;
                 break;
         case SUB:
-                cmd->cmd[indent++] = sub_rax_rbx.cmd[0];
-                cmd->cmd[indent++] = sub_rax_rbx.cmd[1];
-                cmd->cmd[indent++] = sub_rax_rbx.cmd[2];
-                cmd->length += add_rax_rbx.length;
+                cmd->cmd[indent++] = sub_rax_rdi.cmd[0];
+                cmd->cmd[indent++] = sub_rax_rdi.cmd[1];
+                cmd->cmd[indent++] = sub_rax_rdi.cmd[2];
+                cmd->length += add_rax_rdi.length;
                 break;
         case MUL:
-                cmd->cmd[indent++] = mul_rbx.cmd[0];
-                cmd->cmd[indent++] = mul_rbx.cmd[1];
-                cmd->cmd[indent++] = mul_rbx.cmd[2];
-                cmd->length += add_rax_rbx.length;
+                cmd->cmd[indent++] = mul_rdi.cmd[0];
+                cmd->cmd[indent++] = mul_rdi.cmd[1];
+                cmd->cmd[indent++] = mul_rdi.cmd[2];
+                cmd->length += add_rax_rdi.length;
                 break;
         default:
                 log_error(1, "UNKNOWN COMMAND!");
@@ -288,7 +286,7 @@ void incode_push_pop (x86_cmd_t *cmd, token_t *token, size_t table_position)
 
                 cmd->length = 2 + offset;                        /* 1 for MEM_REG_PUSH, 1 for other incoding*/
         } else if (token->mode == MODE_8_BYTE_IN_ADDRESS) {
-                cmd->cmd[offset]  = REG_PUSH_POP << 5;           /*010 00 000*/
+                cmd->cmd[offset] = REG_PUSH_POP << 5;           /*010 00 000*/
                 if (cmds_table[table_position].code1 == IMMED_PUSH)
                         cmd->cmd[offset] |= MODE_8_BYTE_IN_ADDRESS << 3; /*010 10 000*/
                 else
@@ -304,7 +302,7 @@ void incode_push_pop (x86_cmd_t *cmd, token_t *token, size_t table_position)
         }
 }
 
-void insert_add_sub_mul2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, size_t position)
+uint8_t insert_add_sub_mul2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, size_t position)
 {
         assert(cmds);
         assert(tokens);
@@ -336,6 +334,7 @@ void insert_add_sub_mul2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, 
                 x86_cmd_ctor(cmds + 1, tokens->tokens + position);
         } else {
                 uint8_t offset = 0;
+                uint8_t indent = 0;
 
                 if (tokens->tokens[position].use_immed) {
                         immed = tokens->tokens[position].immed;
@@ -345,17 +344,31 @@ void insert_add_sub_mul2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, 
                         immed = tokens->tokens[position + 1].immed;
                         reg = tokens->tokens[position].reg;
                 }
-                cmds[0].cmd[0] = ADD_64bit_PREFIX;
-                cmds[0].cmd[1] = cmd_incode | (1 << 7) | tokens->tokens[position].s | (tokens->tokens[position].dest << 1);
 
-                cmds[0].cmd[2]  = MODE_REG_ADDRESS << 6;
-                cmds[0].cmd[2] |= reg;
+                if (reg == RBX)
+                        indent = 1;
 
-                memcpy(cmds[0].cmd + 3, &immed, get_sizeof_number2write((size_t) immed));
-                cmds[0].length = 3 + get_sizeof_number2write((size_t) immed);
+                cmds[indent].cmd[0] = ADD_64bit_PREFIX;
+                cmds[indent].cmd[1] = cmd_incode | (1 << 7) | tokens->tokens[position].s | (tokens->tokens[position].dest << 1);
 
-                x86_cmd_ctor(cmds + 1, tokens->tokens + position + offset);
+                cmds[indent].cmd[2]  = MODE_REG_ADDRESS << 6;
+                if (reg == RBX) {
+                        cmds[0] = mov_rdi_rbx;
+                        cmds[indent].cmd[2] |= RDI;
+
+                        tokens->tokens[position + offset].reg = RDI;
+                } else {
+                        cmds[indent].cmd[2] |= reg;
+                }
+                memcpy(cmds[indent].cmd + 3, &immed, get_sizeof_number2write((size_t) immed));
+                cmds[indent].length = 3 + get_sizeof_number2write((size_t) immed);
+
+                x86_cmd_ctor(cmds + 1 + indent, tokens->tokens + position + offset);
+
+                return indent;
         }
+
+        return 0;
 }
 
 // void assemble_mov (x86_cmd_t *cmd, tokens_t *tokens, size_t position)

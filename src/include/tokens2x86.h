@@ -29,7 +29,7 @@ void   assemble_cmd                  (x86_cmd_t *cmd, token_t *token, size_t tab
 void   incode_push_pop               (x86_cmd_t *cmd, token_t *token, size_t table_position);
 void   incode_add_sub_mul            (x86_cmd_t *cmd, token_t *token, size_t table_position);
 
-void   insert_add_sub_mul2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, size_t position);
+uint8_t insert_add_sub_mul2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, size_t position);
 
 uint8_t get_sizeof_number2write (size_t number);
 
