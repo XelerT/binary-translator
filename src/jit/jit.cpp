@@ -28,7 +28,8 @@ int jit (tokens_t *tokens)
         for (size_t i = 0; i < jit_code.size; i++)
                 printf("%x ", jit_code.buf[i]);
 
-        exec_status = make_buf_executive((void*) jit_code.buf, jit_code.capacity);
+        exec_status = make_buf_executable((void*) jit_code.buf, jit_code.size);
+        exec_status = make_buf_writable((void*) jit_code.exec_memory2use, jit_code.exec_memory_capacity);
         run_jit_buffer((void(*)()) jit_code.buf);
 
         return exec_status;
@@ -40,9 +41,16 @@ int jit_code_ctor (jit_code_t *jit_code, size_t capacity)
 
         jit_code->buf = (uint8_t*) aligned_alloc(PAGE_SIZE, capacity);
         if (!jit_code->buf) {
-                log_error(1, "MALLOC RETURNED FOR NULL JIT_BUF.");
+                log_error(1, "ALIGNED_ALLOC RETURNED FOR NULL JIT_BUF.");
                 return NULL_CALLOC;
         }
+
+        jit_code->exec_memory2use = (uint8_t*) aligned_alloc(PAGE_SIZE, capacity);
+        if (!jit_code->exec_memory2use) {
+                log_error(1, "ALIGNED_ALLOC RETURNED FOR NULL JIT_BUF.");
+                return NULL_CALLOC;
+        }
+        jit_code->exec_memory_capacity = capacity;
         // for (size_t i = 0; i < capacity; i++) {
         //         jit_code->buf[i] = 0;
         // }
@@ -72,18 +80,41 @@ void jit_code_dtor (jit_code_t *jit_code)
         }
         jit_code->size = 0;
         jit_code->capacity = 0;
+
+        if (jit_code->exec_memory2use) {
+                free(jit_code->exec_memory2use);
+                jit_code->exec_memory2use = nullptr;
+        }
+        jit_code->exec_memory_capacity = 0;
 }
 
 #include <errno.h>
 #include <string.h>
-extern int errno ;
+extern int errno;
 
-int make_buf_executive (void *buf, size_t buf_capacity)
+int make_buf_executable (void *buf, size_t buf_capacity)
 {
         assert(buf);
 
         if (mprotect(buf, buf_capacity, PROT_EXEC)) {
-                int errnum;
+                int errnum = 0;
+                log_error(1, "mprotect RETURNED ERROR");
+
+                perror("\nError printed by perror");
+                fprintf(stderr, "\nError using mprotect: %s\n", strerror( errnum ));
+
+                return CHANGE_PROTECTION_ERROR;
+        }
+
+        return 0;
+}
+
+int make_buf_writable (void *buf, size_t buf_capacity)
+{
+        assert(buf);
+
+        if (mprotect(buf, buf_capacity, PROT_WRITE)) {
+                int errnum = 0;
                 log_error(1, "mprotect RETURNED ERROR");
 
                 perror("\nError printed by perror");

@@ -10,6 +10,9 @@ struct jit_code_t {
         uint8_t *buf     = nullptr;
         size_t  capacity = 0;
         size_t  size     = 0;
+
+        uint8_t *exec_memory2use = nullptr;
+        size_t exec_memory_capacity = 0;
 };
 
 enum jit_errors {
@@ -19,6 +22,6 @@ enum jit_errors {
 int  jit (tokens_t *tokens);
 int  jit_code_ctor (jit_code_t *jit_code, size_t capacity);
 void jit_code_dtor (jit_code_t *jit_code);
-int  make_buf_executive (void *buf, size_t buf_capacity);
-
+int  make_buf_executable (void *buf, size_t buf_capacity);
+int  make_buf_writable   (void *buf, size_t buf_capacity);
 #endif /*JIT_H*/

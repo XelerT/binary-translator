@@ -35,7 +35,7 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
                 i++;
         }
         incode_jmps(jit_code, &label_table);
-        // change_memory_offset(jit_code);
+        change_memory_offset(jit_code);
 
         return 0;
 }
@@ -55,35 +55,60 @@ void change_memory_offset (jit_code_t *jit_code)
         assert(jit_code);
 
         x86_cmd_t cmd = {};
-        token_t token = {
-                // .immed = jit_code->buf + jit_code->size + 1,
-                .use_immed = 1
-        };
-        size_t cmds_table_position = 0;
 
-        size_t n_byte_after_first_pop = 0;
+        uint8_t n_byte_after_first_pop = 0;
         while (jit_code->buf[n_byte_after_first_pop] != pop_rbx.cmd[0])
                 n_byte_after_first_pop++;
+        n_byte_after_first_pop++;
 
-        incode_push_pop(&cmd, &token, cmds_table_position);
+        incode_mov(&cmd, RBX, 0xFF, (size_t) jit_code->exec_memory2use);
 
-        size_t i = 1;
+        uint8_t i = 1;
         while (i < cmd.length + 1) {
                 jit_code->buf[i] = cmd.cmd[i - 1];
                 i++;
         }
-        while (i != n_byte_after_first_pop) {
+        while (i < n_byte_after_first_pop) {
                 jit_code->buf[i] = nop.cmd[0];
                 i++;
         }
 }
 
-// void incode_mov (uint8_t mode, x86_cmd_t *cmd, uint8_t reg1, uint8_t reg2, size_t val)
-// {
-//         assert(cmd);
-//
-//
-// }
+void incode_mov (x86_cmd_t *cmd, uint8_t dest_reg, uint8_t src_reg, size_t val)
+{
+        assert(cmd);
+
+        if (dest_reg == 0xFF && src_reg == 0xFF) {
+                cmd->cmd[0] = x64bit_PREFIX;
+                cmd->cmd[1] = REG_MOV;
+
+                if (dest_reg > RDI)
+                        cmd->cmd[0] |= USE_R_REGS;
+                if (src_reg > RDI)
+                        cmd->cmd[0] |= USE_SRC_R_REG;
+
+                cmd->cmd[2]  = MODE_REG_ADDRESS << 6;
+                cmd->cmd[2] |= dest_reg << 3;
+                cmd->cmd[2] |= src_reg;
+
+                cmd->length = 3;
+        } else if (src_reg == 0xFF && dest_reg != 0xFF) {
+                if (val < (uint32_t) -1) {
+                        cmd->cmd[0]  = IMMED_MOV;
+                        cmd->cmd[0] |= dest_reg;
+                        memcpy(cmd->cmd + 1, &val, sizeof(uint32_t));
+
+                        cmd->length = 1 + sizeof(uint32_t);
+                } else {
+                        cmd->cmd[0] = x64bit_PREFIX;
+                        cmd->cmd[1] = IMMED_MOV;
+                        cmd->cmd[1] |= dest_reg;
+                        memcpy(cmd->cmd + 2, &val, sizeof(size_t));
+
+                        cmd->length = 2 + sizeof(size_t);
+                }
+        }
+}
 
 void incode_jmps (jit_code_t *jit_code, labels_t *label_table)
 {
@@ -94,7 +119,7 @@ void incode_jmps (jit_code_t *jit_code, labels_t *label_table)
                 if (jit_code->buf[i] == PREFIX_64_bit && (jit_code->buf[i + 1] & CONDITIONAL_JMPS_MASK_REL32)) {
                         i += 2;
                         uint32_t my_offset  = jit_code->buf[i];
-                        uint32_t new_offset = (uint32_t) (label_table->labels[find_label(label_table, my_offset)].new_address - i + 2);
+                        uint32_t new_offset = (uint32_t) (label_table->labels[find_label(label_table, my_offset)].new_address - i);
 
                         memcpy(jit_code->buf + i, &new_offset, sizeof(uint32_t));
                         i += sizeof(uint32_t) - 1;
@@ -290,7 +315,7 @@ void assemble_cmd (jit_code_t *jit_code, x86_cmd_t *cmds, token_t *token, size_t
                         incode_add_sub_mul(cmds, token, table_position);
                 }
         } else if (cmds_table[table_position].code1 & CONDITIONAL_JMPS_MASK_REL8) {
-                uint8_t n_cmds = incode_test(cmds);
+                uint8_t n_cmds = incode_cmp(cmds);
                 pre_incode_conditional_jmp(cmds + n_cmds, token, table_position, label_table);
         } else if (cmds_table[table_position].code1 == NEAR_JMP) {
                 incode_jmp(cmds, token, table_position, label_table);
@@ -306,9 +331,20 @@ uint8_t incode_test (x86_cmd_t *cmds)
 {
         assert(cmds);
 
-        cmds[0] = pop_rdx;
-        cmds[1] = pop_rcx;
+        cmds[0] = pop_rcx;
+        cmds[1] = pop_rdx;
         cmds[2] = test_rcx_rdx;
+
+        return 3;
+}
+
+uint8_t incode_cmp (x86_cmd_t *cmds)
+{
+        assert(cmds);
+
+        cmds[0] = pop_rcx;
+        cmds[1] = pop_rdx;
+        cmds[2] = cmp_rcx_rdx;
 
         return 3;
 }
@@ -457,7 +493,7 @@ uint8_t insert_add_sub_mul_div2reg (jit_code_t *jit_code, uint8_t my_cmd, x86_cm
 
         if (tokens->tokens[position + 0].mode == MODE_8_BYTE_IN_ADDRESS &&
             tokens->tokens[position + 1].mode == MODE_8_BYTE_IN_ADDRESS) {
-                cmds[0].cmd[0]  = ADD_64bit_PREFIX;
+                cmds[0].cmd[0]  = x64bit_PREFIX;
                 cmds[0].cmd[1]  = cmd_incode | tokens->tokens[position].s;
 
                 cmds[0].cmd[2]  = MODE_REG_ADDRESS << 6;
@@ -483,7 +519,7 @@ uint8_t insert_add_sub_mul_div2reg (jit_code_t *jit_code, uint8_t my_cmd, x86_cm
                 if (reg == RBX)
                         indent = 1;
 
-                cmds[indent].cmd[0] = ADD_64bit_PREFIX;
+                cmds[indent].cmd[0] = x64bit_PREFIX;
                 cmds[indent].cmd[1] = cmd_incode | (1 << 7) | tokens->tokens[position].s | (tokens->tokens[position].dest << 1);
                 if (my_cmd == CMD_MY_DIV)
                         cmds[indent].cmd[1] |= 0xFF;
@@ -494,6 +530,7 @@ uint8_t insert_add_sub_mul_div2reg (jit_code_t *jit_code, uint8_t my_cmd, x86_cm
                         cmds[indent].cmd[2] |= RDI;
 
                         tokens->tokens[position + offset].reg = RDI;
+                        immed *= sizeof(size_t);
                 } else {
                         cmds[indent].cmd[2] |= reg;
                 }

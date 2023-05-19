@@ -98,6 +98,11 @@ static const x86_cmd_t test_rcx_rdx = {
         .length = 3
 };
 
+static const x86_cmd_t cmp_rcx_rdx = {
+        .cmd = {0x48, 0x39, 0xD1},
+        .length = 3
+};
+
 static const x86_cmd_t pop_rdx = {
         .cmd = {0x5a},
         .length = 1

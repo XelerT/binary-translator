@@ -10,7 +10,8 @@ enum cmd_bit_masks {
         MODE_REG_ADDRESS               = 3,
 
         USE_R_REGS                     = 0x41,
-        ADD_64bit_PREFIX               = 0x48,
+        USE_SRC_R_REG                  = 0x4D,
+        x64bit_PREFIX                  = 0x48,
 
         CONDITIONAL_JMPS_MASK_REL8     = 0x70,
         CONDITIONAL_JMPS_MASK_REL32    = 0x80,
@@ -41,7 +42,10 @@ enum cmds_codes {
         JE           = 0x74,
         JNE          = 0x75,
         JBE          = 0x76,
-        JA           = 0x77
+        JA           = 0x77,
+
+        IMMED_MOV    = 0xB8,
+        REG_MOV      = 0x89
 };
 
 enum my_cmds_incode {
