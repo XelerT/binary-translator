@@ -7,6 +7,7 @@ const int DEFAULT_N_FUNCS = 16;
 const int DEFAULT_N_TABLS =  4;
 
 const int X86_CMD_MAX_LENGTH = 16;
+const int MAX_N_LABELS       = 50;
 
 const int m256_BYTE_CAPACITY = 32;
 

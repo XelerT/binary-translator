@@ -19,18 +19,37 @@ struct my2x86cmd_t {
         unsigned char code3 = 0;
 };
 
+struct label_t {
+        size_t my_address  = 0;
+        size_t new_address = 0;
+};
+
+struct labels_t {
+        label_t labels[MAX_N_LABELS] = {};
+        size_t size = 0;
+};
+
 #include "configs.cmds"
 
 int    fill_jit_code_buf             (jit_code_t *jit_code, tokens_t *tokens);
-size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code_t *jit_code);
+void   insert_nops                   (jit_code_t *jit_code, size_t amount2insert);
+size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code_t *jit_code, labels_t *label_table);
+void change_memory_offset            (jit_code_t *jit_code);
 void   paste_cmd_in_jit_buf          (jit_code_t *jit_code, x86_cmd_t *cmd);
-int    x86_cmd_ctor                  (x86_cmd_t *cmd, token_t *token);
-void   assemble_cmd                  (x86_cmd_t *cmd, token_t *token, size_t table_position);
+int    x86_cmd_ctor                  (jit_code_t *jit_code, x86_cmd_t *cmd, token_t *token, labels_t *label_table);
+void   assemble_cmd                  (jit_code_t *jit_code, x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table);
 void   incode_push_pop               (x86_cmd_t *cmd, token_t *token, size_t table_position);
 void   incode_add_sub_mul            (x86_cmd_t *cmd, token_t *token, size_t table_position);
 
-uint8_t insert_add_sub_mul2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, size_t position);
+uint8_t insert_add_sub_mul_div2reg (jit_code_t *jit_code, uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, size_t position, labels_t *label_table);
 
 uint8_t get_sizeof_number2write (size_t number);
+
+uint8_t incode_test (x86_cmd_t *cmds);
+void insert_label (jit_code_t *jit_code, token_t *token, labels_t *label_table);
+void pre_incode_conditional_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table);
+void incode_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table);
+size_t find_label (labels_t *label_table, uint32_t my_offset);
+void incode_jmps (jit_code_t *jit_code, labels_t *label_table);
 
 #endif /*TOKENS2X86_H*/

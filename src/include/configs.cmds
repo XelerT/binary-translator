@@ -1,12 +1,22 @@
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 
-enum cmd_bit_masks {
-        MODE_USE_REG           = 0,
-        MODE_8_BYTE_IN_ADDRESS = 2,
-        MODE_REG_ADDRESS       = 3,
+enum cmd_consts {
+        NEAR_JMP_RANGE = 0xFF
+};
 
-        USE_R_REGS       = 0x41,
-        ADD_64bit_PREFIX = 0x48
+enum cmd_bit_masks {
+        MODE_USE_REG                   = 0,
+        MODE_8_BYTE_IN_ADDRESS         = 2,
+        MODE_REG_ADDRESS               = 3,
+
+        USE_R_REGS                     = 0x41,
+        ADD_64bit_PREFIX               = 0x48,
+
+        CONDITIONAL_JMPS_MASK_REL8     = 0x70,
+        CONDITIONAL_JMPS_MASK_REL32    = 0x80,
+        COND_JMPS_REL_CONVERTER_MASK   = 0x8F,
+
+        PREFIX_64_bit = 0x0F
 };
 
 enum mod_reg_rm_masks {
@@ -16,25 +26,34 @@ enum mod_reg_rm_masks {
 enum cmds_codes {
         MEM_REG_PUSH = 0xFF,
         MEM_REG_POP  = 0x8F,
-        IMMED_PUSH   = 0x6,
-        REG_PUSH_POP = 0x2,
-        ADD          = 0x0,
+        IMMED_PUSH   = 0x06,
+        REG_PUSH_POP = 0x02,
+        ADD          = 0x00,
         SUB          = 0x29,
         MUL          = 0xF7,
         MEM_CALL     = 0xE8,
         REG_CALL     = 0xFF,
-        RET          = 0xC3
+        RET          = 0xC3,
+
+        NEAR_JMP     = 0xEB,
+        JB           = 0x72,
+        JAE          = 0x73,
+        JE           = 0x74,
+        JNE          = 0x75,
+        JBE          = 0x76,
+        JA           = 0x77
 };
 
 enum my_cmds_incode {
-        CMD_MY_PUSH =  1,
-        CMD_MY_POP  =  2,
-        CMD_MY_ADD  =  3,
-        CMD_MY_SUB  =  4,
-        CMD_MY_MUL  =  5,
-        CMD_MY_DIV  =  6,
-        CMD_MY_CALL = 13,
-        CMD_MY_RET  = 15
+        CMD_MY_PUSH  =  1,
+        CMD_MY_POP   =  2,
+        CMD_MY_ADD   =  3,
+        CMD_MY_SUB   =  4,
+        CMD_MY_MUL   =  5,
+        CMD_MY_DIV   =  6,
+        CMD_MY_LABEL = 12,
+        CMD_MY_CALL  = 13,
+        CMD_MY_RET   = 15
 };
 
 enum x86_regs {
@@ -56,8 +75,16 @@ const my2x86cmd_t cmds_table[] =
         {.my_name = "sub",  .my_incode =  4, .code1 = SUB},
         {.my_name = "mul",  .my_incode =  5, .code1 = MUL},
         {.my_name = "div",  .my_incode =  6, .code1 = MUL, .code2 = 0xFF},
+        {.my_name = "label", .my_incode = 12},
         {.my_name = "call", .my_incode = 13, .code1 = MEM_CALL, .code2 = REG_CALL},
-        {.my_name = "ret",  .my_incode = 15, .code1 = RET}
+        {.my_name = "ret",  .my_incode = 15, .code1 = RET},
+        {.my_name = "jmp",  .my_incode = 11, .code1 = NEAR_JMP},
+        {.my_name = "jb",   .my_incode = 17, .code1 = JB,  .code2 = (JB  & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
+        {.my_name = "jbe",  .my_incode = 18, .code1 = JBE, .code2 = (JBE & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
+        {.my_name = "ja",   .my_incode = 19, .code1 = JA,  .code2 = (JA  & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
+        {.my_name = "jae",  .my_incode = 20, .code1 = JAE, .code2 = (JAE & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
+        {.my_name = "je",   .my_incode = 21, .code1 = JE,  .code2 = (JE  & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
+        {.my_name = "jne",  .my_incode = 22, .code1 = JNE, .code2 = (JNE & COND_JMPS_REL_CONVERTER_MASK) | 0x80}
 };
 
-const int N_COMMANDS = 7;
+const int N_COMMANDS = 16;

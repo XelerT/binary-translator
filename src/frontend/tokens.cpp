@@ -58,6 +58,7 @@ int parse_text_for_tokens (text_t *bin_code, tokens_t *tokens)
 
         for (size_t i = 0; i < bin_code->n_chars; i++) {
                 sscanf(bin_code->buf + i, "%d%hhn", &cmd, &n_skipped_chars);
+                tokens->n_parsed_numbers++;
                 i += (size_t) n_skipped_chars;
 
                 i += init_token(tokens, bin_code, cmd, i);
@@ -67,16 +68,19 @@ int parse_text_for_tokens (text_t *bin_code, tokens_t *tokens)
 }
 
 //CMD(cmd_name_str, number_for_mycpu, real_doesn't_exist, has_arg)
-#define CMD(name, number, doesnt_exist, has_arg)                                                        \
-                case number:                                                                            \
-                        if (doesnt_exist)                                                               \
-                                return 0;                                                               \
-                        if (has_arg) {                                                                  \
-                                sscanf(bin_code->buf + ip, "%d%hhn", &arg, &n_skipped_chars);           \
-                                insert_token_args(tokens, cmd, arg);                                    \
-                        } else {                                                                        \
-                                tokens->tokens[tokens->size].my_cmd = number;                           \
-                        }                                                                               \
+#define CMD(name, number, doesnt_exist, has_arg)                                                                 \
+                case number:                                                                                     \
+                        if (doesnt_exist)                                                                        \
+                                return 0;                                                                        \
+                        if (has_arg) {                                                                           \
+                                sscanf(bin_code->buf + ip, "%d%hhn", &arg, &n_skipped_chars);                    \
+                                tokens->n_parsed_numbers++;                                                      \
+                                insert_token_args(tokens, cmd, arg);                                             \
+                        } else {                                                                                 \
+                                tokens->tokens[tokens->size].my_cmd = number;                                    \
+                                if (number == CMD_MY_LABEL)                                                      \
+                                        tokens->tokens[tokens->size].offset = (uint32_t) tokens->n_parsed_numbers - 1;          \
+                        }                                                                                        \
                         break;
 
 size_t init_token (tokens_t *tokens, text_t *bin_code, unsigned int cmd, size_t ip)

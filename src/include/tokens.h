@@ -18,15 +18,16 @@ struct token_t {
 
         uint8_t mode = 0;                 /* 0 - use register, 2 - 8 byte in address(FYI: "push rax"), 3 - reg address mode*/
 
-        int offset = 0;
+        uint32_t offset = 0;
 
         bool delete_stack_elem = 0;
 };
 
 struct tokens_t {
-        token_t *tokens = nullptr;
-        size_t capacity = 0;
-        size_t size     = 0;
+        token_t *tokens         = nullptr;
+        size_t capacity         = 0;
+        size_t size             = 0;
+        size_t n_parsed_numbers = 0;
 };
 
 enum my_masks {
