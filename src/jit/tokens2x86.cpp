@@ -119,7 +119,7 @@ void incode_jmps (jit_code_t *jit_code, labels_t *label_table)
                 if (jit_code->buf[i] == PREFIX_64_bit && (jit_code->buf[i + 1] & CONDITIONAL_JMPS_MASK_REL32)) {
                         i += 2;
                         uint32_t my_offset  = jit_code->buf[i];
-                        uint32_t new_offset = (uint32_t) (label_table->labels[find_label(label_table, my_offset)].new_address - i);
+                        uint32_t new_offset = (uint32_t) (label_table->labels[find_label(label_table, my_offset)].new_address - i - 4);
 
                         memcpy(jit_code->buf + i, &new_offset, sizeof(uint32_t));
                         i += sizeof(uint32_t) - 1;
