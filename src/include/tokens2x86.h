@@ -12,8 +12,8 @@ struct x86_cmd_t {
 };
 
 struct my2x86cmd_t {
-        char      *my_name  = nullptr;
-        int      my_incode  = 0;
+        char       *my_name = nullptr;
+        int       my_incode = 0;
         unsigned char code1 = 0;
         unsigned char code2 = 0;
         unsigned char code3 = 0;
@@ -47,9 +47,12 @@ uint8_t insert_add_sub_mul_div2reg (jit_code_t *jit_code, uint8_t my_cmd, x86_cm
 
 uint8_t get_sizeof_number2write (size_t number);
 
+void incode_ret (x86_cmd_t *cmd);
 uint8_t incode_test (x86_cmd_t *cmds);
 uint8_t incode_cmp  (x86_cmd_t *cmds);
 void insert_label (jit_code_t *jit_code, token_t *token, labels_t *label_table);
+void pre_incode_call (x86_cmd_t *cmds, token_t *token, size_t table_position, labels_t *label_table);
+void incode_calls (jit_code_t *jit_code, labels_t *label_table);
 void pre_incode_conditional_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table);
 void incode_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table);
 size_t find_label (labels_t *label_table, uint32_t my_offset);

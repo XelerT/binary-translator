@@ -24,6 +24,7 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
                 skipped_tokens = convert_tokens2nonstack_logic(tokens, i, jit_code, &label_table);
                 if (skipped_tokens)
                         continue;
+
                 if (tokens->tokens[i].my_cmd != CMD_MY_LABEL) {
                         x86_cmd_ctor(jit_code, cmds, tokens->tokens + i, &label_table);
 
@@ -35,6 +36,7 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
                 i++;
         }
         incode_jmps(jit_code, &label_table);
+        incode_calls(jit_code, &label_table);
         change_memory_offset(jit_code);
 
         return 0;
@@ -110,23 +112,6 @@ void incode_mov (x86_cmd_t *cmd, uint8_t dest_reg, uint8_t src_reg, size_t val)
         }
 }
 
-void incode_jmps (jit_code_t *jit_code, labels_t *label_table)
-{
-        assert(jit_code);
-        assert(label_table);
-
-        for (size_t i = 0; i < jit_code->size; i++) {
-                if (jit_code->buf[i] == PREFIX_64_bit && (jit_code->buf[i + 1] & CONDITIONAL_JMPS_MASK_REL32)) {
-                        i += 2;
-                        uint32_t my_offset  = jit_code->buf[i];
-                        uint32_t new_offset = (uint32_t) (label_table->labels[find_label(label_table, my_offset)].new_address - i - 4);
-
-                        memcpy(jit_code->buf + i, &new_offset, sizeof(uint32_t));
-                        i += sizeof(uint32_t) - 1;
-                }
-        }
-}
-
 size_t find_label (labels_t *label_table, uint32_t my_offset)
 {
         assert(label_table);
@@ -156,7 +141,8 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
 
         x86_cmd_t cmds[10] = {};
 
-        if (tokens->tokens[n_token].my_cmd == CMD_MY_PUSH && tokens->tokens[n_token + 1].my_cmd == CMD_MY_PUSH) {
+        if (tokens->tokens[n_token].my_cmd == CMD_MY_PUSH      && tokens->tokens[n_token + 1].my_cmd == CMD_MY_PUSH &&
+            tokens->tokens[n_token].mode   != MODE_REG_ADDRESS && tokens->tokens[n_token + 1].mode   != MODE_REG_ADDRESS) {
                 switch (tokens->tokens[n_token + 2].my_cmd) {
                 case CMD_MY_ADD:
                 if (tokens->tokens[n_token + 0].use_immed &&
@@ -182,6 +168,7 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                                 n_token++;
                                 n_new_cmds = 3;
                         } else {
+                        $
                                 n_new_cmds = insert_add_sub_mul_div2reg(jit_code, CMD_MY_SUB, cmds, tokens, n_token, label_table);
                                 n_token += 3;
                                 n_new_cmds += 3;
@@ -313,18 +300,30 @@ void assemble_cmd (jit_code_t *jit_code, x86_cmd_t *cmds, token_t *token, size_t
                     cmds_table[table_position].code1 == SUB ||
                     cmds_table[table_position].code1 == MUL ) {
                         incode_add_sub_mul(cmds, token, table_position);
+                } else if (cmds_table[table_position].code1 == RET) {
+                        incode_ret(cmds);
                 }
+        }  else if (cmds_table[table_position].code1 == RELATIVE_CALL) {
+                pre_incode_call(cmds, token, table_position, label_table);
+        } else if (cmds_table[table_position].code1 == NEAR_JMP) {
+                incode_jmp(cmds, token, table_position, label_table);
         } else if (cmds_table[table_position].code1 & CONDITIONAL_JMPS_MASK_REL8) {
                 uint8_t n_cmds = incode_cmp(cmds);
                 pre_incode_conditional_jmp(cmds + n_cmds, token, table_position, label_table);
-        } else if (cmds_table[table_position].code1 == NEAR_JMP) {
-                incode_jmp(cmds, token, table_position, label_table);
         } else {
                 if (cmds_table[table_position].code1 == IMMED_PUSH ||
                     cmds_table[table_position].code1 == REG_PUSH_POP) {
                         incode_push_pop(cmds, token, table_position);
                 }
         }
+}
+
+void incode_ret (x86_cmd_t *cmd)
+{
+        assert(cmd);
+
+        cmd->cmd[0] = RET;
+        cmd->length = 1;
 }
 
 uint8_t incode_test (x86_cmd_t *cmds)
@@ -361,6 +360,45 @@ void insert_label (jit_code_t *jit_code, token_t *token, labels_t *label_table)
         label_table->size++;
 }
 
+void pre_incode_call (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table)
+{
+        assert(cmd);
+        assert(token);
+        assert(label_table);
+
+        if (token->offset) {
+                size_t offset = token->offset;
+
+                cmd->cmd[0] = RELATIVE_CALL;
+                memcpy(cmd->cmd + 1, &offset, 4);
+                cmd->length = 1 + 4;
+        } else {
+                /*register call*/
+        }
+}
+
+void incode_calls (jit_code_t *jit_code, labels_t *label_table)
+{
+        assert(jit_code);
+        assert(label_table);
+
+        for (size_t i = 0; i < jit_code->size; i++) {
+                if (jit_code->buf[i] == RELATIVE_CALL) {
+                        i += 1;
+                        uint32_t my_offset  = jit_code->buf[i];
+                        size_t n_label = find_label(label_table, my_offset);
+                        if (n_label >= label_table->size) {
+                                log_error(1, "No label found");
+                                return;
+                        }
+                        uint32_t new_offset = (uint32_t) (label_table->labels[n_label].new_address - i - 4);
+
+                        memcpy(jit_code->buf + i, &new_offset, sizeof(uint32_t));
+                        i += sizeof(uint32_t) - 1;
+                }
+        }
+}
+
 void pre_incode_conditional_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position,
                                                         labels_t *label_table)
 {
@@ -374,6 +412,28 @@ void pre_incode_conditional_jmp (x86_cmd_t *cmd, token_t *token, size_t table_po
         cmd->cmd[1] = cmds_table[table_position].code2;
         memcpy(cmd->cmd + 2, &offset, sizeof(int));
         cmd->length = 2 + sizeof(int);
+}
+
+void incode_jmps (jit_code_t *jit_code, labels_t *label_table)
+{
+        assert(jit_code);
+        assert(label_table);
+
+        for (size_t i = 0; i < jit_code->size; i++) {
+                if (jit_code->buf[i] == PREFIX_64_bit && (jit_code->buf[i + 1] & CONDITIONAL_JMPS_MASK_REL32)) {
+                        i += 2;
+                        uint32_t my_offset  = jit_code->buf[i];
+                        size_t n_label = find_label(label_table, my_offset);
+                        if (n_label >= label_table->size) {
+                                log_error(1, "No label found");
+                                return;
+                        }
+                        uint32_t new_offset = (uint32_t) (label_table->labels[n_label].new_address - i - 4);
+
+                        memcpy(jit_code->buf + i, &new_offset, sizeof(uint32_t));
+                        i += sizeof(uint32_t) - 1;
+                }
+        }
 }
 
 void incode_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table)
@@ -448,6 +508,7 @@ void incode_push_pop (x86_cmd_t *cmd, token_t *token, size_t table_position)
                 cmd->length = 1 + get_sizeof_number2write((size_t) token->immed);                  /* 1 byte for cmd incode and 4 for immed number */
         } else if (token->mode == MODE_REG_ADDRESS) {
                 if (cmds_table[table_position].code1 == IMMED_PUSH) {
+                $
                         cmd->cmd[offset] = MEM_REG_PUSH;
                         cmd->cmd[offset + 1]  = IMMED_PUSH << 3;
                 } else {
@@ -518,11 +579,14 @@ uint8_t insert_add_sub_mul_div2reg (jit_code_t *jit_code, uint8_t my_cmd, x86_cm
 
                 if (reg == RBX)
                         indent = 1;
-
+                $
                 cmds[indent].cmd[0] = x64bit_PREFIX;
-                cmds[indent].cmd[1] = cmd_incode | (1 << 7) | tokens->tokens[position].s | (tokens->tokens[position].dest << 1);
+                cmds[indent].cmd[1] = cmd_incode | tokens->tokens[position].s | (tokens->tokens[position].dest << 1);
+                printf("%x %x %x %x\n", cmds[indent].cmd[1], cmd_incode, tokens->tokens[position].s, tokens->tokens[position].dest);
                 if (my_cmd == CMD_MY_DIV)
                         cmds[indent].cmd[1] |= 0xFF;
+                else if (my_cmd == CMD_MY_ADD)
+                        cmds[indent].cmd[1] |= ADD_REG_REG_MASK;
 
                 cmds[indent].cmd[2]  = MODE_REG_ADDRESS << 6;
                 if (reg == RBX) {

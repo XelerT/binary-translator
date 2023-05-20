@@ -34,7 +34,7 @@ static const x86_cmd_t add_rax_rbx = {
 };
 
 static const x86_cmd_t sub_rax_rdi = {
-        .cmd = {0x48, 0x28, 0xF8},
+        .cmd = {0x48, 0x29, 0xF8},
         .length = 3
 };
 
