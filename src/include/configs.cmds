@@ -38,7 +38,8 @@ enum cmds_codes {
         REG_CALL      = 0xFF,
         RET           = 0xC3,
 
-        NEAR_JMP      = 0xEB,
+        SHORT_JMP     = 0xEB,
+        NEAR_JMP      = 0xE9,
         JB            = 0x72,
         JAE           = 0x73,
         JE            = 0x74,
@@ -86,7 +87,7 @@ const my2x86cmd_t cmds_table[] =
         {.my_name = "label", .my_incode = 12},
         {.my_name = "call",  .my_incode = 13, .code1 = RELATIVE_CALL, .code2 = REG_CALL},
         {.my_name = "ret",   .my_incode = 15, .code1 = RET},
-        {.my_name = "jmp",   .my_incode = 11, .code1 = NEAR_JMP},
+        {.my_name = "jmp",   .my_incode = 11, .code1 = SHORT_JMP, .code2 = NEAR_JMP},
         {.my_name = "jb",    .my_incode = 17, .code1 = JB,  .code2 = (JB  & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
         {.my_name = "jbe",   .my_incode = 18, .code1 = JBE, .code2 = (JBE & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
         {.my_name = "ja",    .my_incode = 19, .code1 = JA,  .code2 = (JA  & COND_JMPS_REL_CONVERTER_MASK) | 0x80},

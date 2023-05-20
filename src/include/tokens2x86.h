@@ -34,7 +34,7 @@ struct labels_t {
 int    fill_jit_code_buf             (jit_code_t *jit_code, tokens_t *tokens);
 void   insert_nops                   (jit_code_t *jit_code, size_t amount2insert);
 size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code_t *jit_code, labels_t *label_table);
-void change_memory_offset            (jit_code_t *jit_code);
+void   change_memory_offset          (jit_code_t *jit_code);
 void   paste_cmd_in_jit_buf          (jit_code_t *jit_code, x86_cmd_t *cmd);
 int    x86_cmd_ctor                  (jit_code_t *jit_code, x86_cmd_t *cmd, token_t *token, labels_t *label_table);
 void   assemble_cmd                  (jit_code_t *jit_code, x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table);
@@ -47,15 +47,16 @@ uint8_t insert_add_sub_mul_div2reg (jit_code_t *jit_code, uint8_t my_cmd, x86_cm
 
 uint8_t get_sizeof_number2write (size_t number);
 
-void incode_ret (x86_cmd_t *cmd);
-uint8_t incode_test (x86_cmd_t *cmds);
-uint8_t incode_cmp  (x86_cmd_t *cmds);
-void insert_label (jit_code_t *jit_code, token_t *token, labels_t *label_table);
+void    incode_ret      (x86_cmd_t *cmd);
+uint8_t incode_test  (x86_cmd_t *cmds);
+uint8_t incode_cmp   (x86_cmd_t *cmds);
+void insert_label    (jit_code_t *jit_code, token_t *token, labels_t *label_table);
 void pre_incode_call (x86_cmd_t *cmds, token_t *token, size_t table_position, labels_t *label_table);
-void incode_calls (jit_code_t *jit_code, labels_t *label_table);
+void incode_calls_jmps (jit_code_t *jit_code, labels_t *label_table);
 void pre_incode_conditional_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table);
 void incode_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table);
+void pre_incode_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table);
 size_t find_label (labels_t *label_table, uint32_t my_offset);
-void incode_jmps (jit_code_t *jit_code, labels_t *label_table);
+void incode_conditional_jmps (jit_code_t *jit_code, labels_t *label_table);
 
 #endif /*TOKENS2X86_H*/

@@ -35,8 +35,8 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
                 }
                 i++;
         }
-        incode_jmps(jit_code, &label_table);
-        incode_calls(jit_code, &label_table);
+        incode_conditional_jmps(jit_code, &label_table);
+        incode_calls_jmps(jit_code, &label_table);
         change_memory_offset(jit_code);
 
         return 0;
@@ -168,7 +168,6 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                                 n_token++;
                                 n_new_cmds = 3;
                         } else {
-                        $
                                 n_new_cmds = insert_add_sub_mul_div2reg(jit_code, CMD_MY_SUB, cmds, tokens, n_token, label_table);
                                 n_token += 3;
                                 n_new_cmds += 3;
@@ -305,8 +304,9 @@ void assemble_cmd (jit_code_t *jit_code, x86_cmd_t *cmds, token_t *token, size_t
                 }
         }  else if (cmds_table[table_position].code1 == RELATIVE_CALL) {
                 pre_incode_call(cmds, token, table_position, label_table);
-        } else if (cmds_table[table_position].code1 == NEAR_JMP) {
-                incode_jmp(cmds, token, table_position, label_table);
+        } else if (cmds_table[table_position].code1 == SHORT_JMP) {
+                $
+                pre_incode_jmp(cmds, token, table_position, label_table);
         } else if (cmds_table[table_position].code1 & CONDITIONAL_JMPS_MASK_REL8) {
                 uint8_t n_cmds = incode_cmp(cmds);
                 pre_incode_conditional_jmp(cmds + n_cmds, token, table_position, label_table);
@@ -377,13 +377,13 @@ void pre_incode_call (x86_cmd_t *cmd, token_t *token, size_t table_position, lab
         }
 }
 
-void incode_calls (jit_code_t *jit_code, labels_t *label_table)
+void incode_calls_jmps (jit_code_t *jit_code, labels_t *label_table)
 {
         assert(jit_code);
         assert(label_table);
 
         for (size_t i = 0; i < jit_code->size; i++) {
-                if (jit_code->buf[i] == RELATIVE_CALL) {
+                if (jit_code->buf[i] == RELATIVE_CALL || jit_code->buf[i] == NEAR_JMP) {
                         i += 1;
                         uint32_t my_offset  = jit_code->buf[i];
                         size_t n_label = find_label(label_table, my_offset);
@@ -414,7 +414,7 @@ void pre_incode_conditional_jmp (x86_cmd_t *cmd, token_t *token, size_t table_po
         cmd->length = 2 + sizeof(int);
 }
 
-void incode_jmps (jit_code_t *jit_code, labels_t *label_table)
+void incode_conditional_jmps (jit_code_t *jit_code, labels_t *label_table)
 {
         assert(jit_code);
         assert(label_table);
@@ -436,14 +436,17 @@ void incode_jmps (jit_code_t *jit_code, labels_t *label_table)
         }
 }
 
-void incode_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table)
+void pre_incode_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table)
 {
         assert(cmd);
         assert(token);
         assert(label_table);
 
+        size_t offset = token->offset;
 
-
+        cmd->cmd[0] = NEAR_JMP;
+        memcpy(cmd->cmd + 1, &offset, sizeof(uint32_t));
+        cmd->length = 1 + sizeof(uint32_t);
 }
 
 void incode_add_sub_mul (x86_cmd_t *cmd, token_t *token, size_t table_position)
@@ -508,7 +511,6 @@ void incode_push_pop (x86_cmd_t *cmd, token_t *token, size_t table_position)
                 cmd->length = 1 + get_sizeof_number2write((size_t) token->immed);                  /* 1 byte for cmd incode and 4 for immed number */
         } else if (token->mode == MODE_REG_ADDRESS) {
                 if (cmds_table[table_position].code1 == IMMED_PUSH) {
-                $
                         cmd->cmd[offset] = MEM_REG_PUSH;
                         cmd->cmd[offset + 1]  = IMMED_PUSH << 3;
                 } else {
@@ -579,7 +581,7 @@ uint8_t insert_add_sub_mul_div2reg (jit_code_t *jit_code, uint8_t my_cmd, x86_cm
 
                 if (reg == RBX)
                         indent = 1;
-                $
+
                 cmds[indent].cmd[0] = x64bit_PREFIX;
                 cmds[indent].cmd[1] = cmd_incode | tokens->tokens[position].s | (tokens->tokens[position].dest << 1);
                 printf("%x %x %x %x\n", cmds[indent].cmd[1], cmd_incode, tokens->tokens[position].s, tokens->tokens[position].dest);
