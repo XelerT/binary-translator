@@ -68,7 +68,9 @@ enum x86_regs {
         RSP = 4,
         RBP = 5,
         RSI = 6,
-        RDI = 7
+        RDI = 7,
+
+        INVALID_REG = 0xFF
 };
 
 const my2x86cmd_t cmds_table[] =

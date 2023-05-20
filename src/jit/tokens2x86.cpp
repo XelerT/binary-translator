@@ -61,7 +61,7 @@ void change_memory_offset (jit_code_t *jit_code)
                 n_byte_after_first_pop++;
         n_byte_after_first_pop++;
 
-        incode_mov(&cmd, RBX, 0xFF, (size_t) jit_code->exec_memory2use);
+        incode_mov(&cmd, RBX, INVALID_REG, (size_t) jit_code->exec_memory2use);
 
         uint8_t i = 1;
         while (i < cmd.length + 1) {
@@ -78,7 +78,7 @@ void incode_mov (x86_cmd_t *cmd, uint8_t dest_reg, uint8_t src_reg, size_t val)
 {
         assert(cmd);
 
-        if (dest_reg == 0xFF && src_reg == 0xFF) {
+        if (dest_reg != INVALID_REG && src_reg != INVALID_REG) {
                 cmd->cmd[0] = x64bit_PREFIX;
                 cmd->cmd[1] = REG_MOV;
 
@@ -92,7 +92,7 @@ void incode_mov (x86_cmd_t *cmd, uint8_t dest_reg, uint8_t src_reg, size_t val)
                 cmd->cmd[2] |= src_reg;
 
                 cmd->length = 3;
-        } else if (src_reg == 0xFF && dest_reg != 0xFF) {
+        } else if (src_reg == INVALID_REG && dest_reg != INVALID_REG) {
                 if (val < (uint32_t) -1) {
                         cmd->cmd[0]  = IMMED_MOV;
                         cmd->cmd[0] |= dest_reg;
