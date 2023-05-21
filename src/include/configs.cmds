@@ -1,3 +1,5 @@
+#pragma once
+
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 
 enum cmd_consts {
@@ -19,7 +21,9 @@ enum cmd_bit_masks {
 
         PREFIX_64_bit = 0x0F,
 
-        ADD_REG_REG_MASK = 1 << 7
+        ADD_REG_REG_MASK = 1 << 7,
+
+        IMMED_SUB_MASK = 0x5
 };
 
 enum mod_reg_rm_masks {
@@ -33,6 +37,7 @@ enum cmds_codes {
         REG_PUSH_POP  = 0x02,
         ADD           = 0x00,
         SUB           = 0x29,
+        ADD_SUB_IMMED = 0x81,
         MUL           = 0xF7,
         RELATIVE_CALL = 0xE8,
         REG_CALL      = 0xFF,
@@ -48,7 +53,9 @@ enum cmds_codes {
         JA            = 0x77,
 
         IMMED_MOV     = 0xB8,
-        REG_MOV       = 0x89
+        REG_MOV       = 0x89,
+        MEM_REG_MOV   = 0x8B,
+        MEM_IMMED_MOV = 0xC7
 };
 
 enum my_cmds_incode {
@@ -72,6 +79,14 @@ enum x86_regs {
         RBP = 5,
         RSI = 6,
         RDI = 7,
+        R8  = 10,
+        R9  = 11,
+        R10 = 12,
+        R11 = 13,
+        R12 = 14,
+        R13 = 15,
+        R14 = 16,
+        R15 = 17,
 
         INVALID_REG = 0xFF
 };

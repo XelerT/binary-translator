@@ -21,6 +21,8 @@ struct token_t {
         uint32_t offset = 0;
 
         bool delete_stack_elem = 0;
+
+        size_t space = 0;
 };
 
 struct tokens_t {

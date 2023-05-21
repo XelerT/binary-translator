@@ -24,4 +24,6 @@ int  jit_code_ctor (jit_code_t *jit_code, size_t capacity);
 void jit_code_dtor (jit_code_t *jit_code);
 int  make_buf_executable (void *buf, size_t buf_capacity);
 int  make_buf_writable   (void *buf, size_t buf_capacity);
+void run_jit_buffer      (void (*buf_func) ());
+
 #endif /*JIT_H*/

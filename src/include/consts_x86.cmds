@@ -117,3 +117,8 @@ static const x86_cmd_t nop = {
         .cmd = {0x90},
         .length = 1
 };
+
+static const x86_cmd_t push_mem_r15 = {
+        .cmd = {0x41, 0xff, 0x37},
+        .length = 3
+};

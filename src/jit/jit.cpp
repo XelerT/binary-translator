@@ -8,11 +8,6 @@
 #include "../include/jit.h"
 #include "../include/tokens2x86.h"
 
-void run_jit_buffer (void(*buf_func)())
-{
-        buf_func();
-}
-
 int jit (tokens_t *tokens)
 {
         assert(tokens);
@@ -24,9 +19,6 @@ int jit (tokens_t *tokens)
                 return exec_status;
 
         fill_jit_code_buf(&jit_code, tokens);
-
-        for (size_t i = 0; i < jit_code.size; i++)
-                printf("%x ", jit_code.buf[i]);
 
         exec_status = make_buf_executable((void*) jit_code.buf, jit_code.size);
         exec_status = make_buf_writable((void*) jit_code.exec_memory2use, jit_code.exec_memory_capacity);
@@ -124,4 +116,9 @@ int make_buf_writable (void *buf, size_t buf_capacity)
         }
 
         return 0;
+}
+
+void run_jit_buffer (void (*buf_func) ())
+{
+        buf_func();
 }

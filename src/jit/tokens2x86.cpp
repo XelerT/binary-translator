@@ -17,7 +17,15 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
         size_t skipped_tokens = 0;
         labels_t label_table = {};
 
-        insert_nops(jit_code, 4);
+        x86_cmd_t set_call_stack_offset = {};
+        cmd_info4incode_t cmd_info = {
+                .dest_reg   = R15,
+                .immed_val  = (size_t) jit_code->exec_memory2use + jit_code->exec_memory_capacity - sizeof(size_t)
+        };
+        incode_mov(&set_call_stack_offset, &cmd_info);
+        paste_cmd_in_jit_buf(jit_code, &set_call_stack_offset);
+
+        insert_nops(jit_code, 10);
 
         for (size_t i = 0; i < tokens->size; i += skipped_tokens) {
                 x86_cmd_t cmds[5] = {};
@@ -26,10 +34,12 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
                         continue;
 
                 if (tokens->tokens[i].my_cmd != CMD_MY_LABEL) {
-                        x86_cmd_ctor(jit_code, cmds, tokens->tokens + i, &label_table);
+                        tokens->tokens[i].space = (size_t) jit_code->buf + jit_code->size + 16;
+                        x86_cmd_ctor(cmds, tokens->tokens + i, &label_table);
 
-                        for (uint8_t j = 0; cmds[j].length != 0 && j < 5; j++)
+                        for (uint8_t j = 0; cmds[j].length != 0 && j < 5; j++) {
                                 paste_cmd_in_jit_buf(jit_code, cmds + j);
+                        }
                 } else {
                         insert_label(jit_code, tokens->tokens + i, &label_table);
                 }
@@ -46,7 +56,7 @@ void insert_nops (jit_code_t *jit_code, size_t amount2insert)
 {
         assert(jit_code);
 
-        for (size_t i = 1; i < amount2insert; i++) {
+        for (size_t i = jit_code->size; i < amount2insert; i++) {
                 jit_code->buf[i] = nop.cmd[0];
                 jit_code->size++;
         }
@@ -63,11 +73,16 @@ void change_memory_offset (jit_code_t *jit_code)
                 n_byte_after_first_pop++;
         n_byte_after_first_pop++;
 
-        incode_mov(&cmd, RBX, INVALID_REG, (size_t) jit_code->exec_memory2use);
+        cmd_info4incode_t cmd_info = {
+                .dest_reg   = RBX,
+                .immed_val  = (size_t) jit_code->exec_memory2use
+        };
+        incode_mov(&cmd, &cmd_info);
 
-        uint8_t i = 1;
-        while (i < cmd.length + 1) {
-                jit_code->buf[i] = cmd.cmd[i - 1];
+        uint8_t start_i = 7;
+        uint8_t i = start_i;          /*1 + sizeof( mov r15, address)*/
+        while (i < cmd.length + start_i) {
+                jit_code->buf[i] = cmd.cmd[i - start_i];
                 i++;
         }
         while (i < n_byte_after_first_pop) {
@@ -76,39 +91,76 @@ void change_memory_offset (jit_code_t *jit_code)
         }
 }
 
-void incode_mov (x86_cmd_t *cmd, uint8_t dest_reg, uint8_t src_reg, size_t val)
+void incode_mov (x86_cmd_t *cmd, cmd_info4incode_t *info)
 {
         assert(cmd);
 
-        if (dest_reg != INVALID_REG && src_reg != INVALID_REG) {
-                cmd->cmd[0] = x64bit_PREFIX;
-                cmd->cmd[1] = REG_MOV;
+        uint8_t indent = 0;
 
-                if (dest_reg > RDI)
-                        cmd->cmd[0] |= USE_R_REGS;
-                if (src_reg > RDI)
-                        cmd->cmd[0] |= USE_SRC_R_REG;
+        if (info->dest_reg > RDI && info->dest_reg != INVALID_REG) {
+                cmd->cmd[0] = USE_R_REGS;
+                info->dest_reg -= R8;
+        }
+        if (info->src_reg > RDI && info->src_reg != INVALID_REG) {
+                cmd->cmd[0] = USE_SRC_R_REG;
+                info->src_reg -= R8;
+        }
+        if (cmd->cmd[0])
+                indent++;
 
-                cmd->cmd[2]  = MODE_REG_ADDRESS << 6;
-                cmd->cmd[2] |= dest_reg << 3;
-                cmd->cmd[2] |= src_reg;
+        if (info->dest_reg != INVALID_REG && info->src_reg != INVALID_REG) {
+                cmd->cmd[indent++] = REG_MOV;
 
-                cmd->length = 3;
-        } else if (src_reg == INVALID_REG && dest_reg != INVALID_REG) {
-                if (val < (uint32_t) -1) {
-                        cmd->cmd[0]  = IMMED_MOV;
-                        cmd->cmd[0] |= dest_reg;
-                        memcpy(cmd->cmd + 1, &val, sizeof(uint32_t));
-
-                        cmd->length = 1 + sizeof(uint32_t);
-                } else {
-                        cmd->cmd[0] = x64bit_PREFIX;
-                        cmd->cmd[1] = IMMED_MOV;
-                        cmd->cmd[1] |= dest_reg;
-                        memcpy(cmd->cmd + 2, &val, sizeof(size_t));
-
-                        cmd->length = 2 + sizeof(size_t);
+                cmd->cmd[indent]  = MODE_REG_ADDRESS << 6;
+                if (info->use_memory4src) {
+                        uint8_t swap = info->dest_reg;
+                        info->dest_reg = info->src_reg;
+                        info->src_reg = swap;
                 }
+
+                cmd->cmd[indent] |= info->dest_reg;
+                cmd->cmd[indent] |= info->src_reg << 3;
+
+                cmd->length = indent + 1;
+        } else if (info->dest_reg != INVALID_REG && info->src_reg == INVALID_REG) {
+                if (info->immed_val < (uint32_t) -1) {
+                        if (info->use_memory4dest)
+                                cmd->cmd[indent++] = MEM_IMMED_MOV;
+                        else
+                                cmd->cmd[indent]  = IMMED_MOV;
+
+                        cmd->cmd[indent] |= info->dest_reg;
+                        memcpy(cmd->cmd + 1 + indent, &info->immed_val, sizeof(uint32_t));
+
+                        cmd->length = 1 + indent + sizeof(uint32_t);
+                } else {
+                        cmd->cmd[indent++] |= x64bit_PREFIX;
+
+                        // if (info->use_memory4dest)
+                        //         cmd->cmd[indent] = MEM_IMMED_MOV;
+                        // else
+                                cmd->cmd[indent]  = IMMED_MOV;
+
+                        cmd->cmd[indent]   = IMMED_MOV;
+                        cmd->cmd[indent]  |= info->dest_reg;
+                        memcpy(cmd->cmd + 2, &info->immed_val, sizeof(uint32_t));
+
+                        cmd->length = 2 + sizeof(uint32_t);
+                }
+        }
+        if (info->use_memory4dest && info->use_memory4src) {
+                set_red_in_terminal();
+                fprintf(stderr, "Can't use memory as destination and source!");
+                reset_colour_in_terminal();
+
+                log_error(1, "Can't use memory as destination and source!");
+
+                return;
+        } else if (info->use_memory4dest) {
+                cmd->cmd[0] |= x64bit_PREFIX;
+                // cmd->cmd[indent] = cmd->cmd[indent] & (~MODE_USE_REG >> 2);
+        } else if (info->use_memory4src) {
+                cmd->cmd[indent - 1] = MEM_REG_MOV;
         }
 }
 
@@ -154,7 +206,7 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                         n_token++;
                         n_new_cmds = 3;
                 } else {
-                        n_new_cmds = insert_add_sub_mul_div2reg(jit_code, CMD_MY_ADD, cmds, tokens, n_token, label_table);
+                        n_new_cmds = insert_add_sub_mul_div2reg(CMD_MY_ADD, cmds, tokens, n_token, label_table);
                         n_token += 3;
                         n_new_cmds += 3;
                 }
@@ -168,7 +220,7 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                                 n_token++;
                                 n_new_cmds = 3;
                         } else {
-                                n_new_cmds = insert_add_sub_mul_div2reg(jit_code, CMD_MY_SUB, cmds, tokens, n_token, label_table);
+                                n_new_cmds = insert_add_sub_mul_div2reg(CMD_MY_SUB, cmds, tokens, n_token, label_table);
                                 n_token += 3;
                                 n_new_cmds += 3;
                         }
@@ -186,7 +238,7 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                                 n_token++;
                                 n_new_cmds = 3;
                         } else {
-                                n_new_cmds = insert_add_sub_mul_div2reg(jit_code, CMD_MY_MUL, cmds, tokens, n_token, label_table);
+                                n_new_cmds = insert_add_sub_mul_div2reg(CMD_MY_MUL, cmds, tokens, n_token, label_table);
                                 n_token += 3;
                                 n_new_cmds += 3;
                         }
@@ -276,20 +328,20 @@ void paste_cmd_in_jit_buf (jit_code_t *jit_code, x86_cmd_t *cmd)
         }
 }
 
-int x86_cmd_ctor (jit_code_t *jit_code, x86_cmd_t *cmds, token_t *token, labels_t *label_table)
+int x86_cmd_ctor (x86_cmd_t *cmds, token_t *token, labels_t *label_table)
 {
         assert(cmds);
         assert(token);
 
         for (int i = 0; i < N_COMMANDS; i++) {
                 if (token->my_cmd == cmds_table[i].my_incode) {
-                        assemble_cmd(jit_code, cmds, token, i, label_table);
+                        assemble_cmd(cmds, token, i, label_table);
                 }
         }
         return 0;
 }
 
-void assemble_cmd (jit_code_t *jit_code, x86_cmd_t *cmds, token_t *token, size_t table_position, labels_t *label_table)
+void assemble_cmd (x86_cmd_t *cmds, token_t *token, size_t table_position, labels_t *label_table)
 {
         assert(cmds);
         assert(token);
@@ -300,13 +352,12 @@ void assemble_cmd (jit_code_t *jit_code, x86_cmd_t *cmds, token_t *token, size_t
                     cmds_table[table_position].code1 == MUL ) {
                         incode_add_sub_mul(cmds, token, table_position);
                 } else if (cmds_table[table_position].code1 == RET) {
-                        incode_ret(cmds);
+                        incode_emitation_of_ret(cmds);
                 }
         }  else if (cmds_table[table_position].code1 == RELATIVE_CALL) {
-                pre_incode_call(cmds, token, table_position, label_table);
+                pre_incode_emitation_of_call(cmds, token);
         } else if (cmds_table[table_position].code1 == SHORT_JMP) {
-                $
-                pre_incode_jmp(cmds, token, table_position, label_table);
+                pre_incode_jmp(cmds, token);
         } else if (cmds_table[table_position].code1 & CONDITIONAL_JMPS_MASK_REL8) {
                 uint8_t n_cmds = incode_cmp(cmds);
                 pre_incode_conditional_jmp(cmds + n_cmds, token, table_position, label_table);
@@ -360,18 +411,118 @@ void insert_label (jit_code_t *jit_code, token_t *token, labels_t *label_table)
         label_table->size++;
 }
 
-void pre_incode_call (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table)
+void pre_incode_emitation_of_call (x86_cmd_t *cmds, token_t *token)
+{
+        assert(cmds);
+
+        cmd_info4incode_t cmd_info = {
+                .dest_reg   = R15,
+                .immed_val = token->space,
+                .use_memory4dest = 1
+        };
+        incode_mov(cmds + 0, &cmd_info);
+
+        cmd_info.cmd_incode = SUB;
+        cmd_info.use_memory4dest = 0;
+
+        cmd_info.dest_reg   = R15;
+        cmd_info.src_reg = INVALID_REG;
+        cmd_info.immed_val = 8;
+        cmd_info.use_memory4dest = 0;
+
+        incode_add_sub_mul_div(cmds + 1, &cmd_info);
+        pre_incode_jmp(cmds + 2, token);
+}
+
+void incode_emitation_of_ret (x86_cmd_t *cmds)
+{
+        assert(cmds);
+
+        cmd_info4incode_t cmd_info = {
+                .cmd_incode = ADD,
+                .dest_reg   = R15,
+                .immed_val  = 8
+        };
+        incode_add_sub_mul_div(cmds, &cmd_info);
+        cmds[1] = push_mem_r15;
+
+        incode_ret(cmds + 2);
+}
+
+void incode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4incode_t *info)
+{
+        assert(cmd);
+        assert(info);
+
+        uint8_t indent = 0;
+
+        cmd->cmd[indent] = x64bit_PREFIX;
+
+        if (info->dest_reg > RDI && info->dest_reg != INVALID_REG) {
+                cmd->cmd[indent] |= USE_R_REGS;
+                info->dest_reg -= R8;
+        }
+        if (info->src_reg > RDI && info->src_reg != INVALID_REG) {
+                cmd->cmd[indent] |= USE_SRC_R_REG;
+                info->src_reg -= R8;
+        }
+        if (cmd->cmd[indent])
+                indent++;
+
+        if (info->use_memory4src) {
+                uint8_t swap   = info->dest_reg;
+                info->dest_reg = info->src_reg;
+                info->src_reg  = swap;
+        }
+        cmd->cmd[indent++] = info->cmd_incode;
+
+        if (info->dest_reg != INVALID_REG && info->src_reg != INVALID_REG) {
+                cmd->cmd[indent]  = (MODE_REG_ADDRESS << 6);
+                cmd->cmd[indent] |= (info->src_reg << 3);
+                cmd->cmd[indent] |= info->dest_reg;
+
+                cmd->length = indent + 1;
+        } else if (info->dest_reg != INVALID_REG && info->src_reg == INVALID_REG) {
+                cmd->cmd[indent]  = (MODE_REG_ADDRESS << 6);
+                if (info->cmd_incode == SUB || info->cmd_incode == ADD)
+                        cmd->cmd[indent - 1] = ADD_SUB_IMMED;
+                if (info->cmd_incode == SUB)
+                        cmd->cmd[indent] |= (IMMED_SUB_MASK << 3);
+                cmd->cmd[indent] |= info->dest_reg;
+
+                if (get_sizeof_number2write(info->immed_val) == 1)
+                        cmd->cmd[indent - 1] |= 2;
+                memcpy(cmd->cmd + indent + 1, &info->immed_val, get_sizeof_number2write(info->immed_val));
+
+                cmd->length = 1 + get_sizeof_number2write(info->immed_val) + indent;
+        }
+
+        if (info->use_memory4dest && info->use_memory4src) {
+                set_red_in_terminal();
+                fprintf(stderr, "Can't use memory as destination and source!");
+                reset_colour_in_terminal();
+
+                log_error(1, "Can't use memory as destination and source!");
+
+                return;
+        } else if (info->use_memory4dest) {
+                cmd->cmd[indent - 1] |= 0x0;
+        } else if (info->use_memory4src) {
+                cmd->cmd[indent - 1] |= 0x2;    /* xxxxxx|ds <= d = 1, from memory to register*/
+        }
+}
+
+void pre_incode_call (x86_cmd_t *cmd, token_t *token)
 {
         assert(cmd);
         assert(token);
-        assert(label_table);
 
         if (token->offset) {
                 size_t offset = token->offset;
 
                 cmd->cmd[0] = RELATIVE_CALL;
-                memcpy(cmd->cmd + 1, &offset, 4);
-                cmd->length = 1 + 4;
+                memcpy(cmd->cmd + 1, &offset, sizeof(uint8_t));
+                cmd->length = 1 + sizeof(uint8_t);
         } else {
                 /*register call*/
         }
@@ -436,11 +587,10 @@ void incode_conditional_jmps (jit_code_t *jit_code, labels_t *label_table)
         }
 }
 
-void pre_incode_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position, labels_t *label_table)
+void pre_incode_jmp (x86_cmd_t *cmd, token_t *token)
 {
         assert(cmd);
         assert(token);
-        assert(label_table);
 
         size_t offset = token->offset;
 
@@ -536,7 +686,7 @@ void incode_push_pop (x86_cmd_t *cmd, token_t *token, size_t table_position)
         }
 }
 
-uint8_t insert_add_sub_mul_div2reg (jit_code_t *jit_code, uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, size_t position, labels_t *label_table)
+uint8_t insert_add_sub_mul_div2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, size_t position, labels_t *label_table)
 {
         assert(cmds);
         assert(tokens);
@@ -565,7 +715,7 @@ uint8_t insert_add_sub_mul_div2reg (jit_code_t *jit_code, uint8_t my_cmd, x86_cm
 
                 cmds[0].length = 3;
 
-                x86_cmd_ctor(jit_code, cmds + 1, tokens->tokens + position, label_table);
+                x86_cmd_ctor(cmds + 1, tokens->tokens + position, label_table);
         } else {
                 uint8_t offset = 0;
                 uint8_t indent = 0;
@@ -584,7 +734,7 @@ uint8_t insert_add_sub_mul_div2reg (jit_code_t *jit_code, uint8_t my_cmd, x86_cm
 
                 cmds[indent].cmd[0] = x64bit_PREFIX;
                 cmds[indent].cmd[1] = cmd_incode | tokens->tokens[position].s | (tokens->tokens[position].dest << 1);
-                printf("%x %x %x %x\n", cmds[indent].cmd[1], cmd_incode, tokens->tokens[position].s, tokens->tokens[position].dest);
+
                 if (my_cmd == CMD_MY_DIV)
                         cmds[indent].cmd[1] |= 0xFF;
                 else if (my_cmd == CMD_MY_ADD)
@@ -603,7 +753,7 @@ uint8_t insert_add_sub_mul_div2reg (jit_code_t *jit_code, uint8_t my_cmd, x86_cm
                 memcpy(cmds[indent].cmd + 3, &immed, get_sizeof_number2write((size_t) immed));
                 cmds[indent].length = 3 + get_sizeof_number2write((size_t) immed);
 
-                x86_cmd_ctor(jit_code, cmds + 1 + indent, tokens->tokens + position + offset, label_table);
+                x86_cmd_ctor(cmds + 1 + indent, tokens->tokens + position + offset, label_table);
 
                 return indent;
         }
