@@ -6,6 +6,7 @@
 #include "../include/tokens.h"
 #include "../include/jit.h"
 #include "../include/tokens2x86.h"
+#include "../include/myIO.h"
 
 #include "../include/consts_x86.cmds"
 
@@ -32,7 +33,6 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
                 skipped_tokens = convert_tokens2nonstack_logic(tokens, i, jit_code, &label_table);
                 if (skipped_tokens)
                         continue;
-
                 if (tokens->tokens[i].my_cmd != CMD_MY_LABEL) {
                         tokens->tokens[i].space = (size_t) jit_code->buf + jit_code->size + 16;
                         x86_cmd_ctor(cmds, tokens->tokens + i, &label_table);
@@ -45,11 +45,24 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
                 }
                 i++;
         }
+        //paste_io_decimal_function(jit_code, &label_table, INVALID_PRINT_ADDRESS);
+        //paset_io_decimal_function(jit_code, &label_table, INVALID_SCAN_ADDRESS);
+
         incode_conditional_jmps(jit_code, &label_table);
         incode_calls_jmps(jit_code, &label_table);
+
         change_memory_offset(jit_code);
+        change_return_value_src2rax(jit_code);
 
         return 0;
+}
+
+void change_return_value_src2rax (jit_code_t *jit_code)
+{
+        assert(jit_code);
+
+        x86_cmd_t cmd = pop_rax;
+        paste_cmd_in_jit_buf(jit_code, &cmd);
 }
 
 void insert_nops (jit_code_t *jit_code, size_t amount2insert)
@@ -173,7 +186,7 @@ size_t find_label (labels_t *label_table, uint32_t my_offset)
                         return i;
         }
 
-        return 0;
+        return label_table->size + 1;
 }
 
 #define INSERT_x86_CMD(cmds, indent, x86_cmd, value_ptr)                                                                    \
@@ -328,10 +341,85 @@ void paste_cmd_in_jit_buf (jit_code_t *jit_code, x86_cmd_t *cmd)
         }
 }
 
+void pre_incode_print_scan_call (x86_cmd_t *cmd, token_t *token, labels_t *label_table)
+{
+        assert(cmd);
+        assert(token);
+        assert(label_table);
+
+        if (token->my_cmd == CMD_MY_OUT)
+                token->offset = INVALID_PRINT_ADDRESS;
+        else
+                token->offset = INVALID_SCAN_ADDRESS;
+
+        pre_incode_call(cmd, token);
+}
+
+void incode_print (x86_cmd_t *cmds, token_t *token)
+{
+        assert(cmds);
+
+        cmds[0] = pop_rdi;
+
+        cmd_info4incode_t info = {
+                .immed_val = (size_t) print_decimal - (token->space - 16 + 6)
+        };
+        incode_call(cmds + 1, &info);
+}
+
+void incode_scan (x86_cmd_t *cmds, token_t *token)
+{
+        assert(cmds);
+
+        cmd_info4incode_t info = {
+                .immed_val = (size_t) scan_decimal - (token->space - 16 + 6)
+        };
+        incode_call(cmds, &info);
+        cmds[1] = pop_rax;
+}
+
+void incode_call (x86_cmd_t *cmd, cmd_info4incode_t *info)
+{
+        assert(cmd);
+        assert(info);
+
+        uint8_t indent = 0;
+
+        if (info->src_reg > RDI && info->src_reg != INVALID_REG) {
+                cmd->cmd[indent++] = USE_R_REGS;
+                info->src_reg -= R8;
+        }
+
+        if (info->src_reg != INVALID_REG && !info->use_memory4src) {
+                cmd->cmd[indent] = REG_CALL;
+                cmd->length = indent + 1;
+        } else if (!info->use_memory4src) {
+                cmd->cmd[indent++] = RELATIVE_CALL;
+
+                memcpy(cmd->cmd + indent, &info->immed_val, sizeof(uint32_t));
+                cmd->length = 1 + sizeof(uint32_t);
+        } else if (!info->use_memory4src) {
+                cmd->cmd[indent++] = FAR_CALL;
+
+                memcpy(cmd->cmd + indent, &info->immed_val, sizeof(size_t));
+                cmd->length = 1 + sizeof(size_t);
+        }
+}
+
 int x86_cmd_ctor (x86_cmd_t *cmds, token_t *token, labels_t *label_table)
 {
         assert(cmds);
         assert(token);
+        assert(label_table);
+
+        if (token->my_cmd == CMD_MY_OUT) {
+                // pre_incode_printf_scanf_call(cmds, token, label_table);
+                incode_print(cmds, token);
+                return 0;
+        } else if (token->my_cmd == CMD_MY_IN) {
+                incode_scan(cmds, token);
+                return 0;
+        }
 
         for (int i = 0; i < N_COMMANDS; i++) {
                 if (token->my_cmd == cmds_table[i].my_incode) {

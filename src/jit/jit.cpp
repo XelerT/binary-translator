@@ -88,7 +88,7 @@ int make_buf_executable (void *buf, size_t buf_capacity)
 {
         assert(buf);
 
-        if (mprotect(buf, buf_capacity, PROT_EXEC)) {
+        if (mprotect(buf, buf_capacity, PROT_WRITE | PROT_EXEC | PROT_READ)) {
                 int errnum = 0;
                 log_error(1, "mprotect RETURNED ERROR");
 
@@ -105,7 +105,7 @@ int make_buf_writable (void *buf, size_t buf_capacity)
 {
         assert(buf);
 
-        if (mprotect(buf, buf_capacity, PROT_WRITE)) {
+        if (mprotect(buf, buf_capacity, PROT_WRITE | PROT_EXEC | PROT_READ)) {
                 int errnum = 0;
                 log_error(1, "mprotect RETURNED ERROR");
 

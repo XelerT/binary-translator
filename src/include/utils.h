@@ -14,6 +14,10 @@ const int m256_BYTE_CAPACITY = 32;
 const int PAGE_SIZE        = 4096;
 const int ASCII_MAX_SYMBOL =  127;
 
+
+const int INVALID_PRINT_ADDRESS = 0xFFFA;
+const int INVALID_SCAN_ADDRESS  = 0xFFFC;
+
 struct graph_node_atr_t {
         const char *shape     = "rectangle";
         const char *style     =   "rounded";

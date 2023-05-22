@@ -13,6 +13,12 @@ struct jit_code_t {
 
         uint8_t *exec_memory2use = nullptr;
         size_t exec_memory_capacity = 0;
+
+        size_t print_func_offset = 10;
+        size_t print_func_size   =  0;
+
+        size_t scan_func_offset  = 10;
+        size_t scan_func_size    =  0;
 };
 
 enum jit_errors {

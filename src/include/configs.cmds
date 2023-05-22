@@ -41,6 +41,7 @@ enum cmds_codes {
         MUL           = 0xF7,
         RELATIVE_CALL = 0xE8,
         REG_CALL      = 0xFF,
+        FAR_CALL      = 0x9A,
         RET           = 0xC3,
 
         SHORT_JMP     = 0xEB,
@@ -65,9 +66,11 @@ enum my_cmds_incode {
         CMD_MY_SUB   =  4,
         CMD_MY_MUL   =  5,
         CMD_MY_DIV   =  6,
+        CMD_MY_OUT   =  7,
+        CMD_MY_IN    =  8,
         CMD_MY_LABEL = 12,
         CMD_MY_CALL  = 13,
-        CMD_MY_RET   = 15
+        CMD_MY_RET   = 15,
 };
 
 enum x86_regs {
