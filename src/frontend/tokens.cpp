@@ -163,7 +163,7 @@ void insert_token_args (tokens_t *tokens, unsigned int cmd, int arg)
                         log_error(2, "SMTH WRONG %d", cmd);
                 }
                 break;
-        default:                        /*JMPs*/
+        default:                        /*JMPs and call*/
                 token->offset = arg;
         }
 }

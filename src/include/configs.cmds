@@ -2,6 +2,8 @@
 
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 
+const uint8_t JMP_LENGTH = 5;
+
 enum cmd_consts {
         NEAR_JMP_RANGE = 0xFF
 };

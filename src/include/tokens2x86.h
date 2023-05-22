@@ -77,4 +77,6 @@ void    pre_incode_jmp               (x86_cmd_t *cmd, token_t *token);
 size_t  find_label                   (labels_t *label_table, uint32_t my_offset);
 void    incode_conditional_jmps      (jit_code_t *jit_code, labels_t *label_table);
 
+void pre_incode_print_scan_call (x86_cmd_t *cmd, token_t *token, labels_t *label_table);
+
 #endif /*TOKENS2X86_H*/

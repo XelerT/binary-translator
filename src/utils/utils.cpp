@@ -44,6 +44,8 @@ int check_arguments (int argc, char *argv[], int *n_file_name_arg)
         return compilation_flags;
 }
 
+#pragma GCC diagnostic ignored "-Wformat-security"
+
 char check_compilation_flag (char *flag)
 {
         assert(flag);

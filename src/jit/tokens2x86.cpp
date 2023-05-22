@@ -34,7 +34,7 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
                 if (skipped_tokens)
                         continue;
                 if (tokens->tokens[i].my_cmd != CMD_MY_LABEL) {
-                        tokens->tokens[i].space = (size_t) jit_code->buf + jit_code->size + 16;
+                        tokens->tokens[i].space = (size_t) jit_code->buf + jit_code->size;
                         x86_cmd_ctor(cmds, tokens->tokens + i, &label_table);
 
                         for (uint8_t j = 0; cmds[j].length != 0 && j < 5; j++) {
@@ -145,7 +145,7 @@ void incode_mov (x86_cmd_t *cmd, cmd_info4incode_t *info)
                         cmd->cmd[indent] |= info->dest_reg;
                         memcpy(cmd->cmd + 1 + indent, &info->immed_val, sizeof(uint32_t));
 
-                        cmd->length = 1 + indent + sizeof(uint32_t);
+                        cmd->length = 1 + indent + (uint8_t) sizeof(uint32_t);
                 } else {
                         cmd->cmd[indent++] |= x64bit_PREFIX;
 
@@ -362,7 +362,7 @@ void incode_print (x86_cmd_t *cmds, token_t *token)
         cmds[0] = pop_rdi;
 
         cmd_info4incode_t info = {
-                .immed_val = (size_t) print_decimal - (token->space - 16 + 6)
+                .immed_val = (size_t) print_decimal - (token->space + JMP_LENGTH)
         };
         incode_call(cmds + 1, &info);
 }
@@ -372,7 +372,7 @@ void incode_scan (x86_cmd_t *cmds, token_t *token)
         assert(cmds);
 
         cmd_info4incode_t info = {
-                .immed_val = (size_t) scan_decimal - (token->space - 16 + 6)
+                .immed_val = (size_t) scan_decimal - (token->space + JMP_LENGTH)
         };
         incode_call(cmds, &info);
         cmds[1] = pop_rax;
@@ -505,7 +505,7 @@ void pre_incode_emitation_of_call (x86_cmd_t *cmds, token_t *token)
 
         cmd_info4incode_t cmd_info = {
                 .dest_reg   = R15,
-                .immed_val = token->space,
+                .immed_val = token->space + 16,
                 .use_memory4dest = 1
         };
         incode_mov(cmds + 0, &cmd_info);
@@ -582,7 +582,7 @@ void incode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4incode_t *info)
                         cmd->cmd[indent - 1] |= 2;
                 memcpy(cmd->cmd + indent + 1, &info->immed_val, get_sizeof_number2write(info->immed_val));
 
-                cmd->length = 1 + get_sizeof_number2write(info->immed_val) + indent;
+                cmd->length = get_sizeof_number2write(info->immed_val) + indent + 1;
         }
 
         if (info->use_memory4dest && info->use_memory4src) {
@@ -623,17 +623,19 @@ void incode_calls_jmps (jit_code_t *jit_code, labels_t *label_table)
 
         for (size_t i = 0; i < jit_code->size; i++) {
                 if (jit_code->buf[i] == RELATIVE_CALL || jit_code->buf[i] == NEAR_JMP) {
-                        i += 1;
-                        uint32_t my_offset  = jit_code->buf[i];
+                        uint32_t my_offset = *((uint32_t*)(jit_code->buf + i + 1));
                         size_t n_label = find_label(label_table, my_offset);
-                        if (n_label >= label_table->size) {
+
+                        if (n_label >= label_table->size && my_offset < jit_code->size) {
                                 log_error(1, "No label found");
                                 return;
+                        } else if (n_label >= label_table->size) {
+                                continue;
                         }
-                        uint32_t new_offset = (uint32_t) (label_table->labels[n_label].new_address - i - 4);
+                        uint32_t new_offset = (uint32_t) (label_table->labels[n_label].new_address - (i + JMP_LENGTH));
 
-                        memcpy(jit_code->buf + i, &new_offset, sizeof(uint32_t));
-                        i += sizeof(uint32_t) - 1;
+                        memcpy(jit_code->buf + i + 1, &new_offset, sizeof(uint32_t));
+                        i += sizeof(uint32_t);
                 }
         }
 }
@@ -649,8 +651,8 @@ void pre_incode_conditional_jmp (x86_cmd_t *cmd, token_t *token, size_t table_po
 
         cmd->cmd[0] = PREFIX_64_bit;
         cmd->cmd[1] = cmds_table[table_position].code2;
-        memcpy(cmd->cmd + 2, &offset, sizeof(int));
-        cmd->length = 2 + sizeof(int);
+        memcpy(cmd->cmd + 2, &offset, sizeof(uint32_t));
+        cmd->length = 2 + sizeof(uint32_t);
 }
 
 void incode_conditional_jmps (jit_code_t *jit_code, labels_t *label_table)
@@ -660,17 +662,16 @@ void incode_conditional_jmps (jit_code_t *jit_code, labels_t *label_table)
 
         for (size_t i = 0; i < jit_code->size; i++) {
                 if (jit_code->buf[i] == PREFIX_64_bit && (jit_code->buf[i + 1] & CONDITIONAL_JMPS_MASK_REL32)) {
-                        i += 2;
-                        uint32_t my_offset  = jit_code->buf[i];
+                        uint32_t my_offset  = jit_code->buf[i + 2];
                         size_t n_label = find_label(label_table, my_offset);
                         if (n_label >= label_table->size) {
                                 log_error(1, "No label found");
                                 return;
                         }
-                        uint32_t new_offset = (uint32_t) (label_table->labels[n_label].new_address - i - 4);
+                        uint32_t new_offset = (uint32_t) (label_table->labels[n_label].new_address - (i + JMP_LENGTH + 1));
 
-                        memcpy(jit_code->buf + i, &new_offset, sizeof(uint32_t));
-                        i += sizeof(uint32_t) - 1;
+                        memcpy(jit_code->buf + i + 2, &new_offset, sizeof(uint32_t));
+                        i += sizeof(uint32_t);
                 }
         }
 }
