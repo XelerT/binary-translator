@@ -45,10 +45,11 @@ SANITIZE_FLAGS = -lasan -fsanitize=address,leak
 TEXT_CFILES  = src/utils/text.cpp
 LOG_CFILES   = src/log/log.cpp
 UTILS_CFILES = src/utils/utils.cpp
-JIT_CFILES   = src/jit/jit.cpp src/jit/tokens2x86.cpp
+JIT_CFILES   = src/jit/jit.cpp src/jit/tokens2x86.cpp src/jit/myIO.cpp src/jit/translate2x86.cpp
+CODE_GEN_CFILES = src/jit/conditional_cmds.cpp src/jit/jmp_cmds.cpp src/jit/mem_cmds.cpp src/jit/math_cmds.cpp
 FRONTEND_CFILES = src/frontend/tokens.cpp
 
-CFILES = main.cpp $(TEXT_CFILES) $(LOG_CFILES) $(UTILS_CFILES) $(JIT_CFILES) $(FRONTEND_CFILES)
+CFILES = main.cpp $(TEXT_CFILES) $(LOG_CFILES) $(UTILS_CFILES) $(JIT_CFILES) $(CODE_GEN_CFILES) $(FRONTEND_CFILES)
 
 OUTPUT = jit.out
 

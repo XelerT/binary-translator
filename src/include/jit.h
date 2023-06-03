@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#include "../include/config.h"
-#include "../include/tokens.h"
+#include "config.h"
+#include "tokens.h"
 
 struct jit_code_t {
         uint8_t *buf     = nullptr;
@@ -19,6 +19,31 @@ struct jit_code_t {
 
         size_t scan_func_offset  = 10;
         size_t scan_func_size    =  0;
+};
+
+struct my2x86cmd_t {
+        char       *my_name = nullptr;
+        int       my_incode = 0;
+        unsigned char code1 = 0;
+        unsigned char code2 = 0;
+        unsigned char code3 = 0;
+};
+
+#include "configs.cmds"
+
+struct x86_cmd_t {
+        uint8_t cmd[X86_CMD_MAX_LENGTH] = {};
+        uint8_t length = 0;
+        size_t  number = 0;
+};
+
+struct cmd_info4incode_t {
+        uint8_t cmd_incode   = 0;
+        uint8_t dest_reg     = INVALID_REG;
+        uint8_t src_reg      = INVALID_REG;
+        size_t immed_val     = 0;
+        bool use_memory4dest = 0;
+        bool use_memory4src  = 0;
 };
 
 enum jit_errors {

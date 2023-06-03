@@ -5,65 +5,16 @@
 #include "../include/config.h"
 #include "../include/tokens.h"
 #include "../include/jit.h"
+#include "../include/translate2x86.h"
 #include "../include/tokens2x86.h"
 #include "../include/myIO.h"
 
 #include "../include/consts_x86.cmds"
 
-int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
-{
-        assert(jit_code);
-        assert(tokens);
-
-        size_t skipped_tokens = 0;
-        labels_t label_table = {};
-
-        x86_cmd_t set_call_stack_offset = {};
-        cmd_info4incode_t cmd_info = {
-                .dest_reg   = R15,
-                .immed_val  = (size_t) jit_code->exec_memory2use + jit_code->exec_memory_capacity - sizeof(size_t)
-        };
-        incode_mov(&set_call_stack_offset, &cmd_info);
-        paste_cmd_in_jit_buf(jit_code, &set_call_stack_offset);
-
-        insert_nops(jit_code, 10);
-
-        for (size_t i = 0; i < tokens->size; i += skipped_tokens) {
-                x86_cmd_t cmds[5] = {};
-                skipped_tokens = convert_tokens2nonstack_logic(tokens, i, jit_code, &label_table);
-                if (skipped_tokens)
-                        continue;
-                if (tokens->tokens[i].my_cmd != CMD_MY_LABEL) {
-                        tokens->tokens[i].space = (size_t) jit_code->buf + jit_code->size;
-                        x86_cmd_ctor(cmds, tokens->tokens + i, &label_table);
-
-                        for (uint8_t j = 0; cmds[j].length != 0 && j < 5; j++) {
-                                paste_cmd_in_jit_buf(jit_code, cmds + j);
-                        }
-                } else {
-                        insert_label(jit_code, tokens->tokens + i, &label_table);
-                }
-                i++;
-        }
-        //paste_io_decimal_function(jit_code, &label_table, INVALID_PRINT_ADDRESS);
-        //paset_io_decimal_function(jit_code, &label_table, INVALID_SCAN_ADDRESS);
-
-        incode_conditional_jmps(jit_code, &label_table);
-        incode_calls_jmps(jit_code, &label_table);
-
-        change_memory_offset(jit_code);
-        change_return_value_src2rax(jit_code);
-
-        return 0;
-}
-
-void change_return_value_src2rax (jit_code_t *jit_code)
-{
-        assert(jit_code);
-
-        x86_cmd_t cmd = pop_rax;
-        paste_cmd_in_jit_buf(jit_code, &cmd);
-}
+#include "../include/mem_cmds.h"
+#include "../include/math_cmds.h"
+#include "../include/jmp_cmds.h"
+#include "../include/conditional_cmds.h"
 
 void insert_nops (jit_code_t *jit_code, size_t amount2insert)
 {
@@ -72,108 +23,6 @@ void insert_nops (jit_code_t *jit_code, size_t amount2insert)
         for (size_t i = jit_code->size; i < amount2insert; i++) {
                 jit_code->buf[i] = nop.cmd[0];
                 jit_code->size++;
-        }
-}
-
-void change_memory_offset (jit_code_t *jit_code)
-{
-        assert(jit_code);
-
-        x86_cmd_t cmd = {};
-
-        uint8_t n_byte_after_first_pop = 0;
-        while (jit_code->buf[n_byte_after_first_pop] != pop_rbx.cmd[0])
-                n_byte_after_first_pop++;
-        n_byte_after_first_pop++;
-
-        cmd_info4incode_t cmd_info = {
-                .dest_reg   = RBX,
-                .immed_val  = (size_t) jit_code->exec_memory2use
-        };
-        incode_mov(&cmd, &cmd_info);
-
-        uint8_t start_i = 7;
-        uint8_t i = start_i;          /*1 + sizeof( mov r15, address)*/
-        while (i < cmd.length + start_i) {
-                jit_code->buf[i] = cmd.cmd[i - start_i];
-                i++;
-        }
-        while (i < n_byte_after_first_pop) {
-                jit_code->buf[i] = nop.cmd[0];
-                i++;
-        }
-}
-
-void incode_mov (x86_cmd_t *cmd, cmd_info4incode_t *info)
-{
-        assert(cmd);
-
-        uint8_t indent = 0;
-
-        if (info->dest_reg > RDI && info->dest_reg != INVALID_REG) {
-                cmd->cmd[0] = USE_R_REGS;
-                info->dest_reg -= R8;
-        }
-        if (info->src_reg > RDI && info->src_reg != INVALID_REG) {
-                cmd->cmd[0] = USE_SRC_R_REG;
-                info->src_reg -= R8;
-        }
-        if (cmd->cmd[0])
-                indent++;
-
-        if (info->dest_reg != INVALID_REG && info->src_reg != INVALID_REG) {
-                cmd->cmd[indent++] = REG_MOV;
-
-                cmd->cmd[indent]  = MODE_REG_ADDRESS << 6;
-                if (info->use_memory4src) {
-                        uint8_t swap = info->dest_reg;
-                        info->dest_reg = info->src_reg;
-                        info->src_reg = swap;
-                }
-
-                cmd->cmd[indent] |= info->dest_reg;
-                cmd->cmd[indent] |= info->src_reg << 3;
-
-                cmd->length = indent + 1;
-        } else if (info->dest_reg != INVALID_REG && info->src_reg == INVALID_REG) {
-                if (info->immed_val < (uint32_t) -1) {
-                        if (info->use_memory4dest)
-                                cmd->cmd[indent++] = MEM_IMMED_MOV;
-                        else
-                                cmd->cmd[indent]  = IMMED_MOV;
-
-                        cmd->cmd[indent] |= info->dest_reg;
-                        memcpy(cmd->cmd + 1 + indent, &info->immed_val, sizeof(uint32_t));
-
-                        cmd->length = 1 + indent + (uint8_t) sizeof(uint32_t);
-                } else {
-                        cmd->cmd[indent++] |= x64bit_PREFIX;
-
-                        // if (info->use_memory4dest)
-                        //         cmd->cmd[indent] = MEM_IMMED_MOV;
-                        // else
-                                cmd->cmd[indent]  = IMMED_MOV;
-
-                        cmd->cmd[indent]   = IMMED_MOV;
-                        cmd->cmd[indent]  |= info->dest_reg;
-                        memcpy(cmd->cmd + 2, &info->immed_val, sizeof(uint32_t));
-
-                        cmd->length = 2 + sizeof(uint32_t);
-                }
-        }
-        if (info->use_memory4dest && info->use_memory4src) {
-                set_red_in_terminal();
-                fprintf(stderr, "Can't use memory as destination and source!");
-                reset_colour_in_terminal();
-
-                log_error(1, "Can't use memory as destination and source!");
-
-                return;
-        } else if (info->use_memory4dest) {
-                cmd->cmd[0] |= x64bit_PREFIX;
-                // cmd->cmd[indent] = cmd->cmd[indent] & (~MODE_USE_REG >> 2);
-        } else if (info->use_memory4src) {
-                cmd->cmd[indent - 1] = MEM_REG_MOV;
         }
 }
 
@@ -330,17 +179,6 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
         return indent;
 }
 
-void paste_cmd_in_jit_buf (jit_code_t *jit_code, x86_cmd_t *cmd)
-{
-        assert(jit_code);
-        assert(cmd);
-
-        for (uint8_t i = 0; i < cmd->length; i++) {
-                jit_code->buf[jit_code->size] = cmd->cmd[i];
-                jit_code->size++;
-        }
-}
-
 void pre_incode_print_scan_call (x86_cmd_t *cmd, token_t *token, labels_t *label_table)
 {
         assert(cmd);
@@ -378,115 +216,6 @@ void incode_scan (x86_cmd_t *cmds, token_t *token)
         cmds[1] = pop_rax;
 }
 
-void incode_call (x86_cmd_t *cmd, cmd_info4incode_t *info)
-{
-        assert(cmd);
-        assert(info);
-
-        uint8_t indent = 0;
-
-        if (info->src_reg > RDI && info->src_reg != INVALID_REG) {
-                cmd->cmd[indent++] = USE_R_REGS;
-                info->src_reg -= R8;
-        }
-
-        if (info->src_reg != INVALID_REG && !info->use_memory4src) {
-                cmd->cmd[indent] = REG_CALL;
-                cmd->length = indent + 1;
-        } else if (!info->use_memory4src) {
-                cmd->cmd[indent++] = RELATIVE_CALL;
-
-                memcpy(cmd->cmd + indent, &info->immed_val, sizeof(uint32_t));
-                cmd->length = 1 + sizeof(uint32_t);
-        } else if (!info->use_memory4src) {
-                cmd->cmd[indent++] = FAR_CALL;
-
-                memcpy(cmd->cmd + indent, &info->immed_val, sizeof(size_t));
-                cmd->length = 1 + sizeof(size_t);
-        }
-}
-
-int x86_cmd_ctor (x86_cmd_t *cmds, token_t *token, labels_t *label_table)
-{
-        assert(cmds);
-        assert(token);
-        assert(label_table);
-
-        if (token->my_cmd == CMD_MY_OUT) {
-                // pre_incode_printf_scanf_call(cmds, token, label_table);
-                incode_print(cmds, token);
-                return 0;
-        } else if (token->my_cmd == CMD_MY_IN) {
-                incode_scan(cmds, token);
-                return 0;
-        }
-
-        for (int i = 0; i < N_COMMANDS; i++) {
-                if (token->my_cmd == cmds_table[i].my_incode) {
-                        assemble_cmd(cmds, token, i, label_table);
-                }
-        }
-        return 0;
-}
-
-void assemble_cmd (x86_cmd_t *cmds, token_t *token, size_t table_position, labels_t *label_table)
-{
-        assert(cmds);
-        assert(token);
-
-        if (cmds_table[table_position].code2 == 0) {
-                if (cmds_table[table_position].code1 == ADD ||
-                    cmds_table[table_position].code1 == SUB ||
-                    cmds_table[table_position].code1 == MUL ) {
-                        incode_add_sub_mul(cmds, token, table_position);
-                } else if (cmds_table[table_position].code1 == RET) {
-                        incode_emitation_of_ret(cmds);
-                }
-        }  else if (cmds_table[table_position].code1 == RELATIVE_CALL) {
-                pre_incode_emitation_of_call(cmds, token);
-        } else if (cmds_table[table_position].code1 == SHORT_JMP) {
-                pre_incode_jmp(cmds, token);
-        } else if (cmds_table[table_position].code1 & CONDITIONAL_JMPS_MASK_REL8) {
-                uint8_t n_cmds = incode_cmp(cmds);
-                pre_incode_conditional_jmp(cmds + n_cmds, token, table_position, label_table);
-        } else {
-                if (cmds_table[table_position].code1 == IMMED_PUSH ||
-                    cmds_table[table_position].code1 == REG_PUSH_POP) {
-                        incode_push_pop(cmds, token, table_position);
-                }
-        }
-}
-
-void incode_ret (x86_cmd_t *cmd)
-{
-        assert(cmd);
-
-        cmd->cmd[0] = RET;
-        cmd->length = 1;
-}
-
-uint8_t incode_test (x86_cmd_t *cmds)
-{
-        assert(cmds);
-
-        cmds[0] = pop_rcx;
-        cmds[1] = pop_rdx;
-        cmds[2] = test_rcx_rdx;
-
-        return 3;
-}
-
-uint8_t incode_cmp (x86_cmd_t *cmds)
-{
-        assert(cmds);
-
-        cmds[0] = pop_rcx;
-        cmds[1] = pop_rdx;
-        cmds[2] = cmp_rcx_rdx;
-
-        return 3;
-}
-
 void insert_label (jit_code_t *jit_code, token_t *token, labels_t *label_table)
 {
         assert(jit_code);
@@ -497,195 +226,6 @@ void insert_label (jit_code_t *jit_code, token_t *token, labels_t *label_table)
         label_table->labels[label_table->size].new_address = jit_code->size;
 
         label_table->size++;
-}
-
-void pre_incode_emitation_of_call (x86_cmd_t *cmds, token_t *token)
-{
-        assert(cmds);
-
-        cmd_info4incode_t cmd_info = {
-                .dest_reg   = R15,
-                .immed_val = token->space + 16,
-                .use_memory4dest = 1
-        };
-        incode_mov(cmds + 0, &cmd_info);
-
-        cmd_info.cmd_incode = SUB;
-        cmd_info.use_memory4dest = 0;
-
-        cmd_info.dest_reg   = R15;
-        cmd_info.src_reg = INVALID_REG;
-        cmd_info.immed_val = 8;
-        cmd_info.use_memory4dest = 0;
-
-        incode_add_sub_mul_div(cmds + 1, &cmd_info);
-        pre_incode_jmp(cmds + 2, token);
-}
-
-void incode_emitation_of_ret (x86_cmd_t *cmds)
-{
-        assert(cmds);
-
-        cmd_info4incode_t cmd_info = {
-                .cmd_incode = ADD,
-                .dest_reg   = R15,
-                .immed_val  = 8
-        };
-        incode_add_sub_mul_div(cmds, &cmd_info);
-        cmds[1] = push_mem_r15;
-
-        incode_ret(cmds + 2);
-}
-
-void incode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4incode_t *info)
-{
-        assert(cmd);
-        assert(info);
-
-        uint8_t indent = 0;
-
-        cmd->cmd[indent] = x64bit_PREFIX;
-
-        if (info->dest_reg > RDI && info->dest_reg != INVALID_REG) {
-                cmd->cmd[indent] |= USE_R_REGS;
-                info->dest_reg -= R8;
-        }
-        if (info->src_reg > RDI && info->src_reg != INVALID_REG) {
-                cmd->cmd[indent] |= USE_SRC_R_REG;
-                info->src_reg -= R8;
-        }
-        if (cmd->cmd[indent])
-                indent++;
-
-        if (info->use_memory4src) {
-                uint8_t swap   = info->dest_reg;
-                info->dest_reg = info->src_reg;
-                info->src_reg  = swap;
-        }
-        cmd->cmd[indent++] = info->cmd_incode;
-
-        if (info->dest_reg != INVALID_REG && info->src_reg != INVALID_REG) {
-                cmd->cmd[indent]  = (MODE_REG_ADDRESS << 6);
-                cmd->cmd[indent] |= (info->src_reg << 3);
-                cmd->cmd[indent] |= info->dest_reg;
-
-                cmd->length = indent + 1;
-        } else if (info->dest_reg != INVALID_REG && info->src_reg == INVALID_REG) {
-                cmd->cmd[indent]  = (MODE_REG_ADDRESS << 6);
-                if (info->cmd_incode == SUB || info->cmd_incode == ADD)
-                        cmd->cmd[indent - 1] = ADD_SUB_IMMED;
-                if (info->cmd_incode == SUB)
-                        cmd->cmd[indent] |= (IMMED_SUB_MASK << 3);
-                cmd->cmd[indent] |= info->dest_reg;
-
-                if (get_sizeof_number2write(info->immed_val) == 1)
-                        cmd->cmd[indent - 1] |= 2;
-                memcpy(cmd->cmd + indent + 1, &info->immed_val, get_sizeof_number2write(info->immed_val));
-
-                cmd->length = get_sizeof_number2write(info->immed_val) + indent + 1;
-        }
-
-        if (info->use_memory4dest && info->use_memory4src) {
-                set_red_in_terminal();
-                fprintf(stderr, "Can't use memory as destination and source!");
-                reset_colour_in_terminal();
-
-                log_error(1, "Can't use memory as destination and source!");
-
-                return;
-        } else if (info->use_memory4dest) {
-                cmd->cmd[indent - 1] |= 0x0;
-        } else if (info->use_memory4src) {
-                cmd->cmd[indent - 1] |= 0x2;    /* xxxxxx|ds <= d = 1, from memory to register*/
-        }
-}
-
-void pre_incode_call (x86_cmd_t *cmd, token_t *token)
-{
-        assert(cmd);
-        assert(token);
-
-        if (token->offset) {
-                size_t offset = token->offset;
-
-                cmd->cmd[0] = RELATIVE_CALL;
-                memcpy(cmd->cmd + 1, &offset, sizeof(uint8_t));
-                cmd->length = 1 + sizeof(uint8_t);
-        } else {
-                /*register call*/
-        }
-}
-
-void incode_calls_jmps (jit_code_t *jit_code, labels_t *label_table)
-{
-        assert(jit_code);
-        assert(label_table);
-
-        for (size_t i = 0; i < jit_code->size; i++) {
-                if (jit_code->buf[i] == RELATIVE_CALL || jit_code->buf[i] == NEAR_JMP) {
-                        uint32_t my_offset = *((uint32_t*)(jit_code->buf + i + 1));
-                        size_t n_label = find_label(label_table, my_offset);
-
-                        if (n_label >= label_table->size && my_offset < jit_code->size) {
-                                log_error(1, "No label found");
-                                return;
-                        } else if (n_label >= label_table->size) {
-                                continue;
-                        }
-                        uint32_t new_offset = (uint32_t) (label_table->labels[n_label].new_address - (i + JMP_LENGTH));
-
-                        memcpy(jit_code->buf + i + 1, &new_offset, sizeof(uint32_t));
-                        i += sizeof(uint32_t);
-                }
-        }
-}
-
-void pre_incode_conditional_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position,
-                                                        labels_t *label_table)
-{
-        assert(cmd);
-        assert(token);
-        assert(label_table);
-
-        size_t offset = token->offset;
-
-        cmd->cmd[0] = PREFIX_64_bit;
-        cmd->cmd[1] = cmds_table[table_position].code2;
-        memcpy(cmd->cmd + 2, &offset, sizeof(uint32_t));
-        cmd->length = 2 + sizeof(uint32_t);
-}
-
-void incode_conditional_jmps (jit_code_t *jit_code, labels_t *label_table)
-{
-        assert(jit_code);
-        assert(label_table);
-
-        for (size_t i = 0; i < jit_code->size; i++) {
-                if (jit_code->buf[i] == PREFIX_64_bit && (jit_code->buf[i + 1] & CONDITIONAL_JMPS_MASK_REL32)) {
-                        uint32_t my_offset  = jit_code->buf[i + 2];
-                        size_t n_label = find_label(label_table, my_offset);
-                        if (n_label >= label_table->size) {
-                                log_error(1, "No label found");
-                                return;
-                        }
-                        uint32_t new_offset = (uint32_t) (label_table->labels[n_label].new_address - (i + JMP_LENGTH + 1));
-
-                        memcpy(jit_code->buf + i + 2, &new_offset, sizeof(uint32_t));
-                        i += sizeof(uint32_t);
-                }
-        }
-}
-
-void pre_incode_jmp (x86_cmd_t *cmd, token_t *token)
-{
-        assert(cmd);
-        assert(token);
-
-        size_t offset = token->offset;
-
-        cmd->cmd[0] = NEAR_JMP;
-        memcpy(cmd->cmd + 1, &offset, sizeof(uint32_t));
-        cmd->length = 1 + sizeof(uint32_t);
 }
 
 void incode_add_sub_mul (x86_cmd_t *cmd, token_t *token, size_t table_position)
@@ -725,7 +265,7 @@ void incode_add_sub_mul (x86_cmd_t *cmd, token_t *token, size_t table_position)
         }
 }
 
-void incode_push_pop (x86_cmd_t *cmd, token_t *token, size_t table_position)
+void incode_token2push_pop (x86_cmd_t *cmd, token_t *token, size_t table_position)
 {
         assert(cmd);
         assert(token);
@@ -848,14 +388,6 @@ uint8_t insert_add_sub_mul_div2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *t
         }
 
         return 0;
-}
-
-uint8_t get_sizeof_number2write (size_t number)
-{
-        if (number <= ASCII_MAX_SYMBOL)
-                return 1;
-        else
-                return sizeof(int);
 }
 
 #undef INSERT_x86_CMD

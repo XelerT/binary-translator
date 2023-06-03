@@ -6,7 +6,7 @@
 #include "../include/config.h"
 #include "../include/tokens.h"
 #include "../include/jit.h"
-#include "../include/tokens2x86.h"
+#include "../include/translate2x86.h"
 
 int jit (tokens_t *tokens)
 {
@@ -49,10 +49,10 @@ int jit_code_ctor (jit_code_t *jit_code, size_t capacity)
 
 // /*
         *jit_code->buf = 0xCC;
-        for (size_t i = 1; i < capacity; i++) {
+        jit_code->size++;
+        for (size_t i = jit_code->size; i < capacity; i++) {
                 jit_code->buf[i] = 0xC3;
         }
-        jit_code->size++;
 //*/
         // for (size_t i = 0; i < buf_size; i++) {
         //         buf[i] = 0xC3;

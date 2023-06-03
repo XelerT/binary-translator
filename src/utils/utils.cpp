@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
+
 #include "../include/utils.h"
 
 static const char *HELP_MESSAGE = "Available flags:\n"
@@ -61,4 +62,12 @@ char check_compilation_flag (char *flag)
         }
 
         return 0;
+}
+
+uint8_t get_sizeof_number2write (size_t number)
+{
+        if (number <= ASCII_MAX_SYMBOL)
+                return 1;
+        else
+                return sizeof(int32_t);
 }

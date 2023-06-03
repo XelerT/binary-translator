@@ -1,6 +1,9 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <stdint.h>
+#include <cstddef>
+
 const int MAX_NAME_LENGTH = 64;
 const int DEFAULT_N_VARS  = 16;
 const int DEFAULT_N_FUNCS = 16;
@@ -58,5 +61,7 @@ void set_blue_in_terminal     ();
 void reset_colour_in_terminal ();
 int  check_arguments          (int argc, char *argv[], int *n_file_name_arg);
 char check_compilation_flag   (char *flag);
+
+uint8_t get_sizeof_number2write (size_t number);
 
 #endif /*UTILS_H*/
