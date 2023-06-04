@@ -27,9 +27,6 @@ void pre_incode_print_scan_call (x86_cmd_t *cmd, token_t *token, labels_t *label
 void incode_print               (x86_cmd_t *cmds, token_t *token);
 void incode_scan                (x86_cmd_t *cmds, token_t *token);
 
-void    incode_add_sub_mul    (x86_cmd_t *cmd, token_t *token, size_t table_position);
-void    incode_token2push_pop (x86_cmd_t *cmd, token_t *token, size_t table_position);
-uint8_t insert_add_sub_mul_div2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, size_t position, labels_t *label_table);
-
+void incode_token2push_pop      (x86_cmd_t *cmd, token_t *token, size_t table_position);
 
 #endif /*TOKENS2X86_H*/

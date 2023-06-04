@@ -138,11 +138,7 @@ void assemble_cmd (x86_cmd_t *cmds, token_t *token, size_t table_position, label
         assert(token);
 
         if (cmds_table[table_position].code2 == 0) {
-                if (cmds_table[table_position].code1 == ADD ||
-                    cmds_table[table_position].code1 == SUB ||
-                    cmds_table[table_position].code1 == MUL ) {
-                        incode_add_sub_mul(cmds, token, table_position);
-                } else if (cmds_table[table_position].code1 == RET) {
+                if (cmds_table[table_position].code1 == RET) {
                         incode_emitation_of_ret(cmds);
                 }
         }  else if (cmds_table[table_position].code1 == RELATIVE_CALL) {
