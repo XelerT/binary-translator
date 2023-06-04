@@ -133,6 +133,7 @@ void insert_token_args (tokens_t *tokens, unsigned int cmd, int arg)
                 } else if (cmd & ARG_IMMED_MASK) {
                         token->immed = arg;
                         token->use_immed = 1;
+                        token->reg = INVALID_REG;
                 } else {
                         log_error(2, "SMTH WRONG %d", cmd);
                 }

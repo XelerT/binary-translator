@@ -1,19 +1,21 @@
 #ifndef TOKENS_H
 #define TOKENS_H
 
-#include "../include/config.h"
+#include "config.h"
 #include "text.h"
+
+#include "configs.cmds"
 
 struct token_t {
         int  my_cmd = 0;                  /* original code of command for my cpu */
         bool   dest = 0;                  /* 1 - register => reg/memory, 0 - mem => reg */
         bool      s = 1;                  /* Using 64 bit */
 
-        char my_reg = 0;                  /* number of my reg */
-        int   immed = 0;                  /* immediate number in cmd */
+        char    my_reg = 0;                  /* number of my reg */
+        int      immed = 0;                  /* immediate number in cmd */
         bool use_immed = 0;               /*1 - When immediate number is given*/
 
-        int8_t reg = 0;
+        int8_t reg = INVALID_REG;
         bool use_r8plus_regs = 0;         /* if we need to use regs r8+ */
 
         uint8_t mode = 0;                 /* 0 - use register, 2 - 8 byte in address(FYI: "push rax"), 3 - reg address mode*/

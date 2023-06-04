@@ -25,18 +25,13 @@ void incode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4incode_t *info)
         if (cmd->cmd[indent])
                 indent++;
 
-        if (info->use_memory4src) {
-                uint8_t swap   = info->dest_reg;
-                info->dest_reg = info->src_reg;
-                info->src_reg  = swap;
-        }
         cmd->cmd[indent++] = info->cmd_incode;
 
         if (info->dest_reg != INVALID_REG && info->src_reg != INVALID_REG) {
+                cmd->cmd[indent - 1] |= 1;
                 cmd->cmd[indent]  = (MODE_REG_ADDRESS << 6);
-                cmd->cmd[indent] |= (info->src_reg << 3);
                 cmd->cmd[indent] |= info->dest_reg;
-
+                cmd->cmd[indent] |= (info->src_reg << 3);
                 cmd->length = indent + 1;
         } else if (info->dest_reg != INVALID_REG && info->src_reg == INVALID_REG) {
                 cmd->cmd[indent]  = (MODE_REG_ADDRESS << 6);
@@ -51,6 +46,20 @@ void incode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4incode_t *info)
                 memcpy(cmd->cmd + indent + 1, &info->immed_val, get_sizeof_number2write(info->immed_val));
 
                 cmd->length = get_sizeof_number2write(info->immed_val) + indent + 1;
+        } else if (info->dest_reg == INVALID_REG && info->src_reg != INVALID_REG) {
+                if (info->cmd_incode != MUL && info->cmd_incode != DIV) {
+                        set_red_in_terminal();
+                        fprintf(stderr, "Can't use only source register for non div or mul command!");
+                        reset_colour_in_terminal();
+                }
+                cmd->cmd[indent - 1] = MUL;
+                cmd->cmd[indent]  = (MODE_REG_ADDRESS << 6);
+                cmd->cmd[indent] |= info->src_reg;
+                if (info->cmd_incode == MUL)
+                        cmd->cmd[indent] |= MUL_MASK;
+                else
+                        cmd->cmd[indent] |= DIV_MASK;
+                cmd->length = indent + 1;
         }
 
         if (info->use_memory4dest && info->use_memory4src) {
@@ -59,11 +68,9 @@ void incode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4incode_t *info)
                 reset_colour_in_terminal();
 
                 log_error(1, "Can't use memory as destination and source!");
-
-                return;
         } else if (info->use_memory4dest) {
                 cmd->cmd[indent - 1] |= 0x0;
         } else if (info->use_memory4src) {
-                cmd->cmd[indent - 1] |= 0x2;    /* xxxxxx|ds <= d = 1, from memory to register*/
+                cmd->cmd[indent] &= ((uint8_t) ~MODE_USE_REG) >> 2;   /*00|xxxxxx to change only mode*/
         }
 }

@@ -17,11 +17,13 @@ int jit (tokens_t *tokens)
         int exec_status = jit_code_ctor(&jit_code, tokens->size * 4);
         if (exec_status)
                 return exec_status;
-
+$
         fill_jit_code_buf(&jit_code, tokens);
-
+$
         exec_status = make_buf_executable((void*) jit_code.buf, jit_code.size);
+$
         exec_status = make_buf_writable((void*) jit_code.exec_memory2use, jit_code.exec_memory_capacity);
+$
         run_jit_buffer((void(*)()) jit_code.buf);
 
         return exec_status;

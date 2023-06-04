@@ -6,6 +6,8 @@
 #include "config.h"
 #include "tokens.h"
 
+#include "configs.cmds"
+
 struct jit_code_t {
         uint8_t *buf     = nullptr;
         size_t  capacity = 0;
@@ -20,16 +22,6 @@ struct jit_code_t {
         size_t scan_func_offset  = 10;
         size_t scan_func_size    =  0;
 };
-
-struct my2x86cmd_t {
-        char       *my_name = nullptr;
-        int       my_incode = 0;
-        unsigned char code1 = 0;
-        unsigned char code2 = 0;
-        unsigned char code3 = 0;
-};
-
-#include "configs.cmds"
 
 struct x86_cmd_t {
         uint8_t cmd[X86_CMD_MAX_LENGTH] = {};

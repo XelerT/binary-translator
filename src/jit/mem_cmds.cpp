@@ -117,9 +117,9 @@ void incode_pop_push (x86_cmd_t *cmd, cmd_info4incode_t *info)
                 cmd->cmd[indent] = REG_PUSH_POP << 5;           /*010 00 000*/
                 if (info->use_memory4src || info->src_reg != INVALID_REG)
                         cmd->cmd[indent] |= MODE_8_BYTE_IN_ADDRESS << 3; /*010 10 000*/
-                else
-                        cmd->cmd[indent] |= MODE_REG_ADDRESS << 3; /*010 10 000*/
-
+                else {
+                        cmd->cmd[indent] |= MODE_REG_ADDRESS << 3; /*010 11 000*/
+                }
                 cmd->cmd[indent] |= reg;
 
                 cmd->length = 1 + indent;                        /*1 for incoding*/

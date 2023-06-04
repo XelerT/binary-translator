@@ -36,6 +36,7 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
                 skipped_tokens = convert_tokens2nonstack_logic(tokens, i, jit_code, &label_table);
                 if (skipped_tokens)
                         continue;
+
                 if (tokens->tokens[i].my_cmd != CMD_MY_LABEL) {
                         tokens->tokens[i].space = (size_t) jit_code->buf + jit_code->size;
                         x86_cmd_ctor(cmds, tokens->tokens + i, &label_table);

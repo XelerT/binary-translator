@@ -16,7 +16,9 @@ struct labels_t {
 
 void    insert_nops (jit_code_t *jit_code, size_t amount2insert);
 
-size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code_t *jit_code, labels_t *label_table);
+size_t  convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code_t *jit_code, labels_t *label_table);
+void    find_convert_memory_access (jit_code_t *jit_code, tokens_t *tokens, size_t n_token);
+uint8_t get_cmd_from_token (token_t *token);
 
 size_t find_label   (labels_t *label_table, uint32_t my_offset);
 void   insert_label (jit_code_t *jit_code, token_t *token, labels_t *label_table);
@@ -25,7 +27,7 @@ void pre_incode_print_scan_call (x86_cmd_t *cmd, token_t *token, labels_t *label
 void incode_print               (x86_cmd_t *cmds, token_t *token);
 void incode_scan                (x86_cmd_t *cmds, token_t *token);
 
-void    incode_add_sub_mul (x86_cmd_t *cmd, token_t *token, size_t table_position);
+void    incode_add_sub_mul    (x86_cmd_t *cmd, token_t *token, size_t table_position);
 void    incode_token2push_pop (x86_cmd_t *cmd, token_t *token, size_t table_position);
 uint8_t insert_add_sub_mul_div2reg (uint8_t my_cmd, x86_cmd_t *cmds, tokens_t *tokens, size_t position, labels_t *label_table);
 
