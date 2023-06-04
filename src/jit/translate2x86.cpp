@@ -30,6 +30,14 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
         paste_cmd_in_jit_buf(jit_code, &set_call_stack_offset);
 
         insert_nops(jit_code, 10);
+        // x86_cmd_t mov_mem = {};
+        // cmd_info4incode_t info = {
+        //         .dest_reg = RAX,
+        //         .src_reg = RCX,
+        //         .use_memory4src = 1
+        // };
+        // incode_mov(&mov_mem, &info);
+        // paste_cmd_in_jit_buf(jit_code, &mov_mem);
 
         for (size_t i = 0; i < tokens->size; i += skipped_tokens) {
                 x86_cmd_t cmds[5] = {};

@@ -109,13 +109,14 @@ void insert_token_args (tokens_t *tokens, unsigned int cmd, int arg)
         token_t *token = tokens->tokens + tokens->size;
 
         token->my_cmd = cmd & CMD_MASK;
+        token->reg = INVALID_REG;
 
         switch (cmd & CMD_MASK) {
         case CMD_MY_PUSH:
                 if (cmd & ARG_RAM_MASK) {
                         if (cmd & ARG_REG_MASK) {
                                 token->dest = 1;
-                                token->mode = 3;
+                                token->mode = MODE_REG_ADDRESS;
 
                                 token->reg = convert_my_regs2x86_regs(arg);
                                 if (arg >= 5)
@@ -125,7 +126,7 @@ void insert_token_args (tokens_t *tokens, unsigned int cmd, int arg)
                         }
                 } else if (cmd & ARG_REG_MASK) {
                         token->dest = 1;
-                        token->mode = 2;
+                        token->mode = MODE_8_BYTE_IN_ADDRESS;
 
                         token->reg = convert_my_regs2x86_regs(arg);
                         if (arg >= 5)
@@ -143,7 +144,7 @@ void insert_token_args (tokens_t *tokens, unsigned int cmd, int arg)
                 if (cmd & ARG_RAM_MASK) {
                         if (cmd & ARG_REG_MASK) {
                                 token->dest = 0;
-                                token->mode = 3;
+                                token->mode = MODE_REG_ADDRESS;
 
                                 token->reg = convert_my_regs2x86_regs(arg);
                                 if (arg >= 5)
@@ -153,7 +154,7 @@ void insert_token_args (tokens_t *tokens, unsigned int cmd, int arg)
                         }
                 } else if (cmd & ARG_REG_MASK) {
                         token->dest = 0;
-                        token->mode = 2;
+                        token->mode = MODE_8_BYTE_IN_ADDRESS;
 
                         token->reg = convert_my_regs2x86_regs(arg);
                         if (arg >= 5)
@@ -168,7 +169,6 @@ void insert_token_args (tokens_t *tokens, unsigned int cmd, int arg)
                 token->offset = arg;
         }
 }
-
 
 uint8_t convert_my_regs2x86_regs (int my_reg)
 {

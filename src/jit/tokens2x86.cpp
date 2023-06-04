@@ -48,13 +48,14 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
 
         find_convert_memory_access(jit_code, tokens, n_token);
         if (jit_code->size - prev_jit_code_size)
-                n_token += 3;
+                return 5;
 
         token_t *token0 = tokens->tokens + n_token;
         token_t *token1 = tokens->tokens + n_token + 1;
         token_t *token2 = tokens->tokens + n_token + 2;
 
-        if (token0->use_immed && token1->use_immed)
+        if ((token0->use_immed && token1->use_immed) ||
+             token0->my_cmd == CMD_MY_POP)
                 return 0;
 
         x86_cmd_t cmds[5] = {};
@@ -66,17 +67,19 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
         case CMD_MY_SUB:
         case CMD_MY_MUL:
         case CMD_MY_DIV:
-                cmd_info.dest_reg = RAX;
+                cmd_info.dest_reg = RDI;
                 incode_pop_push(cmds + 0, &cmd_info);
 
-                cmd_info.dest_reg = RDI;
+                cmd_info.dest_reg = RAX;
                 incode_pop_push(cmds + 1, &cmd_info);
 
                 cmd_info.cmd_incode = get_cmd_from_token(token0);
                 if (cmd_info.cmd_incode == MUL || cmd_info.cmd_incode == DIV) {
                         cmd_info.dest_reg = INVALID_REG;
-                        cmd_info.src_reg  = RDI;
+                } else {
+                        cmd_info.dest_reg = RAX;
                 }
+                cmd_info.src_reg  = RDI;
                 incode_add_sub_mul_div(cmds + 2, &cmd_info);
 
                 cmd_info.dest_reg = INVALID_REG;
@@ -94,7 +97,7 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                 case CMD_MY_SUB:
                 case CMD_MY_MUL:
                 case CMD_MY_DIV:
-                        cmd_info.src_reg = RAX;
+                        cmd_info.dest_reg = RAX;
                         incode_pop_push(cmds + 0, &cmd_info);
 
                         cmd_info.src_reg    = token0->reg;
@@ -110,7 +113,8 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
 
                         incode_add_sub_mul_div(cmds + 1, &cmd_info);
 
-                        cmd_info.src_reg = INVALID_REG;
+                        cmd_info.dest_reg = INVALID_REG;
+                        cmd_info.src_reg  = RAX;
                         incode_pop_push(cmds + 2, &cmd_info);
 
                         n_token += 2;
@@ -128,16 +132,23 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                         cmd_info.dest_reg  = RAX;
                         cmd_info.src_reg   = token0->reg;
                         cmd_info.immed_val = token0->immed;
+                        if (token0->mode == MODE_REG_ADDRESS)
+                                cmd_info.use_memory4src = (bool) token0->mode;
 
                         incode_mov(cmds + 0, &cmd_info);
 
+                        cmd_info.use_memory4src = 0;
+                        cmd_info.dest_reg  = RAX;
                         cmd_info.src_reg    = token1->reg;
                         cmd_info.immed_val  = token1->immed;
-                        cmd_info.cmd_incode = get_cmd_from_token(token1);
+                        if (token0->reg == RBX)
+                                cmd_info.immed_val *= 8;
+                        cmd_info.cmd_incode = get_cmd_from_token(token2);
 
                         incode_add_sub_mul_div(cmds + 1, &cmd_info);
 
-                        cmd_info.src_reg = INVALID_REG;
+                        cmd_info.dest_reg  = INVALID_REG;
+                        cmd_info.src_reg   = RAX;
                         incode_pop_push(cmds + 2, &cmd_info);
 
                         n_token += 3;
@@ -172,6 +183,23 @@ uint8_t get_cmd_from_token (token_t *token)
         return 0;
 }
 
+void change_return_value_src (jit_code_t *jit_code, tokens_t *tokens, size_t n_token)
+{
+        assert(jit_code);
+        assert(tokens);
+
+        if (tokens->tokens[n_token + 1].my_cmd == CMD_MY_RET)
+                if (tokens->tokens[n_token].my_cmd == CMD_MY_PUSH) {
+                        cmd_info4incode_t cmd_info = {
+                                .dest_reg   = RAX,
+                                .src_reg    = RDX
+                        };
+                        x86_cmd_t cmd = {};
+                        incode_mov(&cmd, &cmd_info);
+                        paste_cmd_in_jit_buf(jit_code, &cmd);
+                }
+}
+
 void find_convert_memory_access (jit_code_t *jit_code, tokens_t *tokens, size_t n_token)
 {
         assert(jit_code);
@@ -180,6 +208,8 @@ void find_convert_memory_access (jit_code_t *jit_code, tokens_t *tokens, size_t 
         token_t *token0 = tokens->tokens + n_token;
         token_t *token1 = tokens->tokens + n_token + 1;
         token_t *token2 = tokens->tokens + n_token + 2;
+        token_t *token3 = tokens->tokens + n_token + 3;
+        token_t *token4 = tokens->tokens + n_token + 4;
 
         cmd_info4incode_t mov_rdi_rbx = {
                 .dest_reg   = RDI,
@@ -191,12 +221,21 @@ void find_convert_memory_access (jit_code_t *jit_code, tokens_t *tokens, size_t 
         cmd_info4incode_t push_rdi ={
                 .src_reg = RDI
         };
+        cmd_info4incode_t info_pop_rcx = {
+                .dest_reg = RCX
+        };
+        cmd_info4incode_t cmd_info = {};
 
         x86_cmd_t cmds[5] = {};
 
         if (token0->my_cmd == CMD_MY_PUSH && token0->reg == RBX) {
                 if (!token1->use_immed && !token2->use_immed)
                         return;
+                if ((token3->my_cmd != CMD_MY_PUSH && token3->my_cmd != CMD_MY_POP) || token3->reg != RCX)
+                        return;
+                if ((token4->my_cmd != CMD_MY_PUSH && token4->my_cmd != CMD_MY_POP) || token4->reg != RCX)
+                        return;
+
                 if (token1->my_cmd == CMD_MY_PUSH && token2->my_cmd == CMD_MY_ADD)
                         add_rdi.immed_val = token1->immed * 8;
                 else if (token2->my_cmd == CMD_MY_PUSH && token1->my_cmd == CMD_MY_ADD)
@@ -206,10 +245,19 @@ void find_convert_memory_access (jit_code_t *jit_code, tokens_t *tokens, size_t 
                 incode_add_sub_mul_div(cmds + 1, &add_rdi);
 
                 incode_pop_push(cmds + 2, &push_rdi);
+                incode_pop_push(cmds + 3, &info_pop_rcx);
 
-                paste_cmd_in_jit_buf(jit_code, cmds + 0);
-                paste_cmd_in_jit_buf(jit_code, cmds + 1);
-                paste_cmd_in_jit_buf(jit_code, cmds + 2);
+                if (token4->my_cmd == CMD_MY_PUSH) {
+                        cmd_info.src_reg = RCX;
+                        cmd_info.use_memory4src = 1;
+                } else {
+                        cmd_info.dest_reg = RCX;
+                        cmd_info.use_memory4dest = 1;
+                }
+                incode_pop_push(cmds + 4, &cmd_info);
+
+                for (int i = 0; i < 5; i++)
+                        paste_cmd_in_jit_buf(jit_code, cmds + i);
         }
 
 }

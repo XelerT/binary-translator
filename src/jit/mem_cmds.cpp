@@ -22,7 +22,8 @@ void incode_mov (x86_cmd_t *cmd, cmd_info4incode_t *info)
                 indent++;
 
         if (info->dest_reg != INVALID_REG && info->src_reg != INVALID_REG) {
-                cmd->cmd[indent++] = REG_MOV;
+                cmd->cmd[indent++] |= x64bit_PREFIX;
+                cmd->cmd[indent++]  = REG_MOV;
 
                 cmd->cmd[indent]  = MODE_REG_ADDRESS << 6;
                 if (info->use_memory4src) {
@@ -64,12 +65,11 @@ void incode_mov (x86_cmd_t *cmd, cmd_info4incode_t *info)
                 reset_colour_in_terminal();
 
                 log_error(1, "Can't use memory as destination and source!");
-
-                return;
         } else if (info->use_memory4dest) {
                 cmd->cmd[0] |= x64bit_PREFIX;
         } else if (info->use_memory4src) {
                 cmd->cmd[indent - 1] = MEM_REG_MOV;
+                cmd->cmd[indent] &= ((uint8_t) ~MODE_USE_REG) >> 2;   /*00|xxxxxx to change only mode*/
         }
 }
 
@@ -92,7 +92,7 @@ void incode_pop_push (x86_cmd_t *cmd, cmd_info4incode_t *info)
                 reg -= R8;
         }
 
-        if (info->dest_reg == info->src_reg && !use_memory) {
+        if (info->dest_reg == info->src_reg && !use_memory) { /*IMMED*/
                 cmd->cmd[indent] = IMMED_PUSH;                       /*0000 0110*/
                 cmd->cmd[indent] = cmd->cmd[indent] << 4;            /*0110 0000*/
 
