@@ -33,7 +33,7 @@ struct cmd_info4encode_t {
         uint8_t cmd_encode   = 0;
         uint8_t dest_reg     = INVALID_REG;
         uint8_t src_reg      = INVALID_REG;
-        size_t immed_val     = 0;
+        int     immed_val    = 0;
         bool use_memory4dest = 0;
         bool use_memory4src  = 0;
 };

@@ -1,16 +1,21 @@
 
-static const x86_cmd_t pop_rax = {
-        .cmd = {0x58},
-        .length = 1
+static const x86_cmd_t cvtsi2sd_xmm0_rax = {
+        .cmd = {0xF2, 0x48, 0x0F, 0x2A, 0xC0},
+        .length = 5
+};
+
+static const x86_cmd_t sqrtsd_xmm0_xmm0 = {
+        .cmd = {0xF2, 0x0F, 0x51, 0xC0},
+        .length = 4
+};
+
+static const x86_cmd_t cvttsd2si_rax_xmm0 = {
+        .cmd = {0xF2, 0x48, 0x0F, 0x2C, 0xC0},
+        .length = 5
 };
 
 static const x86_cmd_t pop_rbx = {
         .cmd = {0x5b},
-        .length = 1
-};
-
-static const x86_cmd_t pop_rdi = {
-        .cmd = {0x5f},
         .length = 1
 };
 

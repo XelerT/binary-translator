@@ -38,7 +38,7 @@ size_t find_label (labels_t *label_table, uint32_t my_offset)
         return label_table->size + 1;
 }
 
-size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code_t *jit_code, labels_t *label_table)
+size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code_t *jit_code)
 {
         assert(tokens);
         assert(jit_code);
@@ -280,10 +280,13 @@ void encode_print (x86_cmd_t *cmds, token_t *token)
 {
         assert(cmds);
 
-        cmds[0] = pop_rdi;
+        cmd_info4encode_t pop_rdi_info = {
+                .dest_reg = RDI
+        };
+        encode_pop_push(cmds + 0, &pop_rdi_info);
 
         cmd_info4encode_t info = {
-                .immed_val = (size_t) print_decimal - (token->space + JMP_LENGTH)
+                .immed_val = (int) ((size_t) print_decimal - (token->space + JMP_LENGTH))
         };
         encode_call(cmds + 1, &info);
 }
@@ -293,10 +296,14 @@ void encode_scan (x86_cmd_t *cmds, token_t *token)
         assert(cmds);
 
         cmd_info4encode_t info = {
-                .immed_val = (size_t) scan_decimal - (token->space + JMP_LENGTH)
+                .immed_val = (int) ((size_t) scan_decimal - (token->space + JMP_LENGTH))
         };
         encode_call(cmds, &info);
-        cmds[1] = pop_rax;
+
+        cmd_info4encode_t pop_rax_info = {
+                .dest_reg = RAX
+        };
+        encode_pop_push(cmds + 1, &pop_rax_info);
 }
 
 void insert_label (jit_code_t *jit_code, token_t *token, labels_t *label_table)

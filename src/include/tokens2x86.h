@@ -16,7 +16,7 @@ struct labels_t {
 
 void    insert_nops (jit_code_t *jit_code, size_t amount2insert);
 
-size_t  convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code_t *jit_code, labels_t *label_table);
+size_t  convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code_t *jit_code);
 void    find_convert_memory_access    (jit_code_t *jit_code, tokens_t *tokens, size_t n_token);
 void    change_return_value_src       (jit_code_t *jit_code, tokens_t *tokens, size_t n_token);
 uint8_t get_cmd_from_token            (token_t *token);

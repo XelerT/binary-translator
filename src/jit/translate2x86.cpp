@@ -24,24 +24,16 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
         x86_cmd_t set_call_stack_offset = {};
         cmd_info4encode_t cmd_info = {
                 .dest_reg   = R15,
-                .immed_val  = (size_t) jit_code->exec_memory2use + jit_code->exec_memory_capacity - sizeof(size_t)
+                .immed_val  = (int) ((size_t) jit_code->exec_memory2use + jit_code->exec_memory_capacity - sizeof(size_t))
         };
         encode_mov(&set_call_stack_offset, &cmd_info);
         paste_cmd_in_jit_buf(jit_code, &set_call_stack_offset);
 
         insert_nops(jit_code, 10);
-        // x86_cmd_t mov_mem = {};
-        // cmd_info4encode_t info = {
-        //         .dest_reg = RAX,
-        //         .src_reg = RCX,
-        //         .use_memory4src = 1
-        // };
-        // encode_mov(&mov_mem, &info);
-        // paste_cmd_in_jit_buf(jit_code, &mov_mem);
 
         for (size_t i = 0; i < tokens->size; i += skipped_tokens) {
-                x86_cmd_t cmds[5] = {};
-                skipped_tokens = convert_tokens2nonstack_logic(tokens, i, jit_code, &label_table);
+                x86_cmd_t cmds[6] = {};
+                skipped_tokens = convert_tokens2nonstack_logic(tokens, i, jit_code);
                 if (skipped_tokens)
                         continue;
 
@@ -57,8 +49,6 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
                 }
                 i++;
         }
-        //paste_io_decimal_function(jit_code, &label_table, INVALID_PRINT_ADDRESS);
-        //paset_io_decimal_function(jit_code, &label_table, INVALID_SCAN_ADDRESS);
 
         encode_conditional_jmps(jit_code, &label_table);
         encode_calls_jmps(jit_code, &label_table);
@@ -73,7 +63,11 @@ void change_return_value_src2rax (jit_code_t *jit_code)
 {
         assert(jit_code);
 
-        x86_cmd_t cmd = pop_rax;
+        x86_cmd_t cmd = {};
+        cmd_info4encode_t pop_rax_info = {
+                .dest_reg = RAX
+        };
+        encode_pop_push(&cmd, &pop_rax_info);
         paste_cmd_in_jit_buf(jit_code, &cmd);
 }
 
@@ -90,7 +84,7 @@ void change_memory_offset (jit_code_t *jit_code)
 
         cmd_info4encode_t cmd_info = {
                 .dest_reg   = RBX,
-                .immed_val  = (size_t) jit_code->exec_memory2use
+                .immed_val  = (int) (size_t) jit_code->exec_memory2use
         };
         encode_mov(&cmd, &cmd_info);
 
@@ -124,7 +118,6 @@ int x86_cmd_ctor (x86_cmd_t *cmds, token_t *token, labels_t *label_table)
         assert(label_table);
 
         if (token->my_cmd == CMD_MY_OUT) {
-                // pre_encode_printf_scanf_call(cmds, token, label_table);
                 encode_print(cmds, token);
                 return 0;
         } else if (token->my_cmd == CMD_MY_IN) {
@@ -148,6 +141,8 @@ void assemble_cmd (x86_cmd_t *cmds, token_t *token, size_t table_position, label
         if (CMDS_TABLE[table_position].code2 == 0) {
                 if (CMDS_TABLE[table_position].code1 == RET) {
                         encode_emitation_of_ret(cmds);
+                } else if (CMDS_TABLE[table_position].code1 == CMD_MY_SQRT) {
+                        encode_sqrt(cmds);
                 }
         }  else if (CMDS_TABLE[table_position].code1 == RELATIVE_CALL) {
                 pre_encode_emitation_of_call(cmds, token);

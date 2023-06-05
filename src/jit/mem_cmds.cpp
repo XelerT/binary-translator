@@ -7,6 +7,7 @@
 void encode_mov (x86_cmd_t *cmd, cmd_info4encode_t *info)
 {
         assert(cmd);
+        assert(info);
 
         uint8_t indent = 0;
 
@@ -37,7 +38,7 @@ void encode_mov (x86_cmd_t *cmd, cmd_info4encode_t *info)
 
                 cmd->length = indent + 1;
         } else if (info->dest_reg != INVALID_REG && info->src_reg == INVALID_REG) {
-                if (info->immed_val < (uint32_t) -1) {
+                if ((uint32_t) info->immed_val < (uint32_t) -1) {
                         if (info->use_memory4dest)
                                 cmd->cmd[indent++] = MEM_IMMED_MOV;
                         else
@@ -97,13 +98,16 @@ void encode_pop_push (x86_cmd_t *cmd, cmd_info4encode_t *info)
                 cmd->cmd[indent] = cmd->cmd[indent] << 4;            /*0110 0000*/
 
                 cmd->cmd[indent] |= IMMED_PUSH_MRR_MASK;             /*0110 1010*/
-                if (info->immed_val<= ASCII_MAX_SYMBOL)
+                if (info->immed_val <= ASCII_MAX_SYMBOL && -info->immed_val <= ASCII_MAX_SYMBOL)
                         cmd->cmd[indent] |= 2;
+
+                if (info->immed_val < 0)
+                        info->immed_val = 0xFF - info->immed_val;
 
                 memcpy(cmd->cmd + 1, &(info->immed_val), get_sizeof_number2write(info->immed_val));
 
                 cmd->length = 1 + get_sizeof_number2write(info->immed_val);                  /* 1 byte for cmd encode and 4 for immed number */
-        } else if (use_memory) {
+        } else if (use_memory) { /*MEMORY+REG*/
                 if (info->use_memory4src || info->src_reg != INVALID_REG) {
                         cmd->cmd[indent] = MEM_REG_PUSH;
                         cmd->cmd[indent + 1]  = IMMED_PUSH << 3;

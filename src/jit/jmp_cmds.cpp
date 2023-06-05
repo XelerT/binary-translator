@@ -47,8 +47,8 @@ void pre_encode_emitation_of_call (x86_cmd_t *cmds, token_t *token)
         assert(cmds);
 
         cmd_info4encode_t cmd_info = {
-                .dest_reg   = R15,
-                .immed_val = token->space + 16,
+                .dest_reg  = R15,
+                .immed_val = (int) token->space + 16,
                 .use_memory4dest = 1
         };
         encode_mov(cmds + 0, &cmd_info);

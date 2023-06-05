@@ -129,8 +129,8 @@ const my2x86cmd_t CMDS_TABLE[] =
         {.my_name = "out",   .my_encode =  CMD_MY_OUT},
         {.my_name = "in",    .my_encode =  CMD_MY_IN},
         {.my_name = "hlt",   .my_encode =  CMD_MY_HLT},
-        {.my_name = "label", .my_encode = CMD_MY_LABEL},
-        {.my_name = "sqrt",  .my_encode = CMD_MY_SQRT},
+        {.my_name = "label", .my_encode =  CMD_MY_LABEL},
+        {.my_name = "sqrt",  .my_encode =  CMD_MY_SQRT, .code1 = CMD_MY_SQRT},
 
         {.my_name = "call",  .my_encode = CMD_MY_CALL, .code1 = RELATIVE_CALL, .code2 = REG_CALL},
         {.my_name = "ret",   .my_encode = CMD_MY_RET,  .code1 = RET},

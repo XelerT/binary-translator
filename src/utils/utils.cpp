@@ -64,8 +64,11 @@ char check_compilation_flag (char *flag)
         return 0;
 }
 
-uint8_t get_sizeof_number2write (size_t number)
+uint8_t get_sizeof_number2write (int number)
 {
+        if (number < 0)
+                number *= -1;
+
         if (number <= ASCII_MAX_SYMBOL)
                 return 1;
         else

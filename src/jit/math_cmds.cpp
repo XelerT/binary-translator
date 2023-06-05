@@ -74,3 +74,23 @@ void encode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4encode_t *info)
                 cmd->cmd[indent] &= ((uint8_t) ~MODE_USE_REG) >> 2;   /*00|xxxxxx to change only mode*/
         }
 }
+
+#include "../include/consts_x86.cmds"
+
+void encode_sqrt (x86_cmd_t *cmds)
+{
+        assert(cmds);
+
+        cmd_info4encode_t cmd_info = {
+                .dest_reg = RAX
+        };
+        encode_pop_push(cmds + 0, &cmd_info);
+
+        cmds[1] = cvtsi2sd_xmm0_rax;
+        cmds[2] = sqrtsd_xmm0_xmm0;
+        cmds[3] = cvttsd2si_rax_xmm0;
+
+        cmd_info.dest_reg = INVALID_REG;
+        cmd_info.src_reg  = RAX;
+        encode_pop_push(cmds + 4, &cmd_info);
+}

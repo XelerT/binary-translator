@@ -92,7 +92,7 @@ int make_buf_executable (void *buf, size_t buf_capacity)
                 log_error(1, "mprotect RETURNED ERROR");
 
                 perror("\nError printed by perror");
-                fprintf(stderr, "\nError using mprotect: %s\n", strerror( errnum ));
+                fprintf(stderr, "\nError using mprotect: %s\n", strerror(errnum));
 
                 return CHANGE_PROTECTION_ERROR;
         }
@@ -109,7 +109,7 @@ int make_buf_writable (void *buf, size_t buf_capacity)
                 log_error(1, "mprotect RETURNED ERROR");
 
                 perror("\nError printed by perror");
-                fprintf(stderr, "\nError using mprotect: %s\n", strerror( errnum ));
+                fprintf(stderr, "\nError using mprotect: %s\n", strerror(errnum));
 
                 return CHANGE_PROTECTION_ERROR;
         }

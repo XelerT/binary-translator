@@ -62,6 +62,6 @@ void reset_colour_in_terminal ();
 int  check_arguments          (int argc, char *argv[], int *n_file_name_arg);
 char check_compilation_flag   (char *flag);
 
-uint8_t get_sizeof_number2write (size_t number);
+uint8_t get_sizeof_number2write (int number);
 
 #endif /*UTILS_H*/
