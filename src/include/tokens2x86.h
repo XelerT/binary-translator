@@ -24,10 +24,10 @@ uint8_t get_cmd_from_token            (token_t *token);
 size_t find_label   (labels_t *label_table, uint32_t my_offset);
 void   insert_label (jit_code_t *jit_code, token_t *token, labels_t *label_table);
 
-void pre_incode_print_scan_call (x86_cmd_t *cmd, token_t *token, labels_t *label_table);
-void incode_print               (x86_cmd_t *cmds, token_t *token);
-void incode_scan                (x86_cmd_t *cmds, token_t *token);
+void pre_encode_print_scan_call (x86_cmd_t *cmd, token_t *token, labels_t *label_table);
+void encode_print               (x86_cmd_t *cmds, token_t *token);
+void encode_scan                (x86_cmd_t *cmds, token_t *token);
 
-void incode_token2push_pop      (x86_cmd_t *cmd, token_t *token, size_t table_position);
+void encode_token2push_pop      (x86_cmd_t *cmd, token_t *token, size_t table_position);
 
 #endif /*TOKENS2X86_H*/

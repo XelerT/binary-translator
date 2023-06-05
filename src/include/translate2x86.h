@@ -14,6 +14,6 @@ void assemble_cmd (x86_cmd_t *cmds, token_t *token, size_t table_position, label
 
 void change_return_value_src2rax (jit_code_t *jit_code);
 void change_memory_offset        (jit_code_t *jit_code);
-void incode_emitation_of_ret     (x86_cmd_t  *cmds);
+void encode_emitation_of_ret     (x86_cmd_t  *cmds);
 
 #endif /*TRANSLATE2x86_H*/

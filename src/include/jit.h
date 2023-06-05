@@ -29,8 +29,8 @@ struct x86_cmd_t {
         size_t  number = 0;
 };
 
-struct cmd_info4incode_t {
-        uint8_t cmd_incode   = 0;
+struct cmd_info4encode_t {
+        uint8_t cmd_encode   = 0;
         uint8_t dest_reg     = INVALID_REG;
         uint8_t src_reg      = INVALID_REG;
         size_t immed_val     = 0;

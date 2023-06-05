@@ -4,7 +4,7 @@
 
 #include "../include/mem_cmds.h"
 
-void incode_mov (x86_cmd_t *cmd, cmd_info4incode_t *info)
+void encode_mov (x86_cmd_t *cmd, cmd_info4encode_t *info)
 {
         assert(cmd);
 
@@ -73,7 +73,7 @@ void incode_mov (x86_cmd_t *cmd, cmd_info4incode_t *info)
         }
 }
 
-void incode_pop_push (x86_cmd_t *cmd, cmd_info4incode_t *info)
+void encode_pop_push (x86_cmd_t *cmd, cmd_info4encode_t *info)
 {
         assert(cmd);
         assert(info);
@@ -102,7 +102,7 @@ void incode_pop_push (x86_cmd_t *cmd, cmd_info4incode_t *info)
 
                 memcpy(cmd->cmd + 1, &(info->immed_val), get_sizeof_number2write(info->immed_val));
 
-                cmd->length = 1 + get_sizeof_number2write(info->immed_val);                  /* 1 byte for cmd incode and 4 for immed number */
+                cmd->length = 1 + get_sizeof_number2write(info->immed_val);                  /* 1 byte for cmd encode and 4 for immed number */
         } else if (use_memory) {
                 if (info->use_memory4src || info->src_reg != INVALID_REG) {
                         cmd->cmd[indent] = MEM_REG_PUSH;
@@ -124,6 +124,6 @@ void incode_pop_push (x86_cmd_t *cmd, cmd_info4incode_t *info)
 
                 cmd->length = 1 + indent;                        /*1 for incoding*/
         } else {
-                log_error(2, "UNKNOWN PUSH/POP: %d", info->cmd_incode);
+                log_error(2, "UNKNOWN PUSH/POP: %d", info->cmd_encode);
         }
 }

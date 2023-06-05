@@ -65,7 +65,7 @@ enum cmds_codes {
         MEM_IMMED_MOV = 0xC7
 };
 
-enum my_cmds_incode {
+enum my_cmds_encode {
         CMD_MY_PUSH  =  1,
         CMD_MY_POP   =  2,
         CMD_MY_ADD   =  3,
@@ -75,8 +75,17 @@ enum my_cmds_incode {
         CMD_MY_OUT   =  7,
         CMD_MY_IN    =  8,
         CMD_MY_LABEL = 12,
+        CMD_MY_HLT   =  9,
+        CMD_MY_SQRT  = 16,
         CMD_MY_CALL  = 13,
         CMD_MY_RET   = 15,
+        CMD_MY_JMP   = 11,
+        CMD_MY_JB    = 17,
+        CMD_MY_JBE   = 18,
+        CMD_MY_JA    = 19,
+        CMD_MY_JAE   = 20,
+        CMD_MY_JE    = 21,
+        CMD_MY_JNE   = 22
 };
 
 enum x86_regs {
@@ -102,30 +111,36 @@ enum x86_regs {
 
 struct my2x86cmd_t {
         char       *my_name = nullptr;
-        int       my_incode = 0;
+        int       my_encode = 0;
         unsigned char code1 = 0;
         unsigned char code2 = 0;
         unsigned char code3 = 0;
 };
 
-const my2x86cmd_t cmds_table[] =
+const my2x86cmd_t CMDS_TABLE[] =
 {
-        {.my_name = "push",  .my_incode =  1, .code1 = IMMED_PUSH, .code2 = REG_PUSH_POP, .code3 = MEM_REG_PUSH},
-        {.my_name = "pop",   .my_incode =  2, .code1 = REG_PUSH_POP, .code2 = MEM_REG_POP},
-        {.my_name = "add",   .my_incode =  3, .code1 = ADD},
-        {.my_name = "sub",   .my_incode =  4, .code1 = SUB},
-        {.my_name = "mul",   .my_incode =  5, .code1 = MUL},
-        {.my_name = "div",   .my_incode =  6, .code1 = MUL, .code2 = 0xFF},
-        {.my_name = "label", .my_incode = 12},
-        {.my_name = "call",  .my_incode = 13, .code1 = RELATIVE_CALL, .code2 = REG_CALL},
-        {.my_name = "ret",   .my_incode = 15, .code1 = RET},
-        {.my_name = "jmp",   .my_incode = 11, .code1 = SHORT_JMP, .code2 = NEAR_JMP},
-        {.my_name = "jb",    .my_incode = 17, .code1 = JB,  .code2 = (JB  & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
-        {.my_name = "jbe",   .my_incode = 18, .code1 = JBE, .code2 = (JBE & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
-        {.my_name = "ja",    .my_incode = 19, .code1 = JA,  .code2 = (JA  & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
-        {.my_name = "jae",   .my_incode = 20, .code1 = JAE, .code2 = (JAE & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
-        {.my_name = "je",    .my_incode = 21, .code1 = JE,  .code2 = (JE  & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
-        {.my_name = "jne",   .my_incode = 22, .code1 = JNE, .code2 = (JNE & COND_JMPS_REL_CONVERTER_MASK) | 0x80}
+        {.my_name = "push",  .my_encode = CMD_MY_PUSH, .code1 = IMMED_PUSH, .code2 = REG_PUSH_POP, .code3 = MEM_REG_PUSH},
+        {.my_name = "pop",   .my_encode = CMD_MY_POP,  .code1 = REG_PUSH_POP, .code2 = MEM_REG_POP},
+        {.my_name = "add",   .my_encode = CMD_MY_ADD,  .code1 = ADD},
+        {.my_name = "sub",   .my_encode = CMD_MY_SUB,  .code1 = SUB},
+        {.my_name = "mul",   .my_encode = CMD_MY_MUL,  .code1 = MUL},
+        {.my_name = "div",   .my_encode = CMD_MY_DIV,  .code1 = MUL, .code2 = 0xFF},
+
+        {.my_name = "out",   .my_encode =  CMD_MY_OUT},
+        {.my_name = "in",    .my_encode =  CMD_MY_IN},
+        {.my_name = "hlt",   .my_encode =  CMD_MY_HLT},
+        {.my_name = "label", .my_encode = CMD_MY_LABEL},
+        {.my_name = "sqrt",  .my_encode = CMD_MY_SQRT},
+
+        {.my_name = "call",  .my_encode = CMD_MY_CALL, .code1 = RELATIVE_CALL, .code2 = REG_CALL},
+        {.my_name = "ret",   .my_encode = CMD_MY_RET,  .code1 = RET},
+        {.my_name = "jmp",   .my_encode = CMD_MY_JMP,  .code1 = SHORT_JMP, .code2 = NEAR_JMP},
+        {.my_name = "jb",    .my_encode = CMD_MY_JB,   .code1 = JB,  .code2 = (JB  & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
+        {.my_name = "jbe",   .my_encode = CMD_MY_JBE,  .code1 = JBE, .code2 = (JBE & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
+        {.my_name = "ja",    .my_encode = CMD_MY_JA,   .code1 = JA,  .code2 = (JA  & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
+        {.my_name = "jae",   .my_encode = CMD_MY_JAE,  .code1 = JAE, .code2 = (JAE & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
+        {.my_name = "je",    .my_encode = CMD_MY_JE,   .code1 = JE,  .code2 = (JE  & COND_JMPS_REL_CONVERTER_MASK) | 0x80},
+        {.my_name = "jne",   .my_encode = CMD_MY_JNE,  .code1 = JNE, .code2 = (JNE & COND_JMPS_REL_CONVERTER_MASK) | 0x80}
 };
 
-const int N_COMMANDS = 16;
+const int N_COMMANDS = 20;

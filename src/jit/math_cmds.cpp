@@ -5,7 +5,7 @@
 #include "../include/math_cmds.h"
 #include "../include/tokens2x86.h"
 
-void incode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4incode_t *info)
+void encode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4encode_t *info)
 {
         assert(cmd);
         assert(info);
@@ -25,7 +25,7 @@ void incode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4incode_t *info)
         if (cmd->cmd[indent])
                 indent++;
 
-        cmd->cmd[indent++] = info->cmd_incode;
+        cmd->cmd[indent++] = info->cmd_encode;
 
         if (info->dest_reg != INVALID_REG && info->src_reg != INVALID_REG) {
                 cmd->cmd[indent - 1] |= 1;
@@ -35,9 +35,9 @@ void incode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4incode_t *info)
                 cmd->length = indent + 1;
         } else if (info->dest_reg != INVALID_REG && info->src_reg == INVALID_REG) {
                 cmd->cmd[indent]  = (MODE_REG_ADDRESS << 6);
-                if (info->cmd_incode == SUB || info->cmd_incode == ADD)
+                if (info->cmd_encode == SUB || info->cmd_encode == ADD)
                         cmd->cmd[indent - 1] = ADD_SUB_IMMED;
-                if (info->cmd_incode == SUB)
+                if (info->cmd_encode == SUB)
                         cmd->cmd[indent] |= (IMMED_SUB_MASK << 3);
                 cmd->cmd[indent] |= info->dest_reg;
 
@@ -47,7 +47,7 @@ void incode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4incode_t *info)
 
                 cmd->length = get_sizeof_number2write(info->immed_val) + indent + 1;
         } else if (info->dest_reg == INVALID_REG && info->src_reg != INVALID_REG) {
-                if (info->cmd_incode != MUL && info->cmd_incode != DIV) {
+                if (info->cmd_encode != MUL && info->cmd_encode != DIV) {
                         set_red_in_terminal();
                         fprintf(stderr, "Can't use only source register for non div or mul command!");
                         reset_colour_in_terminal();
@@ -55,7 +55,7 @@ void incode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4incode_t *info)
                 cmd->cmd[indent - 1] = MUL;
                 cmd->cmd[indent]  = (MODE_REG_ADDRESS << 6);
                 cmd->cmd[indent] |= info->src_reg;
-                if (info->cmd_incode == MUL)
+                if (info->cmd_encode == MUL)
                         cmd->cmd[indent] |= MUL_MASK;
                 else
                         cmd->cmd[indent] |= DIV_MASK;

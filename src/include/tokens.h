@@ -6,13 +6,15 @@
 
 #include "configs.cmds"
 
+const int AVERAGE_SIZE_OF_TOKEN_IN_CHARS = 32;
+
 struct token_t {
         int  my_cmd = 0;                  /* original code of command for my cpu */
         bool   dest = 0;                  /* 1 - register => reg/memory, 0 - mem => reg */
         bool      s = 1;                  /* Using 64 bit */
 
-        char    my_reg = 0;                  /* number of my reg */
-        int      immed = 0;                  /* immediate number in cmd */
+        char    my_reg = 0;               /* number of my reg */
+        int      immed = 0;               /* immediate number in cmd */
         bool use_immed = 0;               /*1 - When immediate number is given*/
 
         int8_t reg = INVALID_REG;

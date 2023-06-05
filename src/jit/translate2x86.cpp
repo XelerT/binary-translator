@@ -22,21 +22,21 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
         labels_t label_table = {};
 
         x86_cmd_t set_call_stack_offset = {};
-        cmd_info4incode_t cmd_info = {
+        cmd_info4encode_t cmd_info = {
                 .dest_reg   = R15,
                 .immed_val  = (size_t) jit_code->exec_memory2use + jit_code->exec_memory_capacity - sizeof(size_t)
         };
-        incode_mov(&set_call_stack_offset, &cmd_info);
+        encode_mov(&set_call_stack_offset, &cmd_info);
         paste_cmd_in_jit_buf(jit_code, &set_call_stack_offset);
 
         insert_nops(jit_code, 10);
         // x86_cmd_t mov_mem = {};
-        // cmd_info4incode_t info = {
+        // cmd_info4encode_t info = {
         //         .dest_reg = RAX,
         //         .src_reg = RCX,
         //         .use_memory4src = 1
         // };
-        // incode_mov(&mov_mem, &info);
+        // encode_mov(&mov_mem, &info);
         // paste_cmd_in_jit_buf(jit_code, &mov_mem);
 
         for (size_t i = 0; i < tokens->size; i += skipped_tokens) {
@@ -60,8 +60,8 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
         //paste_io_decimal_function(jit_code, &label_table, INVALID_PRINT_ADDRESS);
         //paset_io_decimal_function(jit_code, &label_table, INVALID_SCAN_ADDRESS);
 
-        incode_conditional_jmps(jit_code, &label_table);
-        incode_calls_jmps(jit_code, &label_table);
+        encode_conditional_jmps(jit_code, &label_table);
+        encode_calls_jmps(jit_code, &label_table);
 
         change_memory_offset(jit_code);
         change_return_value_src2rax(jit_code);
@@ -88,11 +88,11 @@ void change_memory_offset (jit_code_t *jit_code)
                 n_byte_after_first_pop++;
         n_byte_after_first_pop++;
 
-        cmd_info4incode_t cmd_info = {
+        cmd_info4encode_t cmd_info = {
                 .dest_reg   = RBX,
                 .immed_val  = (size_t) jit_code->exec_memory2use
         };
-        incode_mov(&cmd, &cmd_info);
+        encode_mov(&cmd, &cmd_info);
 
         uint8_t start_i = 7;
         uint8_t i = start_i;          /*1 + sizeof( mov r15, address)*/
@@ -124,16 +124,16 @@ int x86_cmd_ctor (x86_cmd_t *cmds, token_t *token, labels_t *label_table)
         assert(label_table);
 
         if (token->my_cmd == CMD_MY_OUT) {
-                // pre_incode_printf_scanf_call(cmds, token, label_table);
-                incode_print(cmds, token);
+                // pre_encode_printf_scanf_call(cmds, token, label_table);
+                encode_print(cmds, token);
                 return 0;
         } else if (token->my_cmd == CMD_MY_IN) {
-                incode_scan(cmds, token);
+                encode_scan(cmds, token);
                 return 0;
         }
 
         for (int i = 0; i < N_COMMANDS; i++) {
-                if (token->my_cmd == cmds_table[i].my_incode) {
+                if (token->my_cmd == CMDS_TABLE[i].my_encode) {
                         assemble_cmd(cmds, token, i, label_table);
                 }
         }
@@ -145,36 +145,36 @@ void assemble_cmd (x86_cmd_t *cmds, token_t *token, size_t table_position, label
         assert(cmds);
         assert(token);
 
-        if (cmds_table[table_position].code2 == 0) {
-                if (cmds_table[table_position].code1 == RET) {
-                        incode_emitation_of_ret(cmds);
+        if (CMDS_TABLE[table_position].code2 == 0) {
+                if (CMDS_TABLE[table_position].code1 == RET) {
+                        encode_emitation_of_ret(cmds);
                 }
-        }  else if (cmds_table[table_position].code1 == RELATIVE_CALL) {
-                pre_incode_emitation_of_call(cmds, token);
-        } else if (cmds_table[table_position].code1 == SHORT_JMP) {
-                pre_incode_jmp(cmds, token);
-        } else if (cmds_table[table_position].code1 & CONDITIONAL_JMPS_MASK_REL8) {
-                uint8_t n_cmds = incode_cmp(cmds);
-                pre_incode_conditional_jmp(cmds + n_cmds, token, table_position, label_table);
+        }  else if (CMDS_TABLE[table_position].code1 == RELATIVE_CALL) {
+                pre_encode_emitation_of_call(cmds, token);
+        } else if (CMDS_TABLE[table_position].code1 == SHORT_JMP) {
+                pre_encode_jmp(cmds, token);
+        } else if (CMDS_TABLE[table_position].code1 & CONDITIONAL_JMPS_MASK_REL8) {
+                uint8_t n_cmds = encode_cmp(cmds);
+                pre_encode_conditional_jmp(cmds + n_cmds, token, table_position, label_table);
         } else {
-                if (cmds_table[table_position].code1 == IMMED_PUSH ||
-                    cmds_table[table_position].code1 == REG_PUSH_POP) {
-                        incode_token2push_pop(cmds, token, table_position);
+                if (CMDS_TABLE[table_position].code1 == IMMED_PUSH ||
+                    CMDS_TABLE[table_position].code1 == REG_PUSH_POP) {
+                        encode_token2push_pop(cmds, token, table_position);
                 }
         }
 }
 
-void incode_emitation_of_ret (x86_cmd_t *cmds)
+void encode_emitation_of_ret (x86_cmd_t *cmds)
 {
         assert(cmds);
 
-        cmd_info4incode_t cmd_info = {
-                .cmd_incode = ADD,
+        cmd_info4encode_t cmd_info = {
+                .cmd_encode = ADD,
                 .dest_reg   = R15,
                 .immed_val  = 8
         };
-        incode_add_sub_mul_div(cmds, &cmd_info);
+        encode_add_sub_mul_div(cmds, &cmd_info);
         cmds[1] = push_mem_r15;
 
-        incode_ret(cmds + 2);
+        encode_ret(cmds + 2);
 }

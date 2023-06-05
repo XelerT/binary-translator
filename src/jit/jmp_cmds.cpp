@@ -6,7 +6,7 @@
 #include "../include/mem_cmds.h"
 #include "../include/math_cmds.h"
 
-void incode_call (x86_cmd_t *cmd, cmd_info4incode_t *info)
+void encode_call (x86_cmd_t *cmd, cmd_info4encode_t *info)
 {
         assert(cmd);
         assert(info);
@@ -34,7 +34,7 @@ void incode_call (x86_cmd_t *cmd, cmd_info4incode_t *info)
         }
 }
 
-void incode_ret (x86_cmd_t *cmd)
+void encode_ret (x86_cmd_t *cmd)
 {
         assert(cmd);
 
@@ -42,18 +42,18 @@ void incode_ret (x86_cmd_t *cmd)
         cmd->length = 1;
 }
 
-void pre_incode_emitation_of_call (x86_cmd_t *cmds, token_t *token)
+void pre_encode_emitation_of_call (x86_cmd_t *cmds, token_t *token)
 {
         assert(cmds);
 
-        cmd_info4incode_t cmd_info = {
+        cmd_info4encode_t cmd_info = {
                 .dest_reg   = R15,
                 .immed_val = token->space + 16,
                 .use_memory4dest = 1
         };
-        incode_mov(cmds + 0, &cmd_info);
+        encode_mov(cmds + 0, &cmd_info);
 
-        cmd_info.cmd_incode = SUB;
+        cmd_info.cmd_encode = SUB;
         cmd_info.use_memory4dest = 0;
 
         cmd_info.dest_reg   = R15;
@@ -61,11 +61,11 @@ void pre_incode_emitation_of_call (x86_cmd_t *cmds, token_t *token)
         cmd_info.immed_val = 8;
         cmd_info.use_memory4dest = 0;
 
-        incode_add_sub_mul_div(cmds + 1, &cmd_info);
-        pre_incode_jmp(cmds + 2, token);
+        encode_add_sub_mul_div(cmds + 1, &cmd_info);
+        pre_encode_jmp(cmds + 2, token);
 }
 
-void pre_incode_call (x86_cmd_t *cmd, token_t *token)
+void pre_encode_call (x86_cmd_t *cmd, token_t *token)
 {
         assert(cmd);
         assert(token);
@@ -81,7 +81,7 @@ void pre_incode_call (x86_cmd_t *cmd, token_t *token)
         }
 }
 
-void incode_calls_jmps (jit_code_t *jit_code, labels_t *label_table)
+void encode_calls_jmps (jit_code_t *jit_code, labels_t *label_table)
 {
         assert(jit_code);
         assert(label_table);
@@ -105,7 +105,7 @@ void incode_calls_jmps (jit_code_t *jit_code, labels_t *label_table)
         }
 }
 
-void pre_incode_conditional_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position,
+void pre_encode_conditional_jmp (x86_cmd_t *cmd, token_t *token, size_t table_position,
                                                         labels_t *label_table)
 {
         assert(cmd);
@@ -115,12 +115,12 @@ void pre_incode_conditional_jmp (x86_cmd_t *cmd, token_t *token, size_t table_po
         size_t offset = token->offset;
 
         cmd->cmd[0] = PREFIX_64_bit;
-        cmd->cmd[1] = cmds_table[table_position].code2;
+        cmd->cmd[1] = CMDS_TABLE[table_position].code2;
         memcpy(cmd->cmd + 2, &offset, sizeof(uint32_t));
         cmd->length = 2 + sizeof(uint32_t);
 }
 
-void incode_conditional_jmps (jit_code_t *jit_code, labels_t *label_table)
+void encode_conditional_jmps (jit_code_t *jit_code, labels_t *label_table)
 {
         assert(jit_code);
         assert(label_table);
@@ -141,7 +141,7 @@ void incode_conditional_jmps (jit_code_t *jit_code, labels_t *label_table)
         }
 }
 
-void pre_incode_jmp (x86_cmd_t *cmd, token_t *token)
+void pre_encode_jmp (x86_cmd_t *cmd, token_t *token)
 {
         assert(cmd);
         assert(token);
