@@ -5,6 +5,7 @@
 #include "../include/jmp_cmds.h"
 #include "../include/mem_cmds.h"
 #include "../include/math_cmds.h"
+#include "../include/encode_cmd.h"
 
 void encode_call (x86_cmd_t *cmd, cmd_info4encode_t *info)
 {
@@ -14,7 +15,7 @@ void encode_call (x86_cmd_t *cmd, cmd_info4encode_t *info)
         uint8_t indent = 0;
 
         if (info->src_reg > RDI && info->src_reg != INVALID_REG) {
-                cmd->cmd[indent++] = USE_R_REGS;
+                cmd->cmd[indent++] = USE_DEST_R_REGS;
                 info->src_reg -= R8;
         }
 
@@ -47,11 +48,13 @@ void pre_encode_emitation_of_call (x86_cmd_t *cmds, token_t *token)
         assert(cmds);
 
         cmd_info4encode_t cmd_info = {
+                .cmd_encode = MOV,
                 .dest_reg  = R15,
                 .immed_val = (int) token->space + 16,
                 .use_memory4dest = 1
         };
-        encode_mov(cmds + 0, &cmd_info);
+        encode_cmd(cmds + 0, &cmd_info);
+        // encode_mov(cmds + 0, &cmd_info);
 
         cmd_info.cmd_encode = SUB;
         cmd_info.use_memory4dest = 0;
@@ -61,7 +64,8 @@ void pre_encode_emitation_of_call (x86_cmd_t *cmds, token_t *token)
         cmd_info.immed_val = 8;
         cmd_info.use_memory4dest = 0;
 
-        encode_add_sub_mul_div(cmds + 1, &cmd_info);
+        encode_cmd(cmds + 1, &cmd_info);
+        // encode_add_sub_mul_div(cmds + 1, &cmd_info);
         pre_encode_jmp(cmds + 2, token);
 }
 

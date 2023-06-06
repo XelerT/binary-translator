@@ -4,73 +4,44 @@
 
 #include "../include/mem_cmds.h"
 
-void encode_mov (x86_cmd_t *cmd, cmd_info4encode_t *info)
+void encode_mov (x86_cmd_t *cmd, cmd_info4encode_t *info, uint8_t *indent)
 {
         assert(cmd);
         assert(info);
-
-        uint8_t indent = 0;
-
-        if (info->dest_reg > RDI && info->dest_reg != INVALID_REG) {
-                cmd->cmd[0] = USE_R_REGS;
-                info->dest_reg -= R8;
-        }
-        if (info->src_reg > RDI && info->src_reg != INVALID_REG) {
-                cmd->cmd[0] = USE_SRC_R_REG;
-                info->src_reg -= R8;
-        }
-        if (cmd->cmd[0])
-                indent++;
+        assert(indent);
 
         if (info->dest_reg != INVALID_REG && info->src_reg != INVALID_REG) {
-                cmd->cmd[indent++] |= x64bit_PREFIX;
-                cmd->cmd[indent++]  = REG_MOV;
+                cmd->cmd[*indent] = REG_MOV;
+                ++*indent;
 
-                cmd->cmd[indent]  = MODE_REG_ADDRESS << 6;
-                if (info->use_memory4src) {
-                        uint8_t swap = info->dest_reg;
-                        info->dest_reg = info->src_reg;
-                        info->src_reg = swap;
-                }
+                cmd->cmd[*indent] = MODE_REG_ADDRESS << 6;
 
-                cmd->cmd[indent] |= info->dest_reg;
-                cmd->cmd[indent] |= info->src_reg << 3;
+                cmd->cmd[*indent] |= info->dest_reg;
+                cmd->cmd[*indent] |= info->src_reg << 3;
 
-                cmd->length = indent + 1;
+                cmd->length = *indent + 1;
         } else if (info->dest_reg != INVALID_REG && info->src_reg == INVALID_REG) {
                 if ((uint32_t) info->immed_val < (uint32_t) -1) {
-                        if (info->use_memory4dest)
-                                cmd->cmd[indent++] = MEM_IMMED_MOV;
-                        else
-                                cmd->cmd[indent]  = IMMED_MOV;
+                        if (info->use_memory4dest) {
+                                cmd->cmd[*indent] = MEM_IMMED_MOV;
+                                ++*indent;
+                        } else {
+                                cmd->cmd[*indent] = IMMED_MOV;
+                        }
+                        cmd->cmd[*indent] |= info->dest_reg;
+                        memcpy(cmd->cmd + 1 + *indent, &info->immed_val, sizeof(uint32_t));
 
-                        cmd->cmd[indent] |= info->dest_reg;
-                        memcpy(cmd->cmd + 1 + indent, &info->immed_val, sizeof(uint32_t));
-
-                        cmd->length = 1 + indent + (uint8_t) sizeof(uint32_t);
+                        cmd->length = 1 + *indent + (uint8_t) sizeof(uint32_t);
                 } else {
-                        cmd->cmd[indent++] |= x64bit_PREFIX;
+                        cmd->cmd[*indent] |= x64bit_PREFIX;
+                        ++*indent;
 
-                        cmd->cmd[indent]  = IMMED_MOV;
-
-                        cmd->cmd[indent]   = IMMED_MOV;
-                        cmd->cmd[indent]  |= info->dest_reg;
+                        cmd->cmd[*indent]   = IMMED_MOV;
+                        cmd->cmd[*indent]  |= info->dest_reg;
                         memcpy(cmd->cmd + 2, &info->immed_val, sizeof(uint32_t));
 
                         cmd->length = 2 + sizeof(uint32_t);
                 }
-        }
-        if (info->use_memory4dest && info->use_memory4src) {
-                set_red_in_terminal();
-                fprintf(stderr, "Can't use memory as destination and source!");
-                reset_colour_in_terminal();
-
-                log_error(1, "Can't use memory as destination and source!");
-        } else if (info->use_memory4dest) {
-                cmd->cmd[0] |= x64bit_PREFIX;
-        } else if (info->use_memory4src) {
-                cmd->cmd[indent - 1] = MEM_REG_MOV;
-                cmd->cmd[indent] &= ((uint8_t) ~MODE_USE_REG) >> 2;   /*00|xxxxxx to change only mode*/
         }
 }
 
@@ -86,7 +57,7 @@ void encode_pop_push (x86_cmd_t *cmd, cmd_info4encode_t *info)
         bool use_memory = info->use_memory4dest | info->use_memory4src;
 
         if (info->dest_reg > RDI && info->dest_reg != INVALID_REG) {
-                cmd->cmd[indent++] = USE_R_REGS;
+                cmd->cmd[indent++] = USE_DEST_R_REGS;
                 reg -= R8;
         } else if (info->src_reg > RDI && info->src_reg != INVALID_REG) {
                 cmd->cmd[indent++] = USE_SRC_R_REG;

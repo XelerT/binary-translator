@@ -2,6 +2,7 @@
 #include "src/include/jit.h"
 #include "src/include/text.h"
 #include "src/include/tokens.h"
+#include "src/include/IR.h"
 
 int main (int argc, char *argv[])
 {
@@ -14,6 +15,10 @@ int main (int argc, char *argv[])
 
         tokens_t tokens = {};
         execution_status = parse_my_binary_file(&tokens, argv[n_file_name_arg]);
+        if (execution_status)
+                goto terminate_process;
+
+        execution_status = save_tokens_in_text (&tokens, "IR.dump");
         if (execution_status)
                 goto terminate_process;
 

@@ -6,6 +6,13 @@
 #include "../include/tokens2x86.h"
 #include "../include/jit.h"
 
+#include "../include/mem_cmds.h"
+#include "../include/math_cmds.h"
+#include "../include/jmp_cmds.h"
+#include "../include/conditional_cmds.h"
+
+#include "../include/encode_cmd.h"
+
 int  fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens);
 void paste_cmd_in_jit_buf (jit_code_t *jit_code, x86_cmd_t *cmd);
 

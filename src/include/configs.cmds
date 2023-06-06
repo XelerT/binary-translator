@@ -13,8 +13,12 @@ unsigned enum cmd_bit_masks {
         MODE_8_BYTE_IN_ADDRESS         = 2,
         MODE_REG_ADDRESS               = 3,
 
-        USE_R_REGS                     = 0x41,
-        USE_SRC_R_REG                  = 0x4D,
+        DEST_MEMORY_REG                = 2,
+        DEST_REG_MEMORY                = 0,
+        USE_64bit_OPERANDS             = 1,
+
+        USE_DEST_R_REGS                = 0x41,
+        USE_SRC_R_REG                  = 0x4C,
         x64bit_PREFIX                  = 0x48,
 
         CONDITIONAL_JMPS_MASK_REL8     = 0x70,
@@ -63,6 +67,15 @@ enum cmds_codes {
         REG_MOV       = 0x89,
         MEM_REG_MOV   = 0x8B,
         MEM_IMMED_MOV = 0xC7
+};
+
+enum cmds4autogen_encoding {
+        MOV  = 0x1F,
+        SQRT = 0x2F,
+        POP  = 0x3F,
+        PUSH = 0x4F,
+        CALL = 0x5F,
+        JMP  = 0x6F
 };
 
 enum my_cmds_encode {

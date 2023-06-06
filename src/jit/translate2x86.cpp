@@ -23,10 +23,11 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
 
         x86_cmd_t set_call_stack_offset = {};
         cmd_info4encode_t cmd_info = {
+                .cmd_encode = MOV,
                 .dest_reg   = R15,
                 .immed_val  = (int) ((size_t) jit_code->exec_memory2use + jit_code->exec_memory_capacity - sizeof(size_t))
         };
-        encode_mov(&set_call_stack_offset, &cmd_info);
+        encode_cmd(&set_call_stack_offset, &cmd_info);
         paste_cmd_in_jit_buf(jit_code, &set_call_stack_offset);
 
         insert_nops(jit_code, 10);
@@ -65,9 +66,10 @@ void change_return_value_src2rax (jit_code_t *jit_code)
 
         x86_cmd_t cmd = {};
         cmd_info4encode_t pop_rax_info = {
+                .cmd_encode = POP,
                 .dest_reg = RAX
         };
-        encode_pop_push(&cmd, &pop_rax_info);
+        encode_cmd(&cmd, &pop_rax_info);
         paste_cmd_in_jit_buf(jit_code, &cmd);
 }
 
@@ -83,13 +85,14 @@ void change_memory_offset (jit_code_t *jit_code)
         n_byte_after_first_pop++;
 
         cmd_info4encode_t cmd_info = {
+                .cmd_encode = MOV,
                 .dest_reg   = RBX,
                 .immed_val  = (int) (size_t) jit_code->exec_memory2use
         };
-        encode_mov(&cmd, &cmd_info);
+        encode_cmd(&cmd, &cmd_info);
 
-        uint8_t start_i = 7;
-        uint8_t i = start_i;          /*1 + sizeof( mov r15, address)*/
+        uint8_t start_i = 7;            /*1 + sizeof( mov r15, address)*/
+        uint8_t i = start_i;
         while (i < cmd.length + start_i) {
                 jit_code->buf[i] = cmd.cmd[i - start_i];
                 i++;
@@ -168,7 +171,7 @@ void encode_emitation_of_ret (x86_cmd_t *cmds)
                 .dest_reg   = R15,
                 .immed_val  = 8
         };
-        encode_add_sub_mul_div(cmds, &cmd_info);
+        encode_cmd(cmds, &cmd_info);
         cmds[1] = push_mem_r15;
 
         encode_ret(cmds + 2);
