@@ -57,6 +57,7 @@ enum main_errors {
 };
 
 void set_red_in_terminal      ();
+void set_green_in_terminal    ();
 void set_blue_in_terminal     ();
 void reset_colour_in_terminal ();
 int  check_arguments          (int argc, char *argv[], int *n_file_name_arg);

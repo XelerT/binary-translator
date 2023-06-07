@@ -20,6 +20,7 @@ size_t  convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_cod
 void    find_convert_memory_access    (jit_code_t *jit_code, tokens_t *tokens, size_t n_token);
 void    change_return_value_src       (jit_code_t *jit_code, tokens_t *tokens, size_t n_token);
 uint8_t get_cmd_from_token            (token_t *token);
+void write_cmds_in_jit_code           (jit_code_t *jit_code, x86_cmd_t *cmds, uint8_t max_cmds2write);
 
 size_t find_label   (labels_t *label_table, uint32_t my_offset);
 void   insert_label (jit_code_t *jit_code, token_t *token, labels_t *label_table);

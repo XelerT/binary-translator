@@ -57,6 +57,9 @@ CFILES = main.cpp $(TEXT_CFILES) $(LOG_CFILES) $(UTILS_CFILES) $(JIT_CFILES) \
 
 OUTPUT = jit.out
 
+TEST_CFILES = tests/test_encoding.cpp
+TEST_OUTPUT = tests/test.out
+
 all:
 	@ clear
 	@ g++ $(OPTIM_FLAGS) -masm=intel -o $(OUTPUT) $(CFLAGS) $(CFILES) -no-pie
@@ -72,3 +75,13 @@ sanitize:
 run:
 	@ ./$(OUTPUT) input.txt
 	@ echo Run
+
+.PHONY: test
+test:
+	@ g++ $(OPTIM_FLAGS) -o $(TEST_OUTPUT) $(CFLAGS) $(TEXT_CFILES) $(LOG_CFILES) $(UTILS_CFILES) $(JIT_CFILES) \
+		  $(CODE_GEN_CFILES) $(FRONTEND_CFILES) $(IR_CFILES) $(TEST_CFILES)
+	@ nasm -f elf64 tests/standart.s
+	@ ld -s -o tests/standart tests/standart.o
+	@ echo Complied test files.
+	@ ./$(TEST_OUTPUT)
+	@ echo Run tests.

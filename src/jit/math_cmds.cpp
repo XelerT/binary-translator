@@ -6,15 +6,17 @@
 #include "../include/tokens2x86.h"
 #include "../include/encode_cmd.h"
 
+#pragma GCC diagnostic ignored "-Wconversion"
+
 void encode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4encode_t *info, uint8_t *indent)
 {
         assert(cmd);
         assert(info);
         assert(indent);
 
-        if (info->dest_reg != INVALID_REG && (info->cmd_encode == MUL || info->cmd_encode == DIV)) {
+        if (info->src_reg != INVALID_REG && (info->cmd_encode == MUL || info->cmd_encode == DIV)) {
                 set_red_in_terminal();
-                fprintf(stderr, "Can't use destination for mul/div!");
+                fprintf(stderr, "Can't use source for mul/div(cmd_incode = %d)!\n", info->cmd_encode);
                 reset_colour_in_terminal();
                 return;
         }
@@ -29,7 +31,8 @@ void encode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4encode_t *info, uint8_t *i
                 cmd->cmd[*indent] |= info->src_reg << 3;
 
                 cmd->length = *indent + 1;
-        } else if (info->dest_reg != INVALID_REG && info->src_reg == INVALID_REG) {
+        } else if ((info->dest_reg != INVALID_REG && info->src_reg == INVALID_REG) &&
+                   (info->cmd_encode != MUL && info->cmd_encode != DIV)) {
                 cmd->cmd[*indent] = (MODE_REG_ADDRESS << 6);
 
                 if (info->cmd_encode == SUB || info->cmd_encode == ADD)
@@ -44,15 +47,10 @@ void encode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4encode_t *info, uint8_t *i
                 memcpy(cmd->cmd + *indent + 1, &info->immed_val, get_sizeof_number2write(info->immed_val));
 
                 cmd->length = get_sizeof_number2write(info->immed_val) + *indent + 1;
-        } else if (info->dest_reg == INVALID_REG && info->src_reg != INVALID_REG) {
-                if (info->cmd_encode != MUL && info->cmd_encode != DIV) {
-                        set_red_in_terminal();
-                        fprintf(stderr, "Can't use only source register for non div or mul command!");
-                        reset_colour_in_terminal();
-                }
+        } else if (info->cmd_encode == MUL || info->cmd_encode == DIV) {
                 cmd->cmd[*indent - 1] = MUL;
                 cmd->cmd[*indent]  = (MODE_REG_ADDRESS << 6);
-                cmd->cmd[*indent] |= info->src_reg;
+                cmd->cmd[*indent] |= info->dest_reg;
 
                 if (info->cmd_encode == MUL)
                         cmd->cmd[*indent] |= MUL_MASK;
@@ -62,6 +60,8 @@ void encode_add_sub_mul_div (x86_cmd_t *cmd, cmd_info4encode_t *info, uint8_t *i
                 cmd->length = *indent + 1;
         }
 }
+
+#pragma GCC diagnostic warning "-Wconversion"
 
 #include "../include/consts_x86.cmds"
 

@@ -56,7 +56,6 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                 return 0;
 
         x86_cmd_t cmds[5] = {};
-
         cmd_info4encode_t cmd_info = {};
 
         switch (token0->my_cmd) {
@@ -73,11 +72,12 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
 
                 cmd_info.cmd_encode = get_cmd_from_token(token0);
                 if (cmd_info.cmd_encode == MUL || cmd_info.cmd_encode == DIV) {
-                        cmd_info.dest_reg = INVALID_REG;
+                        cmd_info.src_reg = INVALID_REG;
+                        cmd_info.dest_reg = RDI;
                 } else {
+                        cmd_info.src_reg  = RDI;
                         cmd_info.dest_reg = RAX;
                 }
-                cmd_info.src_reg  = RDI;
                 encode_cmd(cmds + 2, &cmd_info);
 
                 cmd_info.dest_reg = INVALID_REG;
@@ -90,6 +90,11 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
         default:
                 log(1, "");
         }
+        if (token0->my_cmd != CMD_MY_PUSH) {
+                write_cmds_in_jit_code(jit_code, cmds, 5);
+                return n_token - prev_n_token;
+        }
+
         if (!(n_token - prev_n_token)) {
                 switch (token1->my_cmd) {
                 case CMD_MY_ADD:
@@ -105,11 +110,11 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                         cmd_info.dest_reg   = RAX;
                         cmd_info.cmd_encode = get_cmd_from_token(token1);
 
-                        if (cmd_info.cmd_encode == MUL || cmd_info.cmd_encode == DIV) {
-                                cmd_info.dest_reg = INVALID_REG;
-                                if (cmd_info.src_reg == INVALID_REG)
-                                        return 0;
-                        }
+                        // if (cmd_info.cmd_encode == MUL || cmd_info.cmd_encode == DIV) {
+                        //         cmd_info.dest_reg = INVALID_REG;
+                        //         if (cmd_info.src_reg == INVALID_REG)
+                        //                 return 0;
+                        // }
                         encode_cmd(cmds + 1, &cmd_info);
 
                         cmd_info.dest_reg = INVALID_REG;
@@ -123,6 +128,11 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                         log(1, "");
                 }
         }
+        if (token0->my_cmd != CMD_MY_PUSH && token1->my_cmd != CMD_MY_PUSH) {
+                write_cmds_in_jit_code(jit_code, cmds, 5);
+                return n_token - prev_n_token;
+        }
+
         if (!(n_token - prev_n_token)) {
                 switch (token2->my_cmd) {
                 case CMD_MY_ADD:
@@ -139,7 +149,7 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                         encode_cmd(cmds + 0, &cmd_info);
 
                         cmd_info.use_memory4src = 0;
-                        cmd_info.dest_reg  = RAX;
+                        cmd_info.dest_reg   = RAX;
                         cmd_info.src_reg    = token1->reg;
                         cmd_info.immed_val  = token1->immed;
                         if (token0->reg == RBX)
@@ -160,10 +170,18 @@ size_t convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code
                 }
         }
 
-        for (uint8_t i = 0; cmds[i].length != 0 && i < 5; i++) {
+        write_cmds_in_jit_code(jit_code, cmds, 5);
+        return n_token - prev_n_token;
+}
+
+void write_cmds_in_jit_code (jit_code_t *jit_code, x86_cmd_t *cmds, uint8_t max_cmds2write)
+{
+        assert(jit_code);
+        assert(cmds);
+
+        for (uint8_t i = 0; cmds[i].length != 0 && i < max_cmds2write; i++) {
                 paste_cmd_in_jit_buf(jit_code, cmds + i);
         }
-        return n_token - prev_n_token;
 }
 
 uint8_t get_cmd_from_token (token_t *token)

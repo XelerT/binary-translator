@@ -1,0 +1,89 @@
+
+static const int CMDS_ARRAY_LENGTH = 13;
+
+cmd_info4encode_t cmds_array[CMDS_ARRAY_LENGTH] = {
+        {
+                .cmd_encode = MOV,
+                .dest_reg   = R15,
+                .immed_val  = 11,
+                .use_memory4dest = 1
+        },
+
+        {
+                .cmd_encode      = ADD,
+                .dest_reg        = RAX,
+                .src_reg         = RCX
+        },
+
+        {
+                .cmd_encode      = SUB,
+                .dest_reg        = RAX,
+                .src_reg         = R15
+        },
+
+        {
+                .cmd_encode      = ADD,
+                .dest_reg        = RAX,
+                .src_reg         = RCX,
+                .use_memory4dest =   1
+        },
+
+        {
+                .cmd_encode      = MUL,
+                .dest_reg        = RCX,
+                .src_reg         = INVALID_REG
+        },
+
+        {
+                .cmd_encode      = MUL,
+                .dest_reg        = R15,
+                .src_reg         = INVALID_REG
+        },
+
+        {
+                .cmd_encode      = DIV,
+                .dest_reg        = RCX,
+                .src_reg         = INVALID_REG,
+                .use_memory4src  =   1
+        },
+
+        {
+                .cmd_encode      = MOV,
+                .dest_reg        = RDX,
+                .src_reg         = R8
+        },
+
+        {
+                .cmd_encode      = MOV,
+                .dest_reg        = R10,
+                .src_reg         = RCX,
+                .use_memory4dest =   1
+        },
+
+        {
+                .cmd_encode      = PUSH,
+                .dest_reg        = INVALID_REG,
+                .src_reg         = R15,
+                .use_memory4src  =   1
+        },
+
+        {
+                .cmd_encode      = POP,
+                .dest_reg        = R15,
+                .src_reg         = INVALID_REG,
+                .use_memory4dest =   1
+        },
+
+        {
+                .cmd_encode      = POP,
+                .dest_reg        = RAX,
+                .src_reg         = INVALID_REG
+        },
+
+        {
+                .cmd_encode      = PUSH,
+                .dest_reg        = INVALID_REG,
+                .src_reg         = INVALID_REG,
+                .immed_val       = 255
+        },
+};

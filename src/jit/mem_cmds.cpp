@@ -31,7 +31,7 @@ void encode_mov (x86_cmd_t *cmd, cmd_info4encode_t *info, uint8_t *indent)
                         cmd->cmd[*indent] |= info->dest_reg;
                         memcpy(cmd->cmd + 1 + *indent, &info->immed_val, sizeof(uint32_t));
 
-                        cmd->length = 1 + *indent + (uint8_t) sizeof(uint32_t);
+                        cmd->length += 1 + *indent + (uint8_t) sizeof(uint32_t);
                 } else {
                         cmd->cmd[*indent] |= x64bit_PREFIX;
                         ++*indent;
@@ -60,7 +60,7 @@ void encode_pop_push (x86_cmd_t *cmd, cmd_info4encode_t *info)
                 cmd->cmd[indent++] = USE_DEST_R_REGS;
                 reg -= R8;
         } else if (info->src_reg > RDI && info->src_reg != INVALID_REG) {
-                cmd->cmd[indent++] = USE_SRC_R_REG;
+                cmd->cmd[indent++] = USE_DEST_R_REGS;
                 reg -= R8;
         }
 

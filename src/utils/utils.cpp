@@ -11,6 +11,11 @@ void set_red_in_terminal ()
         fprintf(stderr, "\033[1;31m");
 }
 
+void set_green_in_terminal ()
+{
+        fprintf(stderr, "\033[1;32m");
+}
+
 void set_blue_in_terminal ()
 {
         fprintf(stderr, "\033[0;34m");

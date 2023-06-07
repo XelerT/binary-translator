@@ -27,6 +27,7 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
                 .dest_reg   = R15,
                 .immed_val  = (int) ((size_t) jit_code->exec_memory2use + jit_code->exec_memory_capacity - sizeof(size_t))
         };
+
         encode_cmd(&set_call_stack_offset, &cmd_info);
         paste_cmd_in_jit_buf(jit_code, &set_call_stack_offset);
 
@@ -34,6 +35,7 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
 
         for (size_t i = 0; i < tokens->size; i += skipped_tokens) {
                 x86_cmd_t cmds[6] = {};
+
                 skipped_tokens = convert_tokens2nonstack_logic(tokens, i, jit_code);
                 if (skipped_tokens)
                         continue;
@@ -42,9 +44,7 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
                         tokens->tokens[i].space = (size_t) jit_code->buf + jit_code->size;
                         x86_cmd_ctor(cmds, tokens->tokens + i, &label_table);
 
-                        for (uint8_t j = 0; cmds[j].length != 0 && j < 5; j++) {
-                                paste_cmd_in_jit_buf(jit_code, cmds + j);
-                        }
+                        write_cmds_in_jit_code(jit_code, cmds, 5);
                 } else {
                         insert_label(jit_code, tokens->tokens + i, &label_table);
                 }
@@ -67,7 +67,7 @@ void change_return_value_src2rax (jit_code_t *jit_code)
         x86_cmd_t cmd = {};
         cmd_info4encode_t pop_rax_info = {
                 .cmd_encode = POP,
-                .dest_reg = RAX
+                .dest_reg   = RAX
         };
         encode_cmd(&cmd, &pop_rax_info);
         paste_cmd_in_jit_buf(jit_code, &cmd);
@@ -80,7 +80,7 @@ void change_memory_offset (jit_code_t *jit_code)
         x86_cmd_t cmd = {};
 
         uint8_t n_byte_after_first_pop = 0;
-        while (jit_code->buf[n_byte_after_first_pop] != pop_rbx.cmd[0])
+        while (jit_code->buf[n_byte_after_first_pop] != pop_rbx.cmd[0] && n_byte_after_first_pop < jit_code->size)
                 n_byte_after_first_pop++;
         n_byte_after_first_pop++;
 
@@ -93,6 +93,7 @@ void change_memory_offset (jit_code_t *jit_code)
 
         uint8_t start_i = 7;            /*1 + sizeof( mov r15, address)*/
         uint8_t i = start_i;
+
         while (i < cmd.length + start_i) {
                 jit_code->buf[i] = cmd.cmd[i - start_i];
                 i++;

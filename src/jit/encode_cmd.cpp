@@ -67,14 +67,14 @@ void encode_two_operands_cmds (x86_cmd_t *cmd, cmd_info4encode_t *info)
                 cmd->cmd[indent] = USE_SRC_R_REG;
                 info->src_reg   -= R8;
         }
-        if ((!cmd->cmd[indent] && !(info->cmd_encode == MOV && info->src_reg == INVALID_REG)) ||
-             info->src_reg != INVALID_REG)
+        if (!(info->cmd_encode == MOV && info->src_reg == INVALID_REG && !info->use_memory4dest))/* ||*/
+        //       info->src_reg != INVALID_REG)
                 cmd->cmd[indent] |= x64bit_PREFIX;
 
         if (cmd->cmd[indent])
                 indent++;
 
-        if (info->use_memory4src) {
+        if (info->use_memory4src && !(info->cmd_encode == MUL || info->cmd_encode == DIV)) {
                 uint8_t swap = info->dest_reg;
                 info->dest_reg = info->src_reg;
                 info->src_reg = swap;
