@@ -55,7 +55,7 @@ IR_CFILES = src/frontend/IR.cpp
 CFILES = main.cpp $(TEXT_CFILES) $(LOG_CFILES) $(UTILS_CFILES) $(JIT_CFILES) \
 		  $(CODE_GEN_CFILES) $(FRONTEND_CFILES) $(IR_CFILES)
 
-OUTPUT = jit.out
+OUTPUT = jit
 
 TEST_CFILES = tests/test_encoding.cpp
 TEST_OUTPUT = tests/test.out
@@ -75,6 +75,11 @@ sanitize:
 run:
 	@ ./$(OUTPUT) input.txt
 	@ echo Run
+
+.PHONY: comp_debug
+run_debug:
+	@ @ g++ $(OPTIM_FLAGS) -masm=intel -o $(OUTPUT) $(CFLAGS) $(CFILES) -no-pie -DRUN_WITH_INT3
+	@ echo Comiled with RUN_WITH_INT3 define.
 
 .PHONY: test
 test:

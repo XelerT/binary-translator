@@ -47,15 +47,19 @@ int jit_code_ctor (jit_code_t *jit_code, size_t capacity)
         // }
 
 // /*
+#ifdef RUN_WITH_INT3
         *jit_code->buf = 0xCC;
         jit_code->size++;
         for (size_t i = jit_code->size; i < capacity; i++) {
                 jit_code->buf[i] = 0xC3;
         }
 //*/
-        // for (size_t i = 0; i < buf_size; i++) {
-        //         buf[i] = 0xC3;
-        // }
+#else
+        for (size_t i = 0; i < capacity; i++) {
+                jit_code->buf[i] = 0xC3;
+        }
+#endif /* RUN_WITH_INT3 */
+
         jit_code->capacity = capacity;
 
         return 0;

@@ -4,6 +4,8 @@
 
 #include "../include/mem_cmds.h"
 
+#pragma GCC diagnostic ignored "-Wconversion"
+
 void encode_mov (x86_cmd_t *cmd, cmd_info4encode_t *info, uint8_t *indent)
 {
         assert(cmd);
@@ -44,6 +46,8 @@ void encode_mov (x86_cmd_t *cmd, cmd_info4encode_t *info, uint8_t *indent)
                 }
         }
 }
+
+#pragma GCC diagnostic warning "-Wconversion"
 
 void encode_pop_push (x86_cmd_t *cmd, cmd_info4encode_t *info)
 {
