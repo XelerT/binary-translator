@@ -35,7 +35,7 @@ Command in x86-64 can consists of 5 parts (first line is size in bytes):
 
         ------------------------------------------------------------
         |  0 - 4  |    1 - 2      |         1        |    1      | 0 - 4        |
-        | Prefix | Opcode    | M.R.R/M  | S.I.B. | Data        |
+        | Prefix | Opcode    | M.R.R/M  | S.I.B  | Data        |
         -------------------------------------------------------------
 - Prefix part is used to encode 64 bit information, such as need to use 8 byte registers, need to use r8-r15 in source or destination.
 
@@ -44,8 +44,11 @@ Command in x86-64 can consists of 5 parts (first line is size in bytes):
         register  -> memory   =>      d = 0
         memory -> register    =>      d = 1
 
-- Mode-Register-Register/Memory (M.R.R/M)
+- Mode-Register-Register/Memory (M.R.R/M): (xx|xxx|xxx). First 2 bits show which arguments has command, 11 - if 2 operands are registers, 00 - if destination is memory, 10 - if destination is register and source is immediate number.
 
+- Scale-Index-Base (S.I.B): (xx|xxx|xxx). First 2 bits indicates the scaling factor of index, next 3 bits is the index register to use, last three is the base register to use.
+
+- Data field can contain immediate number or address.
 
 ## Translation
 For technical details see [documentation]().
@@ -66,10 +69,10 @@ We obliged to save stack logic in order to avoid destruction of program logic th
 
 <summary>More encoding details.</summary>
 
-Jmps' and call's addresses are fulfilled using 2 step passage.
+Jumps' and call's addresses are fulfilled using 2 step passage.
 
 ---
-Our cpu have 2 stacks, the first is for working with numbers and the second contains returing adresses. For solving this problem we emulate our second stack. Register r15 is used as second rsp, at the begining of buffer $mov r15, (end of data section address)$.
+Our cpu have 2 stacks, the first is for working with numbers and the second contains returning addresses. For solving this problem we emulate our second stack. Register r15 is used as second rsp, at the beginning of buffer $mov r15, (end of data section address)$.
 Every call is changed for "push" in the second stack and jump to the address:
 
         mov qword [r15], (return address)
@@ -90,5 +93,5 @@ For more details see [documentation]()
 ### Execution
 After creation of execution buffer we change rights for "text section" and "data section" for execution, read, write using [mprotect](https://man7.org/linux/man-pages/man2/mprotect.2.html). Then we cast execution buffer pointer to function pointer and call this "function".
 
-## Speed check
+<!-- ## Speed check -->
 
