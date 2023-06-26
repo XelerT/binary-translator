@@ -60,6 +60,65 @@ int fill_jit_code_buf (jit_code_t *jit_code, tokens_t *tokens)
         return 0;
 }
 
+void paste_cmd_in_jit_buf (jit_code_t *jit_code, x86_cmd_t *cmd)
+{
+        assert(jit_code);
+        assert(cmd);
+
+        for (uint8_t i = 0; i < cmd->length; i++) {
+                jit_code->buf[jit_code->size] = cmd->cmd[i];
+                jit_code->size++;
+        }
+}
+
+int x86_cmd_ctor (x86_cmd_t *cmds, token_t *token, labels_t *label_table)
+{
+        assert(cmds);
+        assert(token);
+        assert(label_table);
+
+        if (token->my_cmd == CMD_MY_OUT) {
+                encode_print(cmds, token);
+                return 0;
+        } else if (token->my_cmd == CMD_MY_IN) {
+                encode_scan(cmds, token);
+                return 0;
+        }
+
+        for (int i = 0; i < N_COMMANDS; i++) {
+                if (token->my_cmd == CMDS_TABLE[i].my_encode) {
+                        assemble_cmd(cmds, token, i, label_table);
+                }
+        }
+        return 0;
+}
+
+void assemble_cmd (x86_cmd_t *cmds, token_t *token, size_t table_position, labels_t *label_table)
+{
+        assert(cmds);
+        assert(token);
+
+        if (CMDS_TABLE[table_position].code2 == 0) {
+                if (CMDS_TABLE[table_position].code1 == RET) {
+                        encode_imitation_of_ret(cmds);
+                } else if (CMDS_TABLE[table_position].code1 == CMD_MY_SQRT) {
+                        encode_sqrt(cmds);
+                }
+        }  else if (CMDS_TABLE[table_position].code1 == RELATIVE_CALL) {
+                pre_encode_imitation_of_call(cmds, token);
+        } else if (CMDS_TABLE[table_position].code1 == SHORT_JMP) {
+                pre_encode_jmp(cmds, token);
+        } else if (CMDS_TABLE[table_position].code1 & CONDITIONAL_JMPS_MASK_REL8) {
+                uint8_t n_cmds = encode_cmp(cmds);
+                pre_encode_conditional_jmp(cmds + n_cmds, token, table_position, label_table);
+        } else {
+                if (CMDS_TABLE[table_position].code1 == IMMED_PUSH ||
+                    CMDS_TABLE[table_position].code1 == REG_PUSH_POP) {
+                        encode_token2push_pop(cmds, token, table_position);
+                }
+        }
+}
+
 void change_return_value_src2rax (jit_code_t *jit_code)
 {
         assert(jit_code);
@@ -104,66 +163,7 @@ void change_memory_offset (jit_code_t *jit_code)
         }
 }
 
-void paste_cmd_in_jit_buf (jit_code_t *jit_code, x86_cmd_t *cmd)
-{
-        assert(jit_code);
-        assert(cmd);
-
-        for (uint8_t i = 0; i < cmd->length; i++) {
-                jit_code->buf[jit_code->size] = cmd->cmd[i];
-                jit_code->size++;
-        }
-}
-
-int x86_cmd_ctor (x86_cmd_t *cmds, token_t *token, labels_t *label_table)
-{
-        assert(cmds);
-        assert(token);
-        assert(label_table);
-
-        if (token->my_cmd == CMD_MY_OUT) {
-                encode_print(cmds, token);
-                return 0;
-        } else if (token->my_cmd == CMD_MY_IN) {
-                encode_scan(cmds, token);
-                return 0;
-        }
-
-        for (int i = 0; i < N_COMMANDS; i++) {
-                if (token->my_cmd == CMDS_TABLE[i].my_encode) {
-                        assemble_cmd(cmds, token, i, label_table);
-                }
-        }
-        return 0;
-}
-
-void assemble_cmd (x86_cmd_t *cmds, token_t *token, size_t table_position, labels_t *label_table)
-{
-        assert(cmds);
-        assert(token);
-
-        if (CMDS_TABLE[table_position].code2 == 0) {
-                if (CMDS_TABLE[table_position].code1 == RET) {
-                        encode_emitation_of_ret(cmds);
-                } else if (CMDS_TABLE[table_position].code1 == CMD_MY_SQRT) {
-                        encode_sqrt(cmds);
-                }
-        }  else if (CMDS_TABLE[table_position].code1 == RELATIVE_CALL) {
-                pre_encode_emitation_of_call(cmds, token);
-        } else if (CMDS_TABLE[table_position].code1 == SHORT_JMP) {
-                pre_encode_jmp(cmds, token);
-        } else if (CMDS_TABLE[table_position].code1 & CONDITIONAL_JMPS_MASK_REL8) {
-                uint8_t n_cmds = encode_cmp(cmds);
-                pre_encode_conditional_jmp(cmds + n_cmds, token, table_position, label_table);
-        } else {
-                if (CMDS_TABLE[table_position].code1 == IMMED_PUSH ||
-                    CMDS_TABLE[table_position].code1 == REG_PUSH_POP) {
-                        encode_token2push_pop(cmds, token, table_position);
-                }
-        }
-}
-
-void encode_emitation_of_ret (x86_cmd_t *cmds)
+void encode_imitation_of_ret (x86_cmd_t *cmds)
 {
         assert(cmds);
 

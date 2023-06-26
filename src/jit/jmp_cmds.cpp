@@ -43,7 +43,7 @@ void encode_ret (x86_cmd_t *cmd)
         cmd->length = 1;
 }
 
-void pre_encode_emitation_of_call (x86_cmd_t *cmds, token_t *token)
+void pre_encode_imitation_of_call (x86_cmd_t *cmds, token_t *token)
 {
         assert(cmds);
 
@@ -54,7 +54,6 @@ void pre_encode_emitation_of_call (x86_cmd_t *cmds, token_t *token)
                 .use_memory4dest = 1
         };
         encode_cmd(cmds + 0, &cmd_info);
-        // encode_mov(cmds + 0, &cmd_info);
 
         cmd_info.cmd_encode = SUB;
         cmd_info.use_memory4dest = 0;
@@ -65,7 +64,6 @@ void pre_encode_emitation_of_call (x86_cmd_t *cmds, token_t *token)
         cmd_info.use_memory4dest = 0;
 
         encode_cmd(cmds + 1, &cmd_info);
-        // encode_add_sub_mul_div(cmds + 1, &cmd_info);
         pre_encode_jmp(cmds + 2, token);
 }
 
@@ -80,8 +78,6 @@ void pre_encode_call (x86_cmd_t *cmd, token_t *token)
                 cmd->cmd[0] = RELATIVE_CALL;
                 memcpy(cmd->cmd + 1, &offset, sizeof(uint8_t));
                 cmd->length = 1 + sizeof(uint8_t);
-        } else {
-                /*register call*/
         }
 }
 
