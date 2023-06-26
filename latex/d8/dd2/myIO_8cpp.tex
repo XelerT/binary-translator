@@ -1,0 +1,41 @@
+\hypertarget{myIO_8cpp}{}\doxysection{src/jit/my\+IO.cpp File Reference}
+\label{myIO_8cpp}\index{src/jit/myIO.cpp@{src/jit/myIO.cpp}}
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$sys/stat.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}../include/config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/tokens.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/jit.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/tokens2x86.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/my\+IO.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{myIO_8cpp_aa5632eda32fefb8dbc952c796a6f8b19}{print\+\_\+decimal}} (size\+\_\+t val\+\_\+in\+\_\+rdi)
+\item 
+int \mbox{\hyperlink{myIO_8cpp_a13d46ba70e8635a713c41cdbc3ab0e8b}{scan\+\_\+decimal}} ()
+\item 
+int \mbox{\hyperlink{myIO_8cpp_a5b6b80afdc9e09493509f070ac4f3f50}{paste\+\_\+io\+\_\+decimal\+\_\+function}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code, \mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$label\+\_\+table, int invalid\+\_\+func\+\_\+address)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{myIO_8cpp_a5b6b80afdc9e09493509f070ac4f3f50}\label{myIO_8cpp_a5b6b80afdc9e09493509f070ac4f3f50}} 
+\index{myIO.cpp@{myIO.cpp}!paste\_io\_decimal\_function@{paste\_io\_decimal\_function}}
+\index{paste\_io\_decimal\_function@{paste\_io\_decimal\_function}!myIO.cpp@{myIO.cpp}}
+\doxysubsubsection{\texorpdfstring{paste\_io\_decimal\_function()}{paste\_io\_decimal\_function()}}
+{\footnotesize\ttfamily int paste\+\_\+io\+\_\+decimal\+\_\+function (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code,  }\item[{\mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$}]{label\+\_\+table,  }\item[{int}]{invalid\+\_\+func\+\_\+address }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myIO_8cpp_aa5632eda32fefb8dbc952c796a6f8b19}\label{myIO_8cpp_aa5632eda32fefb8dbc952c796a6f8b19}} 
+\index{myIO.cpp@{myIO.cpp}!print\_decimal@{print\_decimal}}
+\index{print\_decimal@{print\_decimal}!myIO.cpp@{myIO.cpp}}
+\doxysubsubsection{\texorpdfstring{print\_decimal()}{print\_decimal()}}
+{\footnotesize\ttfamily void print\+\_\+decimal (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{val\+\_\+in\+\_\+rdi }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{myIO_8cpp_a13d46ba70e8635a713c41cdbc3ab0e8b}\label{myIO_8cpp_a13d46ba70e8635a713c41cdbc3ab0e8b}} 
+\index{myIO.cpp@{myIO.cpp}!scan\_decimal@{scan\_decimal}}
+\index{scan\_decimal@{scan\_decimal}!myIO.cpp@{myIO.cpp}}
+\doxysubsubsection{\texorpdfstring{scan\_decimal()}{scan\_decimal()}}
+{\footnotesize\ttfamily int scan\+\_\+decimal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+

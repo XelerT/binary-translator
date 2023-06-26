@@ -1,0 +1,44 @@
+\hypertarget{log_8h_source}{}\doxysection{log.\+h}
+\label{log_8h_source}\index{src/log/log.h@{src/log/log.h}}
+\mbox{\hyperlink{log_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ LOG\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ LOG\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}../include/config.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#ifdef\ ASSERT\_ON}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ assert\_ptr(ptr)\ my\_assert(ptr,\ \#ptr,\ \_\_FILE\_\_,\ \_\_LINE\_\_)}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ assert\_ptr()}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*ASSERT\_ON*/}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#ifdef\ LOG\_ON}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ log(num,...)\ \ \ \ \ \ \ mlog((const\ char*)\ \ \ \ \ make\_line(num,\_\_VA\_ARGS\_\_),\ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}black"{}},\ 14)}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ log\_pic(num,...)\ \ \ log\_pict((const\ char*)\ make\_line(num,\_\_VA\_ARGS\_\_),\ \_\_FILE\_\_,\ \_\_LINE\_\_)}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ log\_error(num,...)\ mlog((const\ char*)\ \ \ \ \ make\_line(num,\_\_VA\_ARGS\_\_),\ \_\_FILE\_\_,\ \_\_LINE\_\_,\ "{}red"{}},\ 16)}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ log(num,...)}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ log\_pic(num,...)}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*LOG\_ON*/}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ "{}../debug/debug.h"{}}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{log_8h_abb821de24654cbb84a2eb924f8d663f6}{log\_errors}}\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{log_8h_abb821de24654cbb84a2eb924f8d663f6a3030ffcc400f15888591df3e67510b61}{ASSERTION}}\ \ =\ 0xACCE,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{log_8h_abb821de24654cbb84a2eb924f8d663f6ac96034e2f81ae2755c5ee0a7068eabb8}{CLOSED\_LOG}}\ =\ 0xBAD106,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{log_8h_abb821de24654cbb84a2eb924f8d663f6ac358026137d3662c4f9b2cdb00af278d}{VBUF\_ERR}}\ \ \ =\ 0xBADB0F}
+\DoxyCodeLine{00028\ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keywordtype}{int}\ \ \ \mbox{\hyperlink{log_8h_a79e837c759e353f050a807497952f7f0}{my\_assert}}\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{void}\ *ptr,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *var,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *file,\ \textcolor{keywordtype}{int}\ line);}
+\DoxyCodeLine{00031\ \textcolor{keywordtype}{int}\ \ \ \ \mbox{\hyperlink{log_8h_ad75757cea6aab37a430c46abc121504f}{log\_init}}\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *log\_file\_name);}
+\DoxyCodeLine{00032\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \mbox{\hyperlink{log_8h_a4efc2d816e63a9cc3c5b1936bed6f925}{mlog}}\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *str,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *file,\ \textcolor{keywordtype}{int}\ line,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *color,\ \textcolor{keywordtype}{int}\ font\_size);}
+\DoxyCodeLine{00033\ \textcolor{keywordtype}{int}\ \ \ \ \mbox{\hyperlink{log_8h_a9094a1269b5d17cb2c87265e93bf714a}{log\_pict}}\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *str,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *file,\ \textcolor{keywordtype}{int}\ line);}
+\DoxyCodeLine{00034\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{log_8h_a2de21309f566f0b94f2e4dbd190c768f}{make\_line}}\ (\textcolor{keywordtype}{int}\ argc,\ ...);}
+\DoxyCodeLine{00035\ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{log_8h_a96d8c9bb45b0c44aa6c0da842c03ba07}{fill\_null}}\ (\textcolor{keywordtype}{char}\ *str);}
+\DoxyCodeLine{00036\ \textcolor{keywordtype}{int}\ \ \ \ \mbox{\hyperlink{log_8h_a3026b419a662102368fc13f0dda87a84}{log\_dtor}}\ ();}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*LOG\_H*/}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

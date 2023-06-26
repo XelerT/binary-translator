@@ -1,0 +1,50 @@
+\hypertarget{mem__cmds_8h}{}\doxysection{src/include/mem\+\_\+cmds.h File Reference}
+\label{mem__cmds_8h}\index{src/include/mem\_cmds.h@{src/include/mem\_cmds.h}}
+{\ttfamily \#include \char`\"{}config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}jit.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{mem__cmds_8h_a2399e282a1306b29cdbdd4e2a9ba2e31}{encode\+\_\+mov}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmd, \mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} $\ast$info, uint8\+\_\+t $\ast$indent)
+\begin{DoxyCompactList}\small\item\em encode mov using information from \mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{mem__cmds_8h_a8f742c9006d5d31d36ad52c23da476a1}{encode\+\_\+pop\+\_\+push}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmd, \mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} $\ast$info)
+\begin{DoxyCompactList}\small\item\em encode pop/push command using information from \mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{mem__cmds_8h_a2399e282a1306b29cdbdd4e2a9ba2e31}\label{mem__cmds_8h_a2399e282a1306b29cdbdd4e2a9ba2e31}} 
+\index{mem\_cmds.h@{mem\_cmds.h}!encode\_mov@{encode\_mov}}
+\index{encode\_mov@{encode\_mov}!mem\_cmds.h@{mem\_cmds.h}}
+\doxysubsubsection{\texorpdfstring{encode\_mov()}{encode\_mov()}}
+{\footnotesize\ttfamily void encode\+\_\+mov (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmd,  }\item[{\mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} $\ast$}]{info,  }\item[{uint8\+\_\+t $\ast$}]{indent }\end{DoxyParamCaption})}
+
+
+
+encode mov using information from \mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & \\
+\hline
+{\em info} & information about mov \\
+\hline
+{\em indent} & show start position in cmd buffer to incode Opcode and further bytes \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{mem__cmds_8h_a8f742c9006d5d31d36ad52c23da476a1}\label{mem__cmds_8h_a8f742c9006d5d31d36ad52c23da476a1}} 
+\index{mem\_cmds.h@{mem\_cmds.h}!encode\_pop\_push@{encode\_pop\_push}}
+\index{encode\_pop\_push@{encode\_pop\_push}!mem\_cmds.h@{mem\_cmds.h}}
+\doxysubsubsection{\texorpdfstring{encode\_pop\_push()}{encode\_pop\_push()}}
+{\footnotesize\ttfamily void encode\+\_\+pop\+\_\+push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmd,  }\item[{\mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} $\ast$}]{info }\end{DoxyParamCaption})}
+
+
+
+encode pop/push command using information from \mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & \\
+\hline
+{\em info} & information about pop/push \\
+\hline
+\end{DoxyParams}

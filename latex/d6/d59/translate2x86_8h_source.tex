@@ -1,0 +1,36 @@
+\hypertarget{translate2x86_8h_source}{}\doxysection{translate2x86.\+h}
+\label{translate2x86_8h_source}\index{src/include/translate2x86.h@{src/include/translate2x86.h}}
+\mbox{\hyperlink{translate2x86_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TRANSLATE2x86\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TRANSLATE2x86\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}../include/config.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}../include/tokens.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}../include/tokens2x86.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}../include/jit.h"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}../include/mem\_cmds.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}../include/math\_cmds.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}../include/jmp\_cmds.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}../include/conditional\_cmds.h"{}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}../include/encode\_cmd.h"{}}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00023\ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{translate2x86_8h_aafbe264b91aa55da4e655da7fb9f1e86}{fill\_jit\_code\_buf}}\ \ \ \ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code,\ \mbox{\hyperlink{structtokens__t}{tokens\_t}}\ *tokens);}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00031\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{translate2x86_8h_a66c5744ae5e9b5e1298bf808ca3f5ccd}{paste\_cmd\_in\_jit\_buf}}\ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code,\ \mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmd);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00041\ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{translate2x86_8h_a97b98213a1b2a4087778ca7e72ebd7a8}{x86\_cmd\_ctor}}\ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmds,\ \mbox{\hyperlink{structtoken__t}{token\_t}}\ *token,\ \mbox{\hyperlink{structlabels__t}{labels\_t}}\ *label\_table);}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00051\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{translate2x86_8h_a916574442374a9c229a9e3be5b29ef08}{assemble\_cmd}}\ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmds,\ \mbox{\hyperlink{structtoken__t}{token\_t}}\ *token,\ \textcolor{keywordtype}{size\_t}\ table\_position,\ \mbox{\hyperlink{structlabels__t}{labels\_t}}\ *label\_table);}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00058\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{translate2x86_8h_ac738ac4e56035fd4774ccbd475bf6786}{change\_return\_value\_src2rax}}\ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code);}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00066\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{translate2x86_8h_a539333235f00465129573c1e6806871d}{change\_memory\_offset}}\ \ \ \ \ \ \ \ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code);}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00075\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{translate2x86_8h_a34281f19be88d06d9ea28f4eb5abd248}{encode\_imitation\_of\_ret}}\ \ \ \ \ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ \ *cmds);}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*TRANSLATE2x86\_H*/}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

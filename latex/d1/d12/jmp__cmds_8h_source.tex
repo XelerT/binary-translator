@@ -1,0 +1,29 @@
+\hypertarget{jmp__cmds_8h_source}{}\doxysection{jmp\+\_\+cmds.\+h}
+\label{jmp__cmds_8h_source}\index{src/include/jmp\_cmds.h@{src/include/jmp\_cmds.h}}
+\mbox{\hyperlink{jmp__cmds_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ JMP\_CMDS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ JMP\_CMDS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{config_8h}{config.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tokens_8h}{tokens.h}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tokens2x86_8h}{tokens2x86.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{jit_8h}{jit.h}}"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00015\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{jmp__cmds_8h_a42b7cf63d2a9839d6c03a596ac9193b7}{pre\_encode\_jmp}}\ \ \ \ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmd,\ \mbox{\hyperlink{structtoken__t}{token\_t}}\ *token);}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00023\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{jmp__cmds_8h_abf0535b361661579d3cf294e6803a324}{encode\_calls\_jmps}}\ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code,\ \mbox{\hyperlink{structlabels__t}{labels\_t}}\ *label\_table);}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{jmp__cmds_8h_abcf49e5ab0167450e51da81dfaa5c80a}{pre\_encode\_imitation\_of\_call}}\ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmds,\ \mbox{\hyperlink{structtoken__t}{token\_t}}\ *token);}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{jmp__cmds_8h_a0b296bd0add2b8972c5f6c34a217bd74}{pre\_encode\_call}}\ \ \ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmd,\ \mbox{\hyperlink{structtoken__t}{token\_t}}\ *token);}
+\DoxyCodeLine{00028\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{jmp__cmds_8h_a82b35594a576b4e37671fc36ac6bae51}{encode\_call}}\ \ \ \ \ \ \ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmd,\ \mbox{\hyperlink{structcmd__info4encode__t}{cmd\_info4encode\_t}}\ *info);}
+\DoxyCodeLine{00029\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{jmp__cmds_8h_ab31e2a309fb9832be7b5250dd97d6c0f}{encode\_ret}}\ \ \ \ \ \ \ \ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmd);}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{jmp__cmds_8h_a35968d0010aa89fdab138cb353f8a5f5}{pre\_encode\_conditional\_jmp}}\ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmd,\ \mbox{\hyperlink{structtoken__t}{token\_t}}\ *token,\ \textcolor{keywordtype}{size\_t}\ table\_position,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structlabels__t}{labels\_t}}\ *label\_table);}
+\DoxyCodeLine{00033\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{jmp__cmds_8h_ae7d070d2feb34ed7f57e151344fc2907}{encode\_conditional\_jmps}}\ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code,\ \mbox{\hyperlink{structlabels__t}{labels\_t}}\ *label\_table);}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*JMP\_CMDS\_H*/}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

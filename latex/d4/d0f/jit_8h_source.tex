@@ -1,0 +1,61 @@
+\hypertarget{jit_8h_source}{}\doxysection{jit.\+h}
+\label{jit_8h_source}\index{src/include/jit.h@{src/include/jit.h}}
+\mbox{\hyperlink{jit_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ JIT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ JIT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{config_8h}{config.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tokens_8h}{tokens.h}}"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}configs.cmds"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ uint8\_t\ *\mbox{\hyperlink{structjit__code__t_af15c02584eca0109d10918f2b824e5f8}{buf}}\ \ \ \ \ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \ \mbox{\hyperlink{structjit__code__t_a8c4370f351a0d415ba99ca8b44565374}{capacity}}\ =\ 0;}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \ \mbox{\hyperlink{structjit__code__t_aecd221accf9384fa04c8f4eecc2d2927}{size}}\ \ \ \ \ =\ 0;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ uint8\_t\ *\mbox{\hyperlink{structjit__code__t_af7104ed9a6533aef4472eff5bd0ae5a0}{exec\_memory2use}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structjit__code__t_a6125f4e775845f7571c8d946e59e529b}{exec\_memory\_capacity}}\ =\ 0;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structjit__code__t_a44b2ee7454a66bd544b2fcf965000206}{print\_func\_offset}}\ =\ 10;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structjit__code__t_aef0867e3df236dbf0213ba6353885bae}{print\_func\_size}}\ \ \ =\ \ 0;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structjit__code__t_a96637fbb47dc06574290f430d2701a87}{scan\_func\_offset}}\ \ =\ 10;}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structjit__code__t_ae8ff54867a6b3c70d633a4f7b876dd2c}{scan\_func\_size}}\ \ \ \ =\ \ 0;}
+\DoxyCodeLine{00031\ \};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structx86__cmd__t_a147e8ab9fd619315257f4f991f6b8828}{cmd}}[\mbox{\hyperlink{utils_8h_af3750ca7fd70aea82c237e7d0aabb3cf}{X86\_CMD\_MAX\_LENGTH}}]\ =\ \{\};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structx86__cmd__t_a3b706b5db59acf12ad3621146f9b2c4a}{length}}\ =\ 0;}
+\DoxyCodeLine{00041\ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcmd__info4encode__t}{cmd\_info4encode\_t}}\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structcmd__info4encode__t_aa9a94d51436c7176b6332d6e3b2e61f7}{cmd\_encode}}\ \ \ =\ 0;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structcmd__info4encode__t_aee90b6387fb4a651ccb78c4c8147ce74}{dest\_reg}}\ \ \ \ \ =\ INVALID\_REG;}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structcmd__info4encode__t_a587f8f7d4246b61827ea4151682a1048}{src\_reg}}\ \ \ \ \ \ =\ INVALID\_REG;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{structcmd__info4encode__t_a2897bf81c125b6347c94029095e4c2df}{immed\_val}}\ \ \ \ =\ 0;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcmd__info4encode__t_aef1f3edd692fea35468adb66e499b2a1}{use\_memory4dest}}\ =\ 0;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structcmd__info4encode__t_a45a44a9c1b919fccaab1ddac8a4ed5d3}{use\_memory4src}}\ \ =\ 0;}
+\DoxyCodeLine{00054\ \};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{jit_8h_a6ba5feb04a56516542fd27a5d6f70815}{jit\_errors}}\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{jit_8h_a6ba5feb04a56516542fd27a5d6f70815a3b2c8a165b77cc25cfe7b0c8ec5bb6f0}{CHANGE\_PROTECTION\_ERROR}}\ =\ 0xBAD9301}
+\DoxyCodeLine{00058\ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00066\ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{jit_8h_aedf58484297acfb5d1bd24c1c189a102}{jit}}\ (\mbox{\hyperlink{structtokens__t}{tokens\_t}}\ *tokens);}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00075\ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{jit_8h_a7698f2c9fd2a95e077451a4fa1856b23}{jit\_code\_ctor}}\ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code,\ \textcolor{keywordtype}{size\_t}\ capacity);}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00082\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{jit_8h_a6d4a033af476775fb972d6ef84f08f54}{jit\_code\_dtor}}\ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code);}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00091\ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{jit_8h_af9e472791c8bf403bd4080c89821aeb0}{make\_buf\_executable}}\ (\textcolor{keywordtype}{void}\ *buf,\ \textcolor{keywordtype}{size\_t}\ buf\_capacity);}
+\DoxyCodeLine{00092\ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{jit_8h_af99454d59278d3c3f0c9f6c73660cbd1}{make\_buf\_writable}}\ \ \ (\textcolor{keywordtype}{void}\ *buf,\ \textcolor{keywordtype}{size\_t}\ buf\_capacity);}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00099\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{jit_8h_aed53a7191735f2720e0a6aba677407bf}{run\_jit\_buffer}}\ \ \ \ \ \ (\textcolor{keywordtype}{void}\ (*buf\_func)\ ());}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*JIT\_H*/}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

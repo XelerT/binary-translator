@@ -1,0 +1,7 @@
+var searchData=
+[
+  ['init_5ftoken_0',['init_token',['../d1/d2b/tokens_8cpp.html#a6896953c76b2de7a40132bf52322b8ef',1,'init_token(tokens_t *tokens, text_t *bin_code, unsigned int cmd, size_t ip):&#160;tokens.cpp'],['../d2/da2/tokens_8h.html#a6896953c76b2de7a40132bf52322b8ef',1,'init_token(tokens_t *tokens, text_t *bin_code, unsigned int cmd, size_t ip):&#160;tokens.cpp']]],
+  ['insert_5flabel_1',['insert_label',['../d7/d30/tokens2x86_8h.html#a74ad5c966702068f0780efaadb9b284c',1,'insert_label(jit_code_t *jit_code, token_t *token, labels_t *label_table):&#160;tokens2x86.cpp'],['../db/ddd/tokens2x86_8cpp.html#a74ad5c966702068f0780efaadb9b284c',1,'insert_label(jit_code_t *jit_code, token_t *token, labels_t *label_table):&#160;tokens2x86.cpp']]],
+  ['insert_5fnops_2',['insert_nops',['../d7/d30/tokens2x86_8h.html#a6377bed5f52b026f1ad66e84a645a099',1,'insert_nops(jit_code_t *jit_code, size_t amount2insert):&#160;tokens2x86.cpp'],['../db/ddd/tokens2x86_8cpp.html#a6377bed5f52b026f1ad66e84a645a099',1,'insert_nops(jit_code_t *jit_code, size_t amount2insert):&#160;tokens2x86.cpp']]],
+  ['insert_5ftoken_5fargs_3',['insert_token_args',['../d1/d2b/tokens_8cpp.html#a33c0ef39e4d93cb4858216fea4c88c68',1,'insert_token_args(tokens_t *tokens, unsigned int cmd, int arg):&#160;tokens.cpp'],['../d2/da2/tokens_8h.html#a33c0ef39e4d93cb4858216fea4c88c68',1,'insert_token_args(tokens_t *tokens, unsigned int cmd, int arg):&#160;tokens.cpp']]]
+];

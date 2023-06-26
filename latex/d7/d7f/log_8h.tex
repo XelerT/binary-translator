@@ -1,0 +1,135 @@
+\hypertarget{log_8h}{}\doxysection{src/log/log.h File Reference}
+\label{log_8h}\index{src/log/log.h@{src/log/log.h}}
+{\ttfamily \#include \char`\"{}../include/config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../debug/debug.\+h\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{log_8h_ad94468dbea7f67e7742078d640e58d83}{assert\+\_\+ptr}}(ptr)~\mbox{\hyperlink{log_8cpp_a79e837c759e353f050a807497952f7f0}{my\+\_\+assert}}(ptr, \#ptr, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+)
+\item 
+\#define \mbox{\hyperlink{log_8h_a5e3a1911ade909c5042ae9c8a81ac50e}{log}}(num, ...)~\mbox{\hyperlink{log_8cpp_a4efc2d816e63a9cc3c5b1936bed6f925}{mlog}}((const char$\ast$)     \mbox{\hyperlink{log_8cpp_a2de21309f566f0b94f2e4dbd190c768f}{make\+\_\+line}}(num,\+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+), \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+, \char`\"{}black\char`\"{}, 14)
+\item 
+\#define \mbox{\hyperlink{log_8h_a099cd2e8e49f4758aeca8e0235ab4547}{log\+\_\+pic}}(num, ...)~\mbox{\hyperlink{log_8cpp_a9094a1269b5d17cb2c87265e93bf714a}{log\+\_\+pict}}((const char$\ast$) \mbox{\hyperlink{log_8cpp_a2de21309f566f0b94f2e4dbd190c768f}{make\+\_\+line}}(num,\+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+), \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+)
+\item 
+\#define \mbox{\hyperlink{log_8h_a83b1497740ca09629528d6c81568907f}{log\+\_\+error}}(num, ...)~\mbox{\hyperlink{log_8cpp_a4efc2d816e63a9cc3c5b1936bed6f925}{mlog}}((const char$\ast$)     \mbox{\hyperlink{log_8cpp_a2de21309f566f0b94f2e4dbd190c768f}{make\+\_\+line}}(num,\+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+), \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+, \char`\"{}red\char`\"{}, 16)
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{log_8h_abb821de24654cbb84a2eb924f8d663f6}{log\+\_\+errors}} \{ \mbox{\hyperlink{log_8h_abb821de24654cbb84a2eb924f8d663f6a3030ffcc400f15888591df3e67510b61}{ASSERTION}} = 0x\+ACCE
+, \mbox{\hyperlink{log_8h_abb821de24654cbb84a2eb924f8d663f6ac96034e2f81ae2755c5ee0a7068eabb8}{CLOSED\+\_\+\+LOG}} = 0x\+BAD106
+, \mbox{\hyperlink{log_8h_abb821de24654cbb84a2eb924f8d663f6ac358026137d3662c4f9b2cdb00af278d}{VBUF\+\_\+\+ERR}} = 0x\+BADB0F
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{log_8h_a79e837c759e353f050a807497952f7f0}{my\+\_\+assert}} (const void $\ast$ptr, const char $\ast$var, const char $\ast$file, int line)
+\item 
+int \mbox{\hyperlink{log_8h_ad75757cea6aab37a430c46abc121504f}{log\+\_\+init}} (const char $\ast$log\+\_\+file\+\_\+name)
+\item 
+int \mbox{\hyperlink{log_8h_a4efc2d816e63a9cc3c5b1936bed6f925}{mlog}} (const char $\ast$str, const char $\ast$file, int line, const char $\ast$color, int font\+\_\+size)
+\item 
+int \mbox{\hyperlink{log_8h_a9094a1269b5d17cb2c87265e93bf714a}{log\+\_\+pict}} (const char $\ast$str, const char $\ast$file, int line)
+\item 
+char $\ast$ \mbox{\hyperlink{log_8h_a2de21309f566f0b94f2e4dbd190c768f}{make\+\_\+line}} (int argc,...)
+\item 
+void \mbox{\hyperlink{log_8h_a96d8c9bb45b0c44aa6c0da842c03ba07}{fill\+\_\+null}} (char $\ast$str)
+\item 
+int \mbox{\hyperlink{log_8h_a3026b419a662102368fc13f0dda87a84}{log\+\_\+dtor}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{log_8h_ad94468dbea7f67e7742078d640e58d83}\label{log_8h_ad94468dbea7f67e7742078d640e58d83}} 
+\index{log.h@{log.h}!assert\_ptr@{assert\_ptr}}
+\index{assert\_ptr@{assert\_ptr}!log.h@{log.h}}
+\doxysubsubsection{\texorpdfstring{assert\_ptr}{assert\_ptr}}
+{\footnotesize\ttfamily \#define assert\+\_\+ptr(\begin{DoxyParamCaption}\item[{}]{ptr }\end{DoxyParamCaption})~\mbox{\hyperlink{log_8cpp_a79e837c759e353f050a807497952f7f0}{my\+\_\+assert}}(ptr, \#ptr, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+)}
+
+\mbox{\Hypertarget{log_8h_a5e3a1911ade909c5042ae9c8a81ac50e}\label{log_8h_a5e3a1911ade909c5042ae9c8a81ac50e}} 
+\index{log.h@{log.h}!log@{log}}
+\index{log@{log}!log.h@{log.h}}
+\doxysubsubsection{\texorpdfstring{log}{log}}
+{\footnotesize\ttfamily \#define log(\begin{DoxyParamCaption}\item[{}]{num,  }\item[{}]{... }\end{DoxyParamCaption})~\mbox{\hyperlink{log_8cpp_a4efc2d816e63a9cc3c5b1936bed6f925}{mlog}}((const char$\ast$)     \mbox{\hyperlink{log_8cpp_a2de21309f566f0b94f2e4dbd190c768f}{make\+\_\+line}}(num,\+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+), \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+, \char`\"{}black\char`\"{}, 14)}
+
+\mbox{\Hypertarget{log_8h_a83b1497740ca09629528d6c81568907f}\label{log_8h_a83b1497740ca09629528d6c81568907f}} 
+\index{log.h@{log.h}!log\_error@{log\_error}}
+\index{log\_error@{log\_error}!log.h@{log.h}}
+\doxysubsubsection{\texorpdfstring{log\_error}{log\_error}}
+{\footnotesize\ttfamily \#define log\+\_\+error(\begin{DoxyParamCaption}\item[{}]{num,  }\item[{}]{... }\end{DoxyParamCaption})~\mbox{\hyperlink{log_8cpp_a4efc2d816e63a9cc3c5b1936bed6f925}{mlog}}((const char$\ast$)     \mbox{\hyperlink{log_8cpp_a2de21309f566f0b94f2e4dbd190c768f}{make\+\_\+line}}(num,\+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+), \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+, \char`\"{}red\char`\"{}, 16)}
+
+\mbox{\Hypertarget{log_8h_a099cd2e8e49f4758aeca8e0235ab4547}\label{log_8h_a099cd2e8e49f4758aeca8e0235ab4547}} 
+\index{log.h@{log.h}!log\_pic@{log\_pic}}
+\index{log\_pic@{log\_pic}!log.h@{log.h}}
+\doxysubsubsection{\texorpdfstring{log\_pic}{log\_pic}}
+{\footnotesize\ttfamily \#define log\+\_\+pic(\begin{DoxyParamCaption}\item[{}]{num,  }\item[{}]{... }\end{DoxyParamCaption})~\mbox{\hyperlink{log_8cpp_a9094a1269b5d17cb2c87265e93bf714a}{log\+\_\+pict}}((const char$\ast$) \mbox{\hyperlink{log_8cpp_a2de21309f566f0b94f2e4dbd190c768f}{make\+\_\+line}}(num,\+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+), \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+)}
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{log_8h_abb821de24654cbb84a2eb924f8d663f6}\label{log_8h_abb821de24654cbb84a2eb924f8d663f6}} 
+\index{log.h@{log.h}!log\_errors@{log\_errors}}
+\index{log\_errors@{log\_errors}!log.h@{log.h}}
+\doxysubsubsection{\texorpdfstring{log\_errors}{log\_errors}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{log_8h_abb821de24654cbb84a2eb924f8d663f6}{log\+\_\+errors}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ASSERTION@{ASSERTION}!log.h@{log.h}}\index{log.h@{log.h}!ASSERTION@{ASSERTION}}}\mbox{\Hypertarget{log_8h_abb821de24654cbb84a2eb924f8d663f6a3030ffcc400f15888591df3e67510b61}\label{log_8h_abb821de24654cbb84a2eb924f8d663f6a3030ffcc400f15888591df3e67510b61}} 
+ASSERTION&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CLOSED\_LOG@{CLOSED\_LOG}!log.h@{log.h}}\index{log.h@{log.h}!CLOSED\_LOG@{CLOSED\_LOG}}}\mbox{\Hypertarget{log_8h_abb821de24654cbb84a2eb924f8d663f6ac96034e2f81ae2755c5ee0a7068eabb8}\label{log_8h_abb821de24654cbb84a2eb924f8d663f6ac96034e2f81ae2755c5ee0a7068eabb8}} 
+CLOSED\+\_\+\+LOG&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{VBUF\_ERR@{VBUF\_ERR}!log.h@{log.h}}\index{log.h@{log.h}!VBUF\_ERR@{VBUF\_ERR}}}\mbox{\Hypertarget{log_8h_abb821de24654cbb84a2eb924f8d663f6ac358026137d3662c4f9b2cdb00af278d}\label{log_8h_abb821de24654cbb84a2eb924f8d663f6ac358026137d3662c4f9b2cdb00af278d}} 
+VBUF\+\_\+\+ERR&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{log_8h_a96d8c9bb45b0c44aa6c0da842c03ba07}\label{log_8h_a96d8c9bb45b0c44aa6c0da842c03ba07}} 
+\index{log.h@{log.h}!fill\_null@{fill\_null}}
+\index{fill\_null@{fill\_null}!log.h@{log.h}}
+\doxysubsubsection{\texorpdfstring{fill\_null()}{fill\_null()}}
+{\footnotesize\ttfamily void fill\+\_\+null (\begin{DoxyParamCaption}\item[{char $\ast$}]{str }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{log_8h_a3026b419a662102368fc13f0dda87a84}\label{log_8h_a3026b419a662102368fc13f0dda87a84}} 
+\index{log.h@{log.h}!log\_dtor@{log\_dtor}}
+\index{log\_dtor@{log\_dtor}!log.h@{log.h}}
+\doxysubsubsection{\texorpdfstring{log\_dtor()}{log\_dtor()}}
+{\footnotesize\ttfamily int log\+\_\+dtor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{log_8h_ad75757cea6aab37a430c46abc121504f}\label{log_8h_ad75757cea6aab37a430c46abc121504f}} 
+\index{log.h@{log.h}!log\_init@{log\_init}}
+\index{log\_init@{log\_init}!log.h@{log.h}}
+\doxysubsubsection{\texorpdfstring{log\_init()}{log\_init()}}
+{\footnotesize\ttfamily int log\+\_\+init (\begin{DoxyParamCaption}\item[{const char $\ast$}]{log\+\_\+file\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{log_8h_a9094a1269b5d17cb2c87265e93bf714a}\label{log_8h_a9094a1269b5d17cb2c87265e93bf714a}} 
+\index{log.h@{log.h}!log\_pict@{log\_pict}}
+\index{log\_pict@{log\_pict}!log.h@{log.h}}
+\doxysubsubsection{\texorpdfstring{log\_pict()}{log\_pict()}}
+{\footnotesize\ttfamily int log\+\_\+pict (\begin{DoxyParamCaption}\item[{const char $\ast$}]{str,  }\item[{const char $\ast$}]{file,  }\item[{int}]{line }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{log_8h_a2de21309f566f0b94f2e4dbd190c768f}\label{log_8h_a2de21309f566f0b94f2e4dbd190c768f}} 
+\index{log.h@{log.h}!make\_line@{make\_line}}
+\index{make\_line@{make\_line}!log.h@{log.h}}
+\doxysubsubsection{\texorpdfstring{make\_line()}{make\_line()}}
+{\footnotesize\ttfamily char $\ast$ make\+\_\+line (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{log_8h_a4efc2d816e63a9cc3c5b1936bed6f925}\label{log_8h_a4efc2d816e63a9cc3c5b1936bed6f925}} 
+\index{log.h@{log.h}!mlog@{mlog}}
+\index{mlog@{mlog}!log.h@{log.h}}
+\doxysubsubsection{\texorpdfstring{mlog()}{mlog()}}
+{\footnotesize\ttfamily int mlog (\begin{DoxyParamCaption}\item[{const char $\ast$}]{str,  }\item[{const char $\ast$}]{file,  }\item[{int}]{line,  }\item[{const char $\ast$}]{color,  }\item[{int}]{font\+\_\+size }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{log_8h_a79e837c759e353f050a807497952f7f0}\label{log_8h_a79e837c759e353f050a807497952f7f0}} 
+\index{log.h@{log.h}!my\_assert@{my\_assert}}
+\index{my\_assert@{my\_assert}!log.h@{log.h}}
+\doxysubsubsection{\texorpdfstring{my\_assert()}{my\_assert()}}
+{\footnotesize\ttfamily int my\+\_\+assert (\begin{DoxyParamCaption}\item[{const void $\ast$}]{ptr,  }\item[{const char $\ast$}]{var,  }\item[{const char $\ast$}]{file,  }\item[{int}]{line }\end{DoxyParamCaption})}
+

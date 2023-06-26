@@ -28,11 +28,10 @@ struct labels_t {
  * @param jit_code
  * @param amount2insert
  */
-
 void    insert_nops (jit_code_t *jit_code, size_t amount2insert);
 
 /**
- * @brief Check and encode stack constructions like
+ * Check and encode stack constructions like
  *      push 12
  *      add
  * to
@@ -44,18 +43,15 @@ void    insert_nops (jit_code_t *jit_code, size_t amount2insert);
  * @param jit_code
  * @return size_t number of tokens which was translated
  */
-
 size_t  convert_tokens2nonstack_logic (tokens_t *tokens, size_t n_token, jit_code_t *jit_code);
 
 /**
- * @brief If commands access memory and change rbx it will mov rbx to rdi and change rdi
- * access memory through rdi
+ * @brief If commands access memory and change rbx it will mov rbx to rdi and change rdi access memory through rdi
  *
  * @param jit_code
  * @param tokens
  * @param n_token
  */
-
 void    find_convert_memory_access    (jit_code_t *jit_code, tokens_t *tokens, size_t n_token);
 
 /**
@@ -65,9 +61,7 @@ void    find_convert_memory_access    (jit_code_t *jit_code, tokens_t *tokens, s
  * @param tokens
  * @param n_token
  */
-
 void    change_return_value_src       (jit_code_t *jit_code, tokens_t *tokens, size_t n_token);
-
 
 uint8_t get_cmd_from_token            (token_t *token);
 void write_cmds_in_jit_code           (jit_code_t *jit_code, x86_cmd_t *cmds, uint8_t max_cmds2write);
@@ -88,7 +82,6 @@ size_t find_label   (labels_t *label_table, uint32_t my_offset);
  * @param token contains my_label info
  * @param label_table
  */
-
 void   insert_label (jit_code_t *jit_code, token_t *token, labels_t *label_table);
 
 void pre_encode_print_scan_call (x86_cmd_t *cmd, token_t *token, labels_t *label_table);
@@ -102,7 +95,6 @@ void encode_scan                (x86_cmd_t *cmds, token_t *token);
  * @param token
  * @param table_position
  */
-
 void encode_token2push_pop      (x86_cmd_t *cmd, token_t *token, size_t table_position);
 
 #endif /*TOKENS2X86_H*/

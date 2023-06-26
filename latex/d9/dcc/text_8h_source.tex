@@ -1,0 +1,58 @@
+\hypertarget{text_8h_source}{}\doxysection{text.\+h}
+\label{text_8h_source}\index{src/include/text.h@{src/include/text.h}}
+\mbox{\hyperlink{text_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TEXT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TEXT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{config_8h}{config.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structword__t}{word\_t}}}
+\DoxyCodeLine{00008\ \{}
+\DoxyCodeLine{00009\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{structword__t_a24e89258e507d829f8ab40a6d288bfde}{ptr}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structword__t_a384a986a209def14ec6213ac93674044}{length}}\ =\ 0;}
+\DoxyCodeLine{00011\ \};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structline__t}{line\_t}}}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{structline__t_a5040944574bb3c8ec49dbb13b09eff3c}{ptr}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structline__t_ac14c0acb7525b27f1b73380add1d38f6}{length}}\ =\ 0;}
+\DoxyCodeLine{00017\ \};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structtext__t}{text\_t}}\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structtext__t_a6531905ce5a73bb83067948794184516}{n\_words}}\ \ \ \ \ \ =\ \ \ \ \ \ \ 0;}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structtext__t_a6d9f4270d6f542490e97efe35e7f3940}{n\_lines}}\ \ \ \ \ \ =\ \ \ \ \ \ \ 0;}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structtext__t_a0eaf830e2ca15e89399b02c802de9d59}{n\_chars}}\ \ \ \ \ \ =\ \ \ \ \ \ \ 0;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{structtext__t_a905887cf4028803428c509f08617c547}{buf}}\ \ \ \ \ \ \ \ \ \ \ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structline__t}{line\_t}}\ *\mbox{\hyperlink{structtext__t_ac52f69e9ae53a00b9d837a266cc97e54}{lines}}\ \ \ \ \ \ \ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structword__t}{word\_t}}\ *\mbox{\hyperlink{structtext__t_a89c503a87ec3f72e56a8a79f00d8e339}{words}}\ \ \ \ \ \ \ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{structtext__t_afa9c71f79e1e618f7139de923366e95c}{aligned\_words}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00027\ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{text_8h_a2bed00245e126b4eff6914757499fa03}{MAX\_LINE\_LENGTH}}\ =\ 512;}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{text_8h_acaa672c9a991d73a5d36c5915d90e701}{text\_error}}\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{text_8h_acaa672c9a991d73a5d36c5915d90e701afc84f8cd60f52ab1500e26a25e82ac86}{EMPTY\_FILE}}\ \ \ \ \ =\ -\/1,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{text_8h_acaa672c9a991d73a5d36c5915d90e701a9b6b49bde182b454a736e0e13b50ab45}{NULL\_TEXT\_PTR}}\ \ =\ -\/2,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{text_8h_acaa672c9a991d73a5d36c5915d90e701ace97aa1ba9b4a75ee1dae036e815e15e}{FILE\_ERR}}\ \ \ \ \ \ \ =\ 0xF11E,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{text_8h_acaa672c9a991d73a5d36c5915d90e701aaeec3a63883ecb4febee06206ad60bb7}{GET\_TEXT\_ERROR}}\ =\ 0xBAD61}
+\DoxyCodeLine{00036\ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{text_8h_a2176b7e68a7b94a5c2fb068b26783e82}{get\_text}}\ \ \ \ \ \ \ \ \ \ \ \ \ (FILE\ *input,\ \mbox{\hyperlink{structtext__t}{text\_t}}\ *text,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *file\_name);}
+\DoxyCodeLine{00039\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{text_8h_afcd3b601060d4c65fc867503b592337e}{text\_dtor}}\ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structtext__t}{text\_t}}\ *text);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{text_8h_a9e0b9bfa8daecbffe2ab8a51ff55b52e}{replace\_n}}\ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structtext__t}{text\_t}}\ *text);}
+\DoxyCodeLine{00042\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{text_8h_a2879fb1076846349bb81acbceeba953f}{delete\_punctuations}}\ \ (\mbox{\hyperlink{structtext__t}{text\_t}}\ *text);}
+\DoxyCodeLine{00043\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{text_8h_a6a576c031db090c3830861a114a9ce71}{text\_count\_words}}\ \ \ \ \ (\mbox{\hyperlink{structtext__t}{text\_t}}\ *text);}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{text_8h_adf0a7efd4871b5156cec282d205cf6e9}{divide\_text\_on\_lines}}\ (\mbox{\hyperlink{structtext__t}{text\_t}}\ *text);}
+\DoxyCodeLine{00046\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{text_8h_aff4c39098dd43c8077f81d18c937e2e8}{divide\_text\_on\_words}}\ (\mbox{\hyperlink{structtext__t}{text\_t}}\ *text);}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{text_8h_ac65c6d4cb658d77d5741eebe6ec4c846}{skip\_tabs}}\ \ \ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{char}\ \ \ *line);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{text_8h_a1d4caee22e32cb86c8d340a69479c870}{align\_words}}\ (\mbox{\hyperlink{structtext__t}{text\_t}}\ *text);}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*TEXT\_H*/}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

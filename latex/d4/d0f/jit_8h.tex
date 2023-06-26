@@ -1,0 +1,148 @@
+\hypertarget{jit_8h}{}\doxysection{src/include/jit.h File Reference}
+\label{jit_8h}\index{src/include/jit.h@{src/include/jit.h}}
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}tokens.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}configs.\+cmds\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Contains information about code for JIT compilation. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Contains x86 command. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Contains information which used to encode \mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{jit_8h_a6ba5feb04a56516542fd27a5d6f70815}{jit\+\_\+errors}} \{ \mbox{\hyperlink{jit_8h_a6ba5feb04a56516542fd27a5d6f70815a3b2c8a165b77cc25cfe7b0c8ec5bb6f0}{CHANGE\+\_\+\+PROTECTION\+\_\+\+ERROR}} = 0x\+BAD9301
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{jit_8h_aedf58484297acfb5d1bd24c1c189a102}{jit}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens)
+\begin{DoxyCompactList}\small\item\em Execute code, contained in tokens. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{jit_8h_a7698f2c9fd2a95e077451a4fa1856b23}{jit\+\_\+code\+\_\+ctor}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code, size\+\_\+t capacity)
+\begin{DoxyCompactList}\small\item\em Constructor for \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} variable. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{jit_8h_a6d4a033af476775fb972d6ef84f08f54}{jit\+\_\+code\+\_\+dtor}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code)
+\begin{DoxyCompactList}\small\item\em Destructor for \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{jit_8h_af9e472791c8bf403bd4080c89821aeb0}{make\+\_\+buf\+\_\+executable}} (void $\ast$buf, size\+\_\+t buf\+\_\+capacity)
+\begin{DoxyCompactList}\small\item\em Makes buffer executable, readable and writable using mprotect. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{jit_8h_af99454d59278d3c3f0c9f6c73660cbd1}{make\+\_\+buf\+\_\+writable}} (void $\ast$buf, size\+\_\+t buf\+\_\+capacity)
+\item 
+void \mbox{\hyperlink{jit_8h_aed53a7191735f2720e0a6aba677407bf}{run\+\_\+jit\+\_\+buffer}} (void($\ast$buf\+\_\+func)())
+\begin{DoxyCompactList}\small\item\em Run buffer as a function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{jit_8h_a6ba5feb04a56516542fd27a5d6f70815}\label{jit_8h_a6ba5feb04a56516542fd27a5d6f70815}} 
+\index{jit.h@{jit.h}!jit\_errors@{jit\_errors}}
+\index{jit\_errors@{jit\_errors}!jit.h@{jit.h}}
+\doxysubsubsection{\texorpdfstring{jit\_errors}{jit\_errors}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{jit_8h_a6ba5feb04a56516542fd27a5d6f70815}{jit\+\_\+errors}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CHANGE\_PROTECTION\_ERROR@{CHANGE\_PROTECTION\_ERROR}!jit.h@{jit.h}}\index{jit.h@{jit.h}!CHANGE\_PROTECTION\_ERROR@{CHANGE\_PROTECTION\_ERROR}}}\mbox{\Hypertarget{jit_8h_a6ba5feb04a56516542fd27a5d6f70815a3b2c8a165b77cc25cfe7b0c8ec5bb6f0}\label{jit_8h_a6ba5feb04a56516542fd27a5d6f70815a3b2c8a165b77cc25cfe7b0c8ec5bb6f0}} 
+CHANGE\+\_\+\+PROTECTION\+\_\+\+ERROR&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{jit_8h_aedf58484297acfb5d1bd24c1c189a102}\label{jit_8h_aedf58484297acfb5d1bd24c1c189a102}} 
+\index{jit.h@{jit.h}!jit@{jit}}
+\index{jit@{jit}!jit.h@{jit.h}}
+\doxysubsubsection{\texorpdfstring{jit()}{jit()}}
+{\footnotesize\ttfamily int jit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens }\end{DoxyParamCaption})}
+
+
+
+Execute code, contained in tokens. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tokens} & contains processed bit code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int errors 
+\end{DoxyReturn}
+\mbox{\Hypertarget{jit_8h_a7698f2c9fd2a95e077451a4fa1856b23}\label{jit_8h_a7698f2c9fd2a95e077451a4fa1856b23}} 
+\index{jit.h@{jit.h}!jit\_code\_ctor@{jit\_code\_ctor}}
+\index{jit\_code\_ctor@{jit\_code\_ctor}!jit.h@{jit.h}}
+\doxysubsubsection{\texorpdfstring{jit\_code\_ctor()}{jit\_code\_ctor()}}
+{\footnotesize\ttfamily int jit\+\_\+code\+\_\+ctor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code,  }\item[{size\+\_\+t}]{capacity }\end{DoxyParamCaption})}
+
+
+
+Constructor for \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} variable. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & pointer to \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} to construct \\
+\hline
+{\em capacity} & maximum size of \char`\"{}text\char`\"{} and \char`\"{}data\char`\"{} sections buffers \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int errors 
+\end{DoxyReturn}
+\mbox{\Hypertarget{jit_8h_a6d4a033af476775fb972d6ef84f08f54}\label{jit_8h_a6d4a033af476775fb972d6ef84f08f54}} 
+\index{jit.h@{jit.h}!jit\_code\_dtor@{jit\_code\_dtor}}
+\index{jit\_code\_dtor@{jit\_code\_dtor}!jit.h@{jit.h}}
+\doxysubsubsection{\texorpdfstring{jit\_code\_dtor()}{jit\_code\_dtor()}}
+{\footnotesize\ttfamily void jit\+\_\+code\+\_\+dtor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code }\end{DoxyParamCaption})}
+
+
+
+Destructor for \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & pointer to \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} to destruct \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{jit_8h_af9e472791c8bf403bd4080c89821aeb0}\label{jit_8h_af9e472791c8bf403bd4080c89821aeb0}} 
+\index{jit.h@{jit.h}!make\_buf\_executable@{make\_buf\_executable}}
+\index{make\_buf\_executable@{make\_buf\_executable}!jit.h@{jit.h}}
+\doxysubsubsection{\texorpdfstring{make\_buf\_executable()}{make\_buf\_executable()}}
+{\footnotesize\ttfamily int make\+\_\+buf\+\_\+executable (\begin{DoxyParamCaption}\item[{void $\ast$}]{buf,  }\item[{size\+\_\+t}]{buf\+\_\+capacity }\end{DoxyParamCaption})}
+
+
+
+Makes buffer executable, readable and writable using mprotect. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & pointer to buffer to make executable. \\
+\hline
+{\em buf\+\_\+capacity} & size of buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int errors 
+\end{DoxyReturn}
+\mbox{\Hypertarget{jit_8h_af99454d59278d3c3f0c9f6c73660cbd1}\label{jit_8h_af99454d59278d3c3f0c9f6c73660cbd1}} 
+\index{jit.h@{jit.h}!make\_buf\_writable@{make\_buf\_writable}}
+\index{make\_buf\_writable@{make\_buf\_writable}!jit.h@{jit.h}}
+\doxysubsubsection{\texorpdfstring{make\_buf\_writable()}{make\_buf\_writable()}}
+{\footnotesize\ttfamily int make\+\_\+buf\+\_\+writable (\begin{DoxyParamCaption}\item[{void $\ast$}]{buf,  }\item[{size\+\_\+t}]{buf\+\_\+capacity }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{jit_8h_aed53a7191735f2720e0a6aba677407bf}\label{jit_8h_aed53a7191735f2720e0a6aba677407bf}} 
+\index{jit.h@{jit.h}!run\_jit\_buffer@{run\_jit\_buffer}}
+\index{run\_jit\_buffer@{run\_jit\_buffer}!jit.h@{jit.h}}
+\doxysubsubsection{\texorpdfstring{run\_jit\_buffer()}{run\_jit\_buffer()}}
+{\footnotesize\ttfamily void run\+\_\+jit\+\_\+buffer (\begin{DoxyParamCaption}\item[{void($\ast$)()}]{buf\+\_\+func }\end{DoxyParamCaption})}
+
+
+
+Run buffer as a function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buf\+\_\+func} & pointer to buffer to execute \\
+\hline
+\end{DoxyParams}

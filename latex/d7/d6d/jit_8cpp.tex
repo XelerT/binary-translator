@@ -1,0 +1,138 @@
+\hypertarget{jit_8cpp}{}\doxysection{src/jit/jit.cpp File Reference}
+\label{jit_8cpp}\index{src/jit/jit.cpp@{src/jit/jit.cpp}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+{\ttfamily \#include $<$sys/mman.\+h$>$}\newline
+{\ttfamily \#include $<$cstdlib$>$}\newline
+{\ttfamily \#include \char`\"{}../include/config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/tokens.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/jit.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/translate2x86.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{jit_8cpp_aedf58484297acfb5d1bd24c1c189a102}{jit}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens)
+\begin{DoxyCompactList}\small\item\em Execute code, contained in tokens. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{jit_8cpp_a7698f2c9fd2a95e077451a4fa1856b23}{jit\+\_\+code\+\_\+ctor}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code, size\+\_\+t capacity)
+\begin{DoxyCompactList}\small\item\em Constructor for \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} variable. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{jit_8cpp_a6d4a033af476775fb972d6ef84f08f54}{jit\+\_\+code\+\_\+dtor}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code)
+\begin{DoxyCompactList}\small\item\em Destructor for \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{jit_8cpp_af9e472791c8bf403bd4080c89821aeb0}{make\+\_\+buf\+\_\+executable}} (void $\ast$buf, size\+\_\+t buf\+\_\+capacity)
+\begin{DoxyCompactList}\small\item\em Makes buffer executable, readable and writable using mprotect. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{jit_8cpp_af99454d59278d3c3f0c9f6c73660cbd1}{make\+\_\+buf\+\_\+writable}} (void $\ast$buf, size\+\_\+t buf\+\_\+capacity)
+\item 
+void \mbox{\hyperlink{jit_8cpp_aed53a7191735f2720e0a6aba677407bf}{run\+\_\+jit\+\_\+buffer}} (void($\ast$buf\+\_\+func)())
+\begin{DoxyCompactList}\small\item\em Run buffer as a function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{jit_8cpp_ad65a8842cc674e3ddf69355898c0ecbf}{errno}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{jit_8cpp_aedf58484297acfb5d1bd24c1c189a102}\label{jit_8cpp_aedf58484297acfb5d1bd24c1c189a102}} 
+\index{jit.cpp@{jit.cpp}!jit@{jit}}
+\index{jit@{jit}!jit.cpp@{jit.cpp}}
+\doxysubsubsection{\texorpdfstring{jit()}{jit()}}
+{\footnotesize\ttfamily int jit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens }\end{DoxyParamCaption})}
+
+
+
+Execute code, contained in tokens. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tokens} & contains processed bit code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int errors 
+\end{DoxyReturn}
+\mbox{\Hypertarget{jit_8cpp_a7698f2c9fd2a95e077451a4fa1856b23}\label{jit_8cpp_a7698f2c9fd2a95e077451a4fa1856b23}} 
+\index{jit.cpp@{jit.cpp}!jit\_code\_ctor@{jit\_code\_ctor}}
+\index{jit\_code\_ctor@{jit\_code\_ctor}!jit.cpp@{jit.cpp}}
+\doxysubsubsection{\texorpdfstring{jit\_code\_ctor()}{jit\_code\_ctor()}}
+{\footnotesize\ttfamily int jit\+\_\+code\+\_\+ctor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code,  }\item[{size\+\_\+t}]{capacity }\end{DoxyParamCaption})}
+
+
+
+Constructor for \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} variable. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & pointer to \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} to construct \\
+\hline
+{\em capacity} & maximum size of \char`\"{}text\char`\"{} and \char`\"{}data\char`\"{} sections buffers \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int errors 
+\end{DoxyReturn}
+\mbox{\Hypertarget{jit_8cpp_a6d4a033af476775fb972d6ef84f08f54}\label{jit_8cpp_a6d4a033af476775fb972d6ef84f08f54}} 
+\index{jit.cpp@{jit.cpp}!jit\_code\_dtor@{jit\_code\_dtor}}
+\index{jit\_code\_dtor@{jit\_code\_dtor}!jit.cpp@{jit.cpp}}
+\doxysubsubsection{\texorpdfstring{jit\_code\_dtor()}{jit\_code\_dtor()}}
+{\footnotesize\ttfamily void jit\+\_\+code\+\_\+dtor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code }\end{DoxyParamCaption})}
+
+
+
+Destructor for \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & pointer to \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} to destruct \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{jit_8cpp_af9e472791c8bf403bd4080c89821aeb0}\label{jit_8cpp_af9e472791c8bf403bd4080c89821aeb0}} 
+\index{jit.cpp@{jit.cpp}!make\_buf\_executable@{make\_buf\_executable}}
+\index{make\_buf\_executable@{make\_buf\_executable}!jit.cpp@{jit.cpp}}
+\doxysubsubsection{\texorpdfstring{make\_buf\_executable()}{make\_buf\_executable()}}
+{\footnotesize\ttfamily int make\+\_\+buf\+\_\+executable (\begin{DoxyParamCaption}\item[{void $\ast$}]{buf,  }\item[{size\+\_\+t}]{buf\+\_\+capacity }\end{DoxyParamCaption})}
+
+
+
+Makes buffer executable, readable and writable using mprotect. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & pointer to buffer to make executable. \\
+\hline
+{\em buf\+\_\+capacity} & size of buffer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int errors 
+\end{DoxyReturn}
+\mbox{\Hypertarget{jit_8cpp_af99454d59278d3c3f0c9f6c73660cbd1}\label{jit_8cpp_af99454d59278d3c3f0c9f6c73660cbd1}} 
+\index{jit.cpp@{jit.cpp}!make\_buf\_writable@{make\_buf\_writable}}
+\index{make\_buf\_writable@{make\_buf\_writable}!jit.cpp@{jit.cpp}}
+\doxysubsubsection{\texorpdfstring{make\_buf\_writable()}{make\_buf\_writable()}}
+{\footnotesize\ttfamily int make\+\_\+buf\+\_\+writable (\begin{DoxyParamCaption}\item[{void $\ast$}]{buf,  }\item[{size\+\_\+t}]{buf\+\_\+capacity }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{jit_8cpp_aed53a7191735f2720e0a6aba677407bf}\label{jit_8cpp_aed53a7191735f2720e0a6aba677407bf}} 
+\index{jit.cpp@{jit.cpp}!run\_jit\_buffer@{run\_jit\_buffer}}
+\index{run\_jit\_buffer@{run\_jit\_buffer}!jit.cpp@{jit.cpp}}
+\doxysubsubsection{\texorpdfstring{run\_jit\_buffer()}{run\_jit\_buffer()}}
+{\footnotesize\ttfamily void run\+\_\+jit\+\_\+buffer (\begin{DoxyParamCaption}\item[{void($\ast$)()}]{buf\+\_\+func }\end{DoxyParamCaption})}
+
+
+
+Run buffer as a function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buf\+\_\+func} & pointer to buffer to execute \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{jit_8cpp_ad65a8842cc674e3ddf69355898c0ecbf}\label{jit_8cpp_ad65a8842cc674e3ddf69355898c0ecbf}} 
+\index{jit.cpp@{jit.cpp}!errno@{errno}}
+\index{errno@{errno}!jit.cpp@{jit.cpp}}
+\doxysubsubsection{\texorpdfstring{errno}{errno}}
+{\footnotesize\ttfamily int errno\hspace{0.3cm}{\ttfamily [extern]}}
+

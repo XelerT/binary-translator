@@ -1,0 +1,79 @@
+\hypertarget{text_8cpp}{}\doxysection{src/utils/text.cpp File Reference}
+\label{text_8cpp}\index{src/utils/text.cpp@{src/utils/text.cpp}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$sys/stat.\+h$>$}\newline
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+{\ttfamily \#include $<$ctype.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}../include/text.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{text_8cpp_a2176b7e68a7b94a5c2fb068b26783e82}{get\+\_\+text}} (FILE $\ast$input, \mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text, const char $\ast$file\+\_\+name)
+\item 
+void \mbox{\hyperlink{text_8cpp_a9e0b9bfa8daecbffe2ab8a51ff55b52e}{replace\+\_\+n}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\item 
+void \mbox{\hyperlink{text_8cpp_a2879fb1076846349bb81acbceeba953f}{delete\+\_\+punctuations}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\item 
+void \mbox{\hyperlink{text_8cpp_adf0a7efd4871b5156cec282d205cf6e9}{divide\+\_\+text\+\_\+on\+\_\+lines}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\item 
+void \mbox{\hyperlink{text_8cpp_a6a576c031db090c3830861a114a9ce71}{text\+\_\+count\+\_\+words}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\item 
+void \mbox{\hyperlink{text_8cpp_aff4c39098dd43c8077f81d18c937e2e8}{divide\+\_\+text\+\_\+on\+\_\+words}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\item 
+int \mbox{\hyperlink{text_8cpp_a1d4caee22e32cb86c8d340a69479c870}{align\+\_\+words}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\item 
+void \mbox{\hyperlink{text_8cpp_afcd3b601060d4c65fc867503b592337e}{text\+\_\+dtor}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{text_8cpp_a1d4caee22e32cb86c8d340a69479c870}\label{text_8cpp_a1d4caee22e32cb86c8d340a69479c870}} 
+\index{text.cpp@{text.cpp}!align\_words@{align\_words}}
+\index{align\_words@{align\_words}!text.cpp@{text.cpp}}
+\doxysubsubsection{\texorpdfstring{align\_words()}{align\_words()}}
+{\footnotesize\ttfamily int align\+\_\+words (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8cpp_a2879fb1076846349bb81acbceeba953f}\label{text_8cpp_a2879fb1076846349bb81acbceeba953f}} 
+\index{text.cpp@{text.cpp}!delete\_punctuations@{delete\_punctuations}}
+\index{delete\_punctuations@{delete\_punctuations}!text.cpp@{text.cpp}}
+\doxysubsubsection{\texorpdfstring{delete\_punctuations()}{delete\_punctuations()}}
+{\footnotesize\ttfamily void delete\+\_\+punctuations (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8cpp_adf0a7efd4871b5156cec282d205cf6e9}\label{text_8cpp_adf0a7efd4871b5156cec282d205cf6e9}} 
+\index{text.cpp@{text.cpp}!divide\_text\_on\_lines@{divide\_text\_on\_lines}}
+\index{divide\_text\_on\_lines@{divide\_text\_on\_lines}!text.cpp@{text.cpp}}
+\doxysubsubsection{\texorpdfstring{divide\_text\_on\_lines()}{divide\_text\_on\_lines()}}
+{\footnotesize\ttfamily void divide\+\_\+text\+\_\+on\+\_\+lines (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8cpp_aff4c39098dd43c8077f81d18c937e2e8}\label{text_8cpp_aff4c39098dd43c8077f81d18c937e2e8}} 
+\index{text.cpp@{text.cpp}!divide\_text\_on\_words@{divide\_text\_on\_words}}
+\index{divide\_text\_on\_words@{divide\_text\_on\_words}!text.cpp@{text.cpp}}
+\doxysubsubsection{\texorpdfstring{divide\_text\_on\_words()}{divide\_text\_on\_words()}}
+{\footnotesize\ttfamily void divide\+\_\+text\+\_\+on\+\_\+words (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8cpp_a2176b7e68a7b94a5c2fb068b26783e82}\label{text_8cpp_a2176b7e68a7b94a5c2fb068b26783e82}} 
+\index{text.cpp@{text.cpp}!get\_text@{get\_text}}
+\index{get\_text@{get\_text}!text.cpp@{text.cpp}}
+\doxysubsubsection{\texorpdfstring{get\_text()}{get\_text()}}
+{\footnotesize\ttfamily int get\+\_\+text (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{input,  }\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text,  }\item[{const char $\ast$}]{file\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8cpp_a9e0b9bfa8daecbffe2ab8a51ff55b52e}\label{text_8cpp_a9e0b9bfa8daecbffe2ab8a51ff55b52e}} 
+\index{text.cpp@{text.cpp}!replace\_n@{replace\_n}}
+\index{replace\_n@{replace\_n}!text.cpp@{text.cpp}}
+\doxysubsubsection{\texorpdfstring{replace\_n()}{replace\_n()}}
+{\footnotesize\ttfamily void replace\+\_\+n (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8cpp_a6a576c031db090c3830861a114a9ce71}\label{text_8cpp_a6a576c031db090c3830861a114a9ce71}} 
+\index{text.cpp@{text.cpp}!text\_count\_words@{text\_count\_words}}
+\index{text\_count\_words@{text\_count\_words}!text.cpp@{text.cpp}}
+\doxysubsubsection{\texorpdfstring{text\_count\_words()}{text\_count\_words()}}
+{\footnotesize\ttfamily void text\+\_\+count\+\_\+words (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8cpp_afcd3b601060d4c65fc867503b592337e}\label{text_8cpp_afcd3b601060d4c65fc867503b592337e}} 
+\index{text.cpp@{text.cpp}!text\_dtor@{text\_dtor}}
+\index{text\_dtor@{text\_dtor}!text.cpp@{text.cpp}}
+\doxysubsubsection{\texorpdfstring{text\_dtor()}{text\_dtor()}}
+{\footnotesize\ttfamily void text\+\_\+dtor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+

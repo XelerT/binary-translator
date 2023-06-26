@@ -1,0 +1,206 @@
+\hypertarget{tokens2x86_8cpp}{}\doxysection{src/jit/tokens2x86.cpp File Reference}
+\label{tokens2x86_8cpp}\index{src/jit/tokens2x86.cpp@{src/jit/tokens2x86.cpp}}
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}../include/config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/tokens.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/jit.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/translate2x86.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/tokens2x86.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/my\+IO.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/encode\+\_\+cmd.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/consts\+\_\+x86.\+cmds\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{tokens2x86_8cpp_a6377bed5f52b026f1ad66e84a645a099}{insert\+\_\+nops}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code, size\+\_\+t amount2insert)
+\begin{DoxyCompactList}\small\item\em insert nop commands in jit\+\_\+code buffer \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{tokens2x86_8cpp_afe4a60aee9bc1f162efc1e0abf2e4265}{find\+\_\+label}} (\mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$label\+\_\+table, uint32\+\_\+t my\+\_\+offset)
+\begin{DoxyCompactList}\small\item\em Find label in \mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} using offset in jmp/call to jump. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{tokens2x86_8cpp_a73a0e8314ccb8127636c74948c3a7557}{convert\+\_\+tokens2nonstack\+\_\+logic}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, size\+\_\+t n\+\_\+token, \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code)
+\item 
+void \mbox{\hyperlink{tokens2x86_8cpp_a71a2040875628c04a9f680a623e2f95d}{write\+\_\+cmds\+\_\+in\+\_\+jit\+\_\+code}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code, \mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmds, uint8\+\_\+t max\+\_\+cmds2write)
+\item 
+uint8\+\_\+t \mbox{\hyperlink{tokens2x86_8cpp_a3485a68818ceac0d000432a329a58f1e}{get\+\_\+cmd\+\_\+from\+\_\+token}} (\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token)
+\item 
+void \mbox{\hyperlink{tokens2x86_8cpp_a83fda1275a0aa0d832a613cff8f82c7a}{change\+\_\+return\+\_\+value\+\_\+src}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code, \mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, size\+\_\+t n\+\_\+token)
+\begin{DoxyCompactList}\small\item\em Change returning value of functions from rdx to rax. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{tokens2x86_8cpp_a9a5c267910e7254c237125d0a6548f8b}{find\+\_\+convert\+\_\+memory\+\_\+access}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code, \mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, size\+\_\+t n\+\_\+token)
+\begin{DoxyCompactList}\small\item\em If commands access memory and change rbx it will mov rbx to rdi and change rdi access memory through rdi. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{tokens2x86_8cpp_ab190a70e61d3ddf131046d3ff82c4f2f}{pre\+\_\+encode\+\_\+print\+\_\+scan\+\_\+call}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmd, \mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token, \mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$label\+\_\+table)
+\item 
+void \mbox{\hyperlink{tokens2x86_8cpp_a7d44a76a25345dbc0b0aba5b4804f8db}{encode\+\_\+print}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmds, \mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token)
+\item 
+void \mbox{\hyperlink{tokens2x86_8cpp_af50dff37edbafc0ad605439df61bd9f1}{encode\+\_\+scan}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmds, \mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token)
+\item 
+void \mbox{\hyperlink{tokens2x86_8cpp_a74ad5c966702068f0780efaadb9b284c}{insert\+\_\+label}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code, \mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token, \mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$label\+\_\+table)
+\begin{DoxyCompactList}\small\item\em Insert label in \mbox{\hyperlink{structlabels__t}{labels\+\_\+t}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{tokens2x86_8cpp_a06f164d0a41518ab13d22b5af71f5ca2}{encode\+\_\+token2push\+\_\+pop}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmd, \mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token, size\+\_\+t table\+\_\+position)
+\begin{DoxyCompactList}\small\item\em encode push/pop using information from token \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{tokens2x86_8cpp_a83fda1275a0aa0d832a613cff8f82c7a}\label{tokens2x86_8cpp_a83fda1275a0aa0d832a613cff8f82c7a}} 
+\index{tokens2x86.cpp@{tokens2x86.cpp}!change\_return\_value\_src@{change\_return\_value\_src}}
+\index{change\_return\_value\_src@{change\_return\_value\_src}!tokens2x86.cpp@{tokens2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{change\_return\_value\_src()}{change\_return\_value\_src()}}
+{\footnotesize\ttfamily void change\+\_\+return\+\_\+value\+\_\+src (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code,  }\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{size\+\_\+t}]{n\+\_\+token }\end{DoxyParamCaption})}
+
+
+
+Change returning value of functions from rdx to rax. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & \\
+\hline
+{\em tokens} & \\
+\hline
+{\em n\+\_\+token} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{tokens2x86_8cpp_a73a0e8314ccb8127636c74948c3a7557}\label{tokens2x86_8cpp_a73a0e8314ccb8127636c74948c3a7557}} 
+\index{tokens2x86.cpp@{tokens2x86.cpp}!convert\_tokens2nonstack\_logic@{convert\_tokens2nonstack\_logic}}
+\index{convert\_tokens2nonstack\_logic@{convert\_tokens2nonstack\_logic}!tokens2x86.cpp@{tokens2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{convert\_tokens2nonstack\_logic()}{convert\_tokens2nonstack\_logic()}}
+{\footnotesize\ttfamily size\+\_\+t convert\+\_\+tokens2nonstack\+\_\+logic (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{size\+\_\+t}]{n\+\_\+token,  }\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code }\end{DoxyParamCaption})}
+
+Check and encode stack constructions like push 12 add to pop rax add rax, 12
+
+
+\begin{DoxyParams}{Parameters}
+{\em tokens} & \\
+\hline
+{\em n\+\_\+token} & \\
+\hline
+{\em jit\+\_\+code} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+size\+\_\+t number of tokens which was translated 
+\end{DoxyReturn}
+\mbox{\Hypertarget{tokens2x86_8cpp_a7d44a76a25345dbc0b0aba5b4804f8db}\label{tokens2x86_8cpp_a7d44a76a25345dbc0b0aba5b4804f8db}} 
+\index{tokens2x86.cpp@{tokens2x86.cpp}!encode\_print@{encode\_print}}
+\index{encode\_print@{encode\_print}!tokens2x86.cpp@{tokens2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{encode\_print()}{encode\_print()}}
+{\footnotesize\ttfamily void encode\+\_\+print (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmds,  }\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens2x86_8cpp_af50dff37edbafc0ad605439df61bd9f1}\label{tokens2x86_8cpp_af50dff37edbafc0ad605439df61bd9f1}} 
+\index{tokens2x86.cpp@{tokens2x86.cpp}!encode\_scan@{encode\_scan}}
+\index{encode\_scan@{encode\_scan}!tokens2x86.cpp@{tokens2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{encode\_scan()}{encode\_scan()}}
+{\footnotesize\ttfamily void encode\+\_\+scan (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmds,  }\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens2x86_8cpp_a06f164d0a41518ab13d22b5af71f5ca2}\label{tokens2x86_8cpp_a06f164d0a41518ab13d22b5af71f5ca2}} 
+\index{tokens2x86.cpp@{tokens2x86.cpp}!encode\_token2push\_pop@{encode\_token2push\_pop}}
+\index{encode\_token2push\_pop@{encode\_token2push\_pop}!tokens2x86.cpp@{tokens2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{encode\_token2push\_pop()}{encode\_token2push\_pop()}}
+{\footnotesize\ttfamily void encode\+\_\+token2push\+\_\+pop (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmd,  }\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token,  }\item[{size\+\_\+t}]{table\+\_\+position }\end{DoxyParamCaption})}
+
+
+
+encode push/pop using information from token 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & \\
+\hline
+{\em token} & \\
+\hline
+{\em table\+\_\+position} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{tokens2x86_8cpp_a9a5c267910e7254c237125d0a6548f8b}\label{tokens2x86_8cpp_a9a5c267910e7254c237125d0a6548f8b}} 
+\index{tokens2x86.cpp@{tokens2x86.cpp}!find\_convert\_memory\_access@{find\_convert\_memory\_access}}
+\index{find\_convert\_memory\_access@{find\_convert\_memory\_access}!tokens2x86.cpp@{tokens2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{find\_convert\_memory\_access()}{find\_convert\_memory\_access()}}
+{\footnotesize\ttfamily void find\+\_\+convert\+\_\+memory\+\_\+access (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code,  }\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{size\+\_\+t}]{n\+\_\+token }\end{DoxyParamCaption})}
+
+
+
+If commands access memory and change rbx it will mov rbx to rdi and change rdi access memory through rdi. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & \\
+\hline
+{\em tokens} & \\
+\hline
+{\em n\+\_\+token} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{tokens2x86_8cpp_afe4a60aee9bc1f162efc1e0abf2e4265}\label{tokens2x86_8cpp_afe4a60aee9bc1f162efc1e0abf2e4265}} 
+\index{tokens2x86.cpp@{tokens2x86.cpp}!find\_label@{find\_label}}
+\index{find\_label@{find\_label}!tokens2x86.cpp@{tokens2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{find\_label()}{find\_label()}}
+{\footnotesize\ttfamily size\+\_\+t find\+\_\+label (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$}]{label\+\_\+table,  }\item[{uint32\+\_\+t}]{my\+\_\+offset }\end{DoxyParamCaption})}
+
+
+
+Find label in \mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} using offset in jmp/call to jump. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em label\+\_\+table} & \\
+\hline
+{\em my\+\_\+offset} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+size\+\_\+t position in table if label is in table and amount of labels in label\+\_\+table + 1 
+\end{DoxyReturn}
+\mbox{\Hypertarget{tokens2x86_8cpp_a3485a68818ceac0d000432a329a58f1e}\label{tokens2x86_8cpp_a3485a68818ceac0d000432a329a58f1e}} 
+\index{tokens2x86.cpp@{tokens2x86.cpp}!get\_cmd\_from\_token@{get\_cmd\_from\_token}}
+\index{get\_cmd\_from\_token@{get\_cmd\_from\_token}!tokens2x86.cpp@{tokens2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{get\_cmd\_from\_token()}{get\_cmd\_from\_token()}}
+{\footnotesize\ttfamily uint8\+\_\+t get\+\_\+cmd\+\_\+from\+\_\+token (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens2x86_8cpp_a74ad5c966702068f0780efaadb9b284c}\label{tokens2x86_8cpp_a74ad5c966702068f0780efaadb9b284c}} 
+\index{tokens2x86.cpp@{tokens2x86.cpp}!insert\_label@{insert\_label}}
+\index{insert\_label@{insert\_label}!tokens2x86.cpp@{tokens2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{insert\_label()}{insert\_label()}}
+{\footnotesize\ttfamily void insert\+\_\+label (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code,  }\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token,  }\item[{\mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$}]{label\+\_\+table }\end{DoxyParamCaption})}
+
+
+
+Insert label in \mbox{\hyperlink{structlabels__t}{labels\+\_\+t}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & \\
+\hline
+{\em token} & contains my\+\_\+label info \\
+\hline
+{\em label\+\_\+table} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{tokens2x86_8cpp_a6377bed5f52b026f1ad66e84a645a099}\label{tokens2x86_8cpp_a6377bed5f52b026f1ad66e84a645a099}} 
+\index{tokens2x86.cpp@{tokens2x86.cpp}!insert\_nops@{insert\_nops}}
+\index{insert\_nops@{insert\_nops}!tokens2x86.cpp@{tokens2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{insert\_nops()}{insert\_nops()}}
+{\footnotesize\ttfamily void insert\+\_\+nops (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code,  }\item[{size\+\_\+t}]{amount2insert }\end{DoxyParamCaption})}
+
+
+
+insert nop commands in jit\+\_\+code buffer 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & \\
+\hline
+{\em amount2insert} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{tokens2x86_8cpp_ab190a70e61d3ddf131046d3ff82c4f2f}\label{tokens2x86_8cpp_ab190a70e61d3ddf131046d3ff82c4f2f}} 
+\index{tokens2x86.cpp@{tokens2x86.cpp}!pre\_encode\_print\_scan\_call@{pre\_encode\_print\_scan\_call}}
+\index{pre\_encode\_print\_scan\_call@{pre\_encode\_print\_scan\_call}!tokens2x86.cpp@{tokens2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{pre\_encode\_print\_scan\_call()}{pre\_encode\_print\_scan\_call()}}
+{\footnotesize\ttfamily void pre\+\_\+encode\+\_\+print\+\_\+scan\+\_\+call (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmd,  }\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token,  }\item[{\mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$}]{label\+\_\+table }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens2x86_8cpp_a71a2040875628c04a9f680a623e2f95d}\label{tokens2x86_8cpp_a71a2040875628c04a9f680a623e2f95d}} 
+\index{tokens2x86.cpp@{tokens2x86.cpp}!write\_cmds\_in\_jit\_code@{write\_cmds\_in\_jit\_code}}
+\index{write\_cmds\_in\_jit\_code@{write\_cmds\_in\_jit\_code}!tokens2x86.cpp@{tokens2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{write\_cmds\_in\_jit\_code()}{write\_cmds\_in\_jit\_code()}}
+{\footnotesize\ttfamily void write\+\_\+cmds\+\_\+in\+\_\+jit\+\_\+code (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code,  }\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmds,  }\item[{uint8\+\_\+t}]{max\+\_\+cmds2write }\end{DoxyParamCaption})}
+

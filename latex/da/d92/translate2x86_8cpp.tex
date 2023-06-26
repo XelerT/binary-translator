@@ -1,0 +1,158 @@
+\hypertarget{translate2x86_8cpp}{}\doxysection{src/jit/translate2x86.cpp File Reference}
+\label{translate2x86_8cpp}\index{src/jit/translate2x86.cpp@{src/jit/translate2x86.cpp}}
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}../include/translate2x86.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/tokens2x86.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/my\+IO.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/mem\+\_\+cmds.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/math\+\_\+cmds.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/jmp\+\_\+cmds.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/conditional\+\_\+cmds.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/consts\+\_\+x86.\+cmds\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{translate2x86_8cpp_aafbe264b91aa55da4e655da7fb9f1e86}{fill\+\_\+jit\+\_\+code\+\_\+buf}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code, \mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens)
+\begin{DoxyCompactList}\small\item\em Translate tokens into x86 commands, writing them into \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} buffer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{translate2x86_8cpp_a66c5744ae5e9b5e1298bf808ca3f5ccd}{paste\+\_\+cmd\+\_\+in\+\_\+jit\+\_\+buf}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code, \mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmd)
+\begin{DoxyCompactList}\small\item\em Paste x86 command in \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} buffer. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{translate2x86_8cpp_a97b98213a1b2a4087778ca7e72ebd7a8}{x86\+\_\+cmd\+\_\+ctor}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmds, \mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token, \mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$label\+\_\+table)
+\begin{DoxyCompactList}\small\item\em Finds token command in command table(CMD\+\_\+\+TABLE in configs.\+cmds file) and call encode functions Call encode print or scan functions or assemble\+\_\+cmd function. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{translate2x86_8cpp_a916574442374a9c229a9e3be5b29ef08}{assemble\+\_\+cmd}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmds, \mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token, size\+\_\+t table\+\_\+position, \mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$label\+\_\+table)
+\begin{DoxyCompactList}\small\item\em Call encode functions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{translate2x86_8cpp_ac738ac4e56035fd4774ccbd475bf6786}{change\+\_\+return\+\_\+value\+\_\+src2rax}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code)
+\begin{DoxyCompactList}\small\item\em Change return value of program from stack to rax. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{translate2x86_8cpp_a539333235f00465129573c1e6806871d}{change\+\_\+memory\+\_\+offset}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code)
+\begin{DoxyCompactList}\small\item\em Change memory offset which contains in rbx (as pointer to data section of soft-\/cpu RAM) to new data section. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{translate2x86_8cpp_a34281f19be88d06d9ea28f4eb5abd248}{encode\+\_\+imitation\+\_\+of\+\_\+ret}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmds)
+\begin{DoxyCompactList}\small\item\em Encode imitation of return using r15 Encode add r15, 8 push qword \mbox{[}r15\mbox{]} ret. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{translate2x86_8cpp_a916574442374a9c229a9e3be5b29ef08}\label{translate2x86_8cpp_a916574442374a9c229a9e3be5b29ef08}} 
+\index{translate2x86.cpp@{translate2x86.cpp}!assemble\_cmd@{assemble\_cmd}}
+\index{assemble\_cmd@{assemble\_cmd}!translate2x86.cpp@{translate2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{assemble\_cmd()}{assemble\_cmd()}}
+{\footnotesize\ttfamily void assemble\+\_\+cmd (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmds,  }\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token,  }\item[{size\+\_\+t}]{table\+\_\+position,  }\item[{\mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$}]{label\+\_\+table }\end{DoxyParamCaption})}
+
+
+
+Call encode functions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmds} & array of \mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} to encode \\
+\hline
+{\em token} & pointer to token to encode \\
+\hline
+{\em table\+\_\+position} & position of command in CMD\+\_\+\+TABLE from configs.\+cmds file \\
+\hline
+{\em label\+\_\+table} & pointer to table of labels for jumps and calls \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{translate2x86_8cpp_a539333235f00465129573c1e6806871d}\label{translate2x86_8cpp_a539333235f00465129573c1e6806871d}} 
+\index{translate2x86.cpp@{translate2x86.cpp}!change\_memory\_offset@{change\_memory\_offset}}
+\index{change\_memory\_offset@{change\_memory\_offset}!translate2x86.cpp@{translate2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{change\_memory\_offset()}{change\_memory\_offset()}}
+{\footnotesize\ttfamily void change\+\_\+memory\+\_\+offset (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code }\end{DoxyParamCaption})}
+
+
+
+Change memory offset which contains in rbx (as pointer to data section of soft-\/cpu RAM) to new data section. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{translate2x86_8cpp_ac738ac4e56035fd4774ccbd475bf6786}\label{translate2x86_8cpp_ac738ac4e56035fd4774ccbd475bf6786}} 
+\index{translate2x86.cpp@{translate2x86.cpp}!change\_return\_value\_src2rax@{change\_return\_value\_src2rax}}
+\index{change\_return\_value\_src2rax@{change\_return\_value\_src2rax}!translate2x86.cpp@{translate2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{change\_return\_value\_src2rax()}{change\_return\_value\_src2rax()}}
+{\footnotesize\ttfamily void change\+\_\+return\+\_\+value\+\_\+src2rax (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code }\end{DoxyParamCaption})}
+
+
+
+Change return value of program from stack to rax. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{translate2x86_8cpp_a34281f19be88d06d9ea28f4eb5abd248}\label{translate2x86_8cpp_a34281f19be88d06d9ea28f4eb5abd248}} 
+\index{translate2x86.cpp@{translate2x86.cpp}!encode\_imitation\_of\_ret@{encode\_imitation\_of\_ret}}
+\index{encode\_imitation\_of\_ret@{encode\_imitation\_of\_ret}!translate2x86.cpp@{translate2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{encode\_imitation\_of\_ret()}{encode\_imitation\_of\_ret()}}
+{\footnotesize\ttfamily void encode\+\_\+imitation\+\_\+of\+\_\+ret (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmds }\end{DoxyParamCaption})}
+
+
+
+Encode imitation of return using r15 Encode add r15, 8 push qword \mbox{[}r15\mbox{]} ret. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmds} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{translate2x86_8cpp_aafbe264b91aa55da4e655da7fb9f1e86}\label{translate2x86_8cpp_aafbe264b91aa55da4e655da7fb9f1e86}} 
+\index{translate2x86.cpp@{translate2x86.cpp}!fill\_jit\_code\_buf@{fill\_jit\_code\_buf}}
+\index{fill\_jit\_code\_buf@{fill\_jit\_code\_buf}!translate2x86.cpp@{translate2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{fill\_jit\_code\_buf()}{fill\_jit\_code\_buf()}}
+{\footnotesize\ttfamily int fill\+\_\+jit\+\_\+code\+\_\+buf (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code,  }\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens }\end{DoxyParamCaption})}
+
+
+
+Translate tokens into x86 commands, writing them into \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & pointer to \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} \\
+\hline
+{\em tokens} & pointer to \mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int errors 
+\end{DoxyReturn}
+\mbox{\Hypertarget{translate2x86_8cpp_a66c5744ae5e9b5e1298bf808ca3f5ccd}\label{translate2x86_8cpp_a66c5744ae5e9b5e1298bf808ca3f5ccd}} 
+\index{translate2x86.cpp@{translate2x86.cpp}!paste\_cmd\_in\_jit\_buf@{paste\_cmd\_in\_jit\_buf}}
+\index{paste\_cmd\_in\_jit\_buf@{paste\_cmd\_in\_jit\_buf}!translate2x86.cpp@{translate2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{paste\_cmd\_in\_jit\_buf()}{paste\_cmd\_in\_jit\_buf()}}
+{\footnotesize\ttfamily void paste\+\_\+cmd\+\_\+in\+\_\+jit\+\_\+buf (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code,  }\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmd }\end{DoxyParamCaption})}
+
+
+
+Paste x86 command in \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & pointer to \mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} \\
+\hline
+{\em cmd} & encoded x86 command \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{translate2x86_8cpp_a97b98213a1b2a4087778ca7e72ebd7a8}\label{translate2x86_8cpp_a97b98213a1b2a4087778ca7e72ebd7a8}} 
+\index{translate2x86.cpp@{translate2x86.cpp}!x86\_cmd\_ctor@{x86\_cmd\_ctor}}
+\index{x86\_cmd\_ctor@{x86\_cmd\_ctor}!translate2x86.cpp@{translate2x86.cpp}}
+\doxysubsubsection{\texorpdfstring{x86\_cmd\_ctor()}{x86\_cmd\_ctor()}}
+{\footnotesize\ttfamily int x86\+\_\+cmd\+\_\+ctor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmds,  }\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token,  }\item[{\mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$}]{label\+\_\+table }\end{DoxyParamCaption})}
+
+
+
+Finds token command in command table(CMD\+\_\+\+TABLE in configs.\+cmds file) and call encode functions Call encode print or scan functions or assemble\+\_\+cmd function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmds} & \\
+\hline
+{\em token} & \\
+\hline
+{\em label\+\_\+table} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}

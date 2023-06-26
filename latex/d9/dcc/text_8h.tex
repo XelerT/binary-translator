@@ -1,0 +1,141 @@
+\hypertarget{text_8h}{}\doxysection{src/include/text.h File Reference}
+\label{text_8h}\index{src/include/text.h@{src/include/text.h}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}config.\+h\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structword__t}{word\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structline__t}{line\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structtext__t}{text\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{text_8h_acaa672c9a991d73a5d36c5915d90e701}{text\+\_\+error}} \{ \mbox{\hyperlink{text_8h_acaa672c9a991d73a5d36c5915d90e701afc84f8cd60f52ab1500e26a25e82ac86}{EMPTY\+\_\+\+FILE}} = -\/1
+, \mbox{\hyperlink{text_8h_acaa672c9a991d73a5d36c5915d90e701a9b6b49bde182b454a736e0e13b50ab45}{NULL\+\_\+\+TEXT\+\_\+\+PTR}} = -\/2
+, \mbox{\hyperlink{text_8h_acaa672c9a991d73a5d36c5915d90e701ace97aa1ba9b4a75ee1dae036e815e15e}{FILE\+\_\+\+ERR}} = 0x\+F11E
+, \mbox{\hyperlink{text_8h_acaa672c9a991d73a5d36c5915d90e701aaeec3a63883ecb4febee06206ad60bb7}{GET\+\_\+\+TEXT\+\_\+\+ERROR}} = 0x\+BAD61
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{text_8h_a2176b7e68a7b94a5c2fb068b26783e82}{get\+\_\+text}} (FILE $\ast$input, \mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text, const char $\ast$file\+\_\+name)
+\item 
+void \mbox{\hyperlink{text_8h_afcd3b601060d4c65fc867503b592337e}{text\+\_\+dtor}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\item 
+void \mbox{\hyperlink{text_8h_a9e0b9bfa8daecbffe2ab8a51ff55b52e}{replace\+\_\+n}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\item 
+void \mbox{\hyperlink{text_8h_a2879fb1076846349bb81acbceeba953f}{delete\+\_\+punctuations}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\item 
+void \mbox{\hyperlink{text_8h_a6a576c031db090c3830861a114a9ce71}{text\+\_\+count\+\_\+words}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\item 
+void \mbox{\hyperlink{text_8h_adf0a7efd4871b5156cec282d205cf6e9}{divide\+\_\+text\+\_\+on\+\_\+lines}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\item 
+void \mbox{\hyperlink{text_8h_aff4c39098dd43c8077f81d18c937e2e8}{divide\+\_\+text\+\_\+on\+\_\+words}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\item 
+char $\ast$ \mbox{\hyperlink{text_8h_ac65c6d4cb658d77d5741eebe6ec4c846}{skip\+\_\+tabs}} (char $\ast$line)
+\item 
+int \mbox{\hyperlink{text_8h_a1d4caee22e32cb86c8d340a69479c870}{align\+\_\+words}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$text)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const int \mbox{\hyperlink{text_8h_a2bed00245e126b4eff6914757499fa03}{MAX\+\_\+\+LINE\+\_\+\+LENGTH}} = 512
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{text_8h_acaa672c9a991d73a5d36c5915d90e701}\label{text_8h_acaa672c9a991d73a5d36c5915d90e701}} 
+\index{text.h@{text.h}!text\_error@{text\_error}}
+\index{text\_error@{text\_error}!text.h@{text.h}}
+\doxysubsubsection{\texorpdfstring{text\_error}{text\_error}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{text_8h_acaa672c9a991d73a5d36c5915d90e701}{text\+\_\+error}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EMPTY\_FILE@{EMPTY\_FILE}!text.h@{text.h}}\index{text.h@{text.h}!EMPTY\_FILE@{EMPTY\_FILE}}}\mbox{\Hypertarget{text_8h_acaa672c9a991d73a5d36c5915d90e701afc84f8cd60f52ab1500e26a25e82ac86}\label{text_8h_acaa672c9a991d73a5d36c5915d90e701afc84f8cd60f52ab1500e26a25e82ac86}} 
+EMPTY\+\_\+\+FILE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NULL\_TEXT\_PTR@{NULL\_TEXT\_PTR}!text.h@{text.h}}\index{text.h@{text.h}!NULL\_TEXT\_PTR@{NULL\_TEXT\_PTR}}}\mbox{\Hypertarget{text_8h_acaa672c9a991d73a5d36c5915d90e701a9b6b49bde182b454a736e0e13b50ab45}\label{text_8h_acaa672c9a991d73a5d36c5915d90e701a9b6b49bde182b454a736e0e13b50ab45}} 
+NULL\+\_\+\+TEXT\+\_\+\+PTR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{FILE\_ERR@{FILE\_ERR}!text.h@{text.h}}\index{text.h@{text.h}!FILE\_ERR@{FILE\_ERR}}}\mbox{\Hypertarget{text_8h_acaa672c9a991d73a5d36c5915d90e701ace97aa1ba9b4a75ee1dae036e815e15e}\label{text_8h_acaa672c9a991d73a5d36c5915d90e701ace97aa1ba9b4a75ee1dae036e815e15e}} 
+FILE\+\_\+\+ERR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{GET\_TEXT\_ERROR@{GET\_TEXT\_ERROR}!text.h@{text.h}}\index{text.h@{text.h}!GET\_TEXT\_ERROR@{GET\_TEXT\_ERROR}}}\mbox{\Hypertarget{text_8h_acaa672c9a991d73a5d36c5915d90e701aaeec3a63883ecb4febee06206ad60bb7}\label{text_8h_acaa672c9a991d73a5d36c5915d90e701aaeec3a63883ecb4febee06206ad60bb7}} 
+GET\+\_\+\+TEXT\+\_\+\+ERROR&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{text_8h_a1d4caee22e32cb86c8d340a69479c870}\label{text_8h_a1d4caee22e32cb86c8d340a69479c870}} 
+\index{text.h@{text.h}!align\_words@{align\_words}}
+\index{align\_words@{align\_words}!text.h@{text.h}}
+\doxysubsubsection{\texorpdfstring{align\_words()}{align\_words()}}
+{\footnotesize\ttfamily int align\+\_\+words (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8h_a2879fb1076846349bb81acbceeba953f}\label{text_8h_a2879fb1076846349bb81acbceeba953f}} 
+\index{text.h@{text.h}!delete\_punctuations@{delete\_punctuations}}
+\index{delete\_punctuations@{delete\_punctuations}!text.h@{text.h}}
+\doxysubsubsection{\texorpdfstring{delete\_punctuations()}{delete\_punctuations()}}
+{\footnotesize\ttfamily void delete\+\_\+punctuations (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8h_adf0a7efd4871b5156cec282d205cf6e9}\label{text_8h_adf0a7efd4871b5156cec282d205cf6e9}} 
+\index{text.h@{text.h}!divide\_text\_on\_lines@{divide\_text\_on\_lines}}
+\index{divide\_text\_on\_lines@{divide\_text\_on\_lines}!text.h@{text.h}}
+\doxysubsubsection{\texorpdfstring{divide\_text\_on\_lines()}{divide\_text\_on\_lines()}}
+{\footnotesize\ttfamily void divide\+\_\+text\+\_\+on\+\_\+lines (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8h_aff4c39098dd43c8077f81d18c937e2e8}\label{text_8h_aff4c39098dd43c8077f81d18c937e2e8}} 
+\index{text.h@{text.h}!divide\_text\_on\_words@{divide\_text\_on\_words}}
+\index{divide\_text\_on\_words@{divide\_text\_on\_words}!text.h@{text.h}}
+\doxysubsubsection{\texorpdfstring{divide\_text\_on\_words()}{divide\_text\_on\_words()}}
+{\footnotesize\ttfamily void divide\+\_\+text\+\_\+on\+\_\+words (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8h_a2176b7e68a7b94a5c2fb068b26783e82}\label{text_8h_a2176b7e68a7b94a5c2fb068b26783e82}} 
+\index{text.h@{text.h}!get\_text@{get\_text}}
+\index{get\_text@{get\_text}!text.h@{text.h}}
+\doxysubsubsection{\texorpdfstring{get\_text()}{get\_text()}}
+{\footnotesize\ttfamily int get\+\_\+text (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{input,  }\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text,  }\item[{const char $\ast$}]{file\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8h_a9e0b9bfa8daecbffe2ab8a51ff55b52e}\label{text_8h_a9e0b9bfa8daecbffe2ab8a51ff55b52e}} 
+\index{text.h@{text.h}!replace\_n@{replace\_n}}
+\index{replace\_n@{replace\_n}!text.h@{text.h}}
+\doxysubsubsection{\texorpdfstring{replace\_n()}{replace\_n()}}
+{\footnotesize\ttfamily void replace\+\_\+n (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8h_ac65c6d4cb658d77d5741eebe6ec4c846}\label{text_8h_ac65c6d4cb658d77d5741eebe6ec4c846}} 
+\index{text.h@{text.h}!skip\_tabs@{skip\_tabs}}
+\index{skip\_tabs@{skip\_tabs}!text.h@{text.h}}
+\doxysubsubsection{\texorpdfstring{skip\_tabs()}{skip\_tabs()}}
+{\footnotesize\ttfamily char $\ast$ skip\+\_\+tabs (\begin{DoxyParamCaption}\item[{char $\ast$}]{line }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8h_a6a576c031db090c3830861a114a9ce71}\label{text_8h_a6a576c031db090c3830861a114a9ce71}} 
+\index{text.h@{text.h}!text\_count\_words@{text\_count\_words}}
+\index{text\_count\_words@{text\_count\_words}!text.h@{text.h}}
+\doxysubsubsection{\texorpdfstring{text\_count\_words()}{text\_count\_words()}}
+{\footnotesize\ttfamily void text\+\_\+count\+\_\+words (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{text_8h_afcd3b601060d4c65fc867503b592337e}\label{text_8h_afcd3b601060d4c65fc867503b592337e}} 
+\index{text.h@{text.h}!text\_dtor@{text\_dtor}}
+\index{text\_dtor@{text\_dtor}!text.h@{text.h}}
+\doxysubsubsection{\texorpdfstring{text\_dtor()}{text\_dtor()}}
+{\footnotesize\ttfamily void text\+\_\+dtor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{text }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{text_8h_a2bed00245e126b4eff6914757499fa03}\label{text_8h_a2bed00245e126b4eff6914757499fa03}} 
+\index{text.h@{text.h}!MAX\_LINE\_LENGTH@{MAX\_LINE\_LENGTH}}
+\index{MAX\_LINE\_LENGTH@{MAX\_LINE\_LENGTH}!text.h@{text.h}}
+\doxysubsubsection{\texorpdfstring{MAX\_LINE\_LENGTH}{MAX\_LINE\_LENGTH}}
+{\footnotesize\ttfamily const int MAX\+\_\+\+LINE\+\_\+\+LENGTH = 512}
+

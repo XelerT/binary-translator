@@ -20,7 +20,6 @@
  * @param tokens pointer to tokens_t
  * @return int errors
  */
-
 int  fill_jit_code_buf    (jit_code_t *jit_code, tokens_t *tokens);
 
 /**
@@ -29,7 +28,6 @@ int  fill_jit_code_buf    (jit_code_t *jit_code, tokens_t *tokens);
  * @param jit_code pointer to jit_code_t
  * @param cmd encoded x86 command
  */
-
 void paste_cmd_in_jit_buf (jit_code_t *jit_code, x86_cmd_t *cmd);
 
 /**
@@ -40,7 +38,6 @@ void paste_cmd_in_jit_buf (jit_code_t *jit_code, x86_cmd_t *cmd);
  * @param label_table
  * @return int
  */
-
 int  x86_cmd_ctor (x86_cmd_t *cmds, token_t *token, labels_t *label_table);
 
 /**
@@ -51,7 +48,6 @@ int  x86_cmd_ctor (x86_cmd_t *cmds, token_t *token, labels_t *label_table);
  * @param table_position position of command in CMD_TABLE from configs.cmds file
  * @param label_table pointer to table of labels for jumps and calls
  */
-
 void assemble_cmd (x86_cmd_t *cmds, token_t *token, size_t table_position, labels_t *label_table);
 
 /**
@@ -59,7 +55,6 @@ void assemble_cmd (x86_cmd_t *cmds, token_t *token, size_t table_position, label
  *
  * @param jit_code
  */
-
 void change_return_value_src2rax (jit_code_t *jit_code);
 
 /**
@@ -68,7 +63,6 @@ void change_return_value_src2rax (jit_code_t *jit_code);
  *
  * @param jit_code
  */
-
 void change_memory_offset        (jit_code_t *jit_code);
 
 /**
@@ -78,7 +72,6 @@ void change_memory_offset        (jit_code_t *jit_code);
  *        ret
  * @param cmds
  */
-
 void encode_imitation_of_ret     (x86_cmd_t  *cmds);
 
 #endif /*TRANSLATE2x86_H*/

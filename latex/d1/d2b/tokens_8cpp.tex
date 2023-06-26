@@ -1,0 +1,101 @@
+\hypertarget{tokens_8cpp}{}\doxysection{src/frontend/tokens.cpp File Reference}
+\label{tokens_8cpp}\index{src/frontend/tokens.cpp@{src/frontend/tokens.cpp}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$cstdlib$>$}\newline
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}../include/tokens.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/tokens2x86.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/list.\+my\+\_\+cmds\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{tokens_8cpp_aed6bc46d38472be338542ef3294faa1d}{CMD}}(name,  number,  doesnt\+\_\+exist,  has\+\_\+arg)
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{tokens_8cpp_a952d8a7a42934b8688fe13be8a5da7a7}{parse\+\_\+my\+\_\+binary\+\_\+file}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, const char $\ast$input\+\_\+file\+\_\+name)
+\item 
+int \mbox{\hyperlink{tokens_8cpp_aa7ba6f56967d0e268135abc2c5c5f275}{tokens\+\_\+ctor}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, size\+\_\+t capacity)
+\item 
+void \mbox{\hyperlink{tokens_8cpp_aa8fbbc72027dce8c39680705ee351114}{tokens\+\_\+dtor}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens)
+\item 
+int \mbox{\hyperlink{tokens_8cpp_aaeb1bc2bf700c59e95f22d63c7ebbd89}{parse\+\_\+text\+\_\+for\+\_\+tokens}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$bin\+\_\+code, \mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens)
+\item 
+size\+\_\+t \mbox{\hyperlink{tokens_8cpp_a6896953c76b2de7a40132bf52322b8ef}{init\+\_\+token}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, \mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$bin\+\_\+code, unsigned int cmd, size\+\_\+t ip)
+\item 
+void \mbox{\hyperlink{tokens_8cpp_a33c0ef39e4d93cb4858216fea4c88c68}{insert\+\_\+token\+\_\+args}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, unsigned int cmd, int arg)
+\item 
+uint8\+\_\+t \mbox{\hyperlink{tokens_8cpp_a5c357df42c98245dd08e8305475cbf16}{convert\+\_\+my\+\_\+regs2x86\+\_\+regs}} (int my\+\_\+reg)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{tokens_8cpp_aed6bc46d38472be338542ef3294faa1d}\label{tokens_8cpp_aed6bc46d38472be338542ef3294faa1d}} 
+\index{tokens.cpp@{tokens.cpp}!CMD@{CMD}}
+\index{CMD@{CMD}!tokens.cpp@{tokens.cpp}}
+\doxysubsubsection{\texorpdfstring{CMD}{CMD}}
+{\footnotesize\ttfamily \#define CMD(\begin{DoxyParamCaption}\item[{}]{name,  }\item[{}]{number,  }\item[{}]{doesnt\+\_\+exist,  }\item[{}]{has\+\_\+arg }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ number:\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (doesnt\_exist)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (has\_arg)\ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sscanf(bin\_code-\/>buf\ +\ ip,\ \textcolor{stringliteral}{"{}\%d\%hhn"{}},\ \&arg,\ \&n\_skipped\_chars);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tokens-\/>n\_parsed\_numbers++;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ insert\_token\_args(tokens,\ cmd,\ arg);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tokens-\/>tokens[tokens-\/>size].my\_cmd\ =\ number;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (number\ ==\ CMD\_MY\_LABEL)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tokens-\/>tokens[tokens-\/>size].offset\ =\ (uint32\_t)\ tokens-\/>n\_parsed\_numbers\ -\/\ 1;\ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{tokens_8cpp_a5c357df42c98245dd08e8305475cbf16}\label{tokens_8cpp_a5c357df42c98245dd08e8305475cbf16}} 
+\index{tokens.cpp@{tokens.cpp}!convert\_my\_regs2x86\_regs@{convert\_my\_regs2x86\_regs}}
+\index{convert\_my\_regs2x86\_regs@{convert\_my\_regs2x86\_regs}!tokens.cpp@{tokens.cpp}}
+\doxysubsubsection{\texorpdfstring{convert\_my\_regs2x86\_regs()}{convert\_my\_regs2x86\_regs()}}
+{\footnotesize\ttfamily uint8\+\_\+t convert\+\_\+my\+\_\+regs2x86\+\_\+regs (\begin{DoxyParamCaption}\item[{int}]{my\+\_\+reg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens_8cpp_a6896953c76b2de7a40132bf52322b8ef}\label{tokens_8cpp_a6896953c76b2de7a40132bf52322b8ef}} 
+\index{tokens.cpp@{tokens.cpp}!init\_token@{init\_token}}
+\index{init\_token@{init\_token}!tokens.cpp@{tokens.cpp}}
+\doxysubsubsection{\texorpdfstring{init\_token()}{init\_token()}}
+{\footnotesize\ttfamily size\+\_\+t init\+\_\+token (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{bin\+\_\+code,  }\item[{unsigned int}]{cmd,  }\item[{size\+\_\+t}]{ip }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens_8cpp_a33c0ef39e4d93cb4858216fea4c88c68}\label{tokens_8cpp_a33c0ef39e4d93cb4858216fea4c88c68}} 
+\index{tokens.cpp@{tokens.cpp}!insert\_token\_args@{insert\_token\_args}}
+\index{insert\_token\_args@{insert\_token\_args}!tokens.cpp@{tokens.cpp}}
+\doxysubsubsection{\texorpdfstring{insert\_token\_args()}{insert\_token\_args()}}
+{\footnotesize\ttfamily void insert\+\_\+token\+\_\+args (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{unsigned int}]{cmd,  }\item[{int}]{arg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens_8cpp_a952d8a7a42934b8688fe13be8a5da7a7}\label{tokens_8cpp_a952d8a7a42934b8688fe13be8a5da7a7}} 
+\index{tokens.cpp@{tokens.cpp}!parse\_my\_binary\_file@{parse\_my\_binary\_file}}
+\index{parse\_my\_binary\_file@{parse\_my\_binary\_file}!tokens.cpp@{tokens.cpp}}
+\doxysubsubsection{\texorpdfstring{parse\_my\_binary\_file()}{parse\_my\_binary\_file()}}
+{\footnotesize\ttfamily int parse\+\_\+my\+\_\+binary\+\_\+file (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{const char $\ast$}]{input\+\_\+file\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens_8cpp_aaeb1bc2bf700c59e95f22d63c7ebbd89}\label{tokens_8cpp_aaeb1bc2bf700c59e95f22d63c7ebbd89}} 
+\index{tokens.cpp@{tokens.cpp}!parse\_text\_for\_tokens@{parse\_text\_for\_tokens}}
+\index{parse\_text\_for\_tokens@{parse\_text\_for\_tokens}!tokens.cpp@{tokens.cpp}}
+\doxysubsubsection{\texorpdfstring{parse\_text\_for\_tokens()}{parse\_text\_for\_tokens()}}
+{\footnotesize\ttfamily int parse\+\_\+text\+\_\+for\+\_\+tokens (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{bin\+\_\+code,  }\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens_8cpp_aa7ba6f56967d0e268135abc2c5c5f275}\label{tokens_8cpp_aa7ba6f56967d0e268135abc2c5c5f275}} 
+\index{tokens.cpp@{tokens.cpp}!tokens\_ctor@{tokens\_ctor}}
+\index{tokens\_ctor@{tokens\_ctor}!tokens.cpp@{tokens.cpp}}
+\doxysubsubsection{\texorpdfstring{tokens\_ctor()}{tokens\_ctor()}}
+{\footnotesize\ttfamily int tokens\+\_\+ctor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{size\+\_\+t}]{capacity }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens_8cpp_aa8fbbc72027dce8c39680705ee351114}\label{tokens_8cpp_aa8fbbc72027dce8c39680705ee351114}} 
+\index{tokens.cpp@{tokens.cpp}!tokens\_dtor@{tokens\_dtor}}
+\index{tokens\_dtor@{tokens\_dtor}!tokens.cpp@{tokens.cpp}}
+\doxysubsubsection{\texorpdfstring{tokens\_dtor()}{tokens\_dtor()}}
+{\footnotesize\ttfamily void tokens\+\_\+dtor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens }\end{DoxyParamCaption})}
+

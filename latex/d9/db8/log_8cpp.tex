@@ -1,0 +1,68 @@
+\hypertarget{log_8cpp}{}\doxysection{src/log/log.cpp File Reference}
+\label{log_8cpp}\index{src/log/log.cpp@{src/log/log.cpp}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}log.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{log_8cpp_ad75757cea6aab37a430c46abc121504f}{log\+\_\+init}} (const char $\ast$log\+\_\+file\+\_\+name)
+\item 
+int \mbox{\hyperlink{log_8cpp_a4efc2d816e63a9cc3c5b1936bed6f925}{mlog}} (const char $\ast$str, const char $\ast$file, int line, const char $\ast$color, int font\+\_\+size)
+\item 
+int \mbox{\hyperlink{log_8cpp_a9094a1269b5d17cb2c87265e93bf714a}{log\+\_\+pict}} (const char $\ast$str, const char $\ast$file, int line)
+\item 
+int \mbox{\hyperlink{log_8cpp_a79e837c759e353f050a807497952f7f0}{my\+\_\+assert}} (const void $\ast$ptr, const char $\ast$var, const char $\ast$file, int line)
+\item 
+char $\ast$ \mbox{\hyperlink{log_8cpp_a2de21309f566f0b94f2e4dbd190c768f}{make\+\_\+line}} (int argc,...)
+\item 
+void \mbox{\hyperlink{log_8cpp_a96d8c9bb45b0c44aa6c0da842c03ba07}{fill\+\_\+null}} (char $\ast$str)
+\item 
+int \mbox{\hyperlink{log_8cpp_a3026b419a662102368fc13f0dda87a84}{log\+\_\+dtor}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{log_8cpp_a96d8c9bb45b0c44aa6c0da842c03ba07}\label{log_8cpp_a96d8c9bb45b0c44aa6c0da842c03ba07}} 
+\index{log.cpp@{log.cpp}!fill\_null@{fill\_null}}
+\index{fill\_null@{fill\_null}!log.cpp@{log.cpp}}
+\doxysubsubsection{\texorpdfstring{fill\_null()}{fill\_null()}}
+{\footnotesize\ttfamily void fill\+\_\+null (\begin{DoxyParamCaption}\item[{char $\ast$}]{str }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{log_8cpp_a3026b419a662102368fc13f0dda87a84}\label{log_8cpp_a3026b419a662102368fc13f0dda87a84}} 
+\index{log.cpp@{log.cpp}!log\_dtor@{log\_dtor}}
+\index{log\_dtor@{log\_dtor}!log.cpp@{log.cpp}}
+\doxysubsubsection{\texorpdfstring{log\_dtor()}{log\_dtor()}}
+{\footnotesize\ttfamily int log\+\_\+dtor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{log_8cpp_ad75757cea6aab37a430c46abc121504f}\label{log_8cpp_ad75757cea6aab37a430c46abc121504f}} 
+\index{log.cpp@{log.cpp}!log\_init@{log\_init}}
+\index{log\_init@{log\_init}!log.cpp@{log.cpp}}
+\doxysubsubsection{\texorpdfstring{log\_init()}{log\_init()}}
+{\footnotesize\ttfamily int log\+\_\+init (\begin{DoxyParamCaption}\item[{const char $\ast$}]{log\+\_\+file\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{log_8cpp_a9094a1269b5d17cb2c87265e93bf714a}\label{log_8cpp_a9094a1269b5d17cb2c87265e93bf714a}} 
+\index{log.cpp@{log.cpp}!log\_pict@{log\_pict}}
+\index{log\_pict@{log\_pict}!log.cpp@{log.cpp}}
+\doxysubsubsection{\texorpdfstring{log\_pict()}{log\_pict()}}
+{\footnotesize\ttfamily int log\+\_\+pict (\begin{DoxyParamCaption}\item[{const char $\ast$}]{str,  }\item[{const char $\ast$}]{file,  }\item[{int}]{line }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{log_8cpp_a2de21309f566f0b94f2e4dbd190c768f}\label{log_8cpp_a2de21309f566f0b94f2e4dbd190c768f}} 
+\index{log.cpp@{log.cpp}!make\_line@{make\_line}}
+\index{make\_line@{make\_line}!log.cpp@{log.cpp}}
+\doxysubsubsection{\texorpdfstring{make\_line()}{make\_line()}}
+{\footnotesize\ttfamily char $\ast$ make\+\_\+line (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{log_8cpp_a4efc2d816e63a9cc3c5b1936bed6f925}\label{log_8cpp_a4efc2d816e63a9cc3c5b1936bed6f925}} 
+\index{log.cpp@{log.cpp}!mlog@{mlog}}
+\index{mlog@{mlog}!log.cpp@{log.cpp}}
+\doxysubsubsection{\texorpdfstring{mlog()}{mlog()}}
+{\footnotesize\ttfamily int mlog (\begin{DoxyParamCaption}\item[{const char $\ast$}]{str,  }\item[{const char $\ast$}]{file,  }\item[{int}]{line,  }\item[{const char $\ast$}]{color,  }\item[{int}]{font\+\_\+size }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{log_8cpp_a79e837c759e353f050a807497952f7f0}\label{log_8cpp_a79e837c759e353f050a807497952f7f0}} 
+\index{log.cpp@{log.cpp}!my\_assert@{my\_assert}}
+\index{my\_assert@{my\_assert}!log.cpp@{log.cpp}}
+\doxysubsubsection{\texorpdfstring{my\_assert()}{my\_assert()}}
+{\footnotesize\ttfamily int my\+\_\+assert (\begin{DoxyParamCaption}\item[{const void $\ast$}]{ptr,  }\item[{const char $\ast$}]{var,  }\item[{const char $\ast$}]{file,  }\item[{int}]{line }\end{DoxyParamCaption})}
+

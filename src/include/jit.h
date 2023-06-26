@@ -8,14 +8,13 @@
 
 #include "configs.cmds"
 
-/** \struct
+/**
  * @brief Contains information about code for JIT compilation
  *
  * It contains pointer to buffer with encoded x86 commands, capacity and size
  * of buffer, exec_memory2use is pointer to the "data" section, offsets for print and scan functions.
  *
  */
-
 struct jit_code_t {
         uint8_t *buf     = nullptr;
         size_t  capacity = 0;
@@ -31,21 +30,20 @@ struct jit_code_t {
         size_t scan_func_size    =  0;
 };
 
-/** \struct
+/**
  * @brief Contains x86 command
+ *
  * Contains buffer for command, it's length a
  */
-
 struct x86_cmd_t {
         uint8_t cmd[X86_CMD_MAX_LENGTH] = {};
         uint8_t length = 0;
 };
 
-/** \struct
+/**
  * @brief Contains information which used to encode x86_cmd_t.
  *
  */
-
 struct cmd_info4encode_t {
         uint8_t cmd_encode   = 0;
         uint8_t dest_reg     = INVALID_REG;
@@ -65,7 +63,6 @@ enum jit_errors {
  * @param tokens contains processed bit code.
  * @return int errors
  */
-
 int  jit (tokens_t *tokens);
 
 /**

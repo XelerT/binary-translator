@@ -1,0 +1,139 @@
+\hypertarget{tokens_8h}{}\doxysection{src/include/tokens.h File Reference}
+\label{tokens_8h}\index{src/include/tokens.h@{src/include/tokens.h}}
+{\ttfamily \#include \char`\"{}config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}text.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}configs.\+cmds\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structtoken__t}{token\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{tokens_8h_a4045669578653ba92d36a64bb9d34f75}{my\+\_\+masks}} \{ \mbox{\hyperlink{tokens_8h_a4045669578653ba92d36a64bb9d34f75a425b9e2bd7df83862c458159025bb6b5}{ARG\+\_\+\+IMMED\+\_\+\+MASK}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 5
+, \mbox{\hyperlink{tokens_8h_a4045669578653ba92d36a64bb9d34f75a0c8482068bdab248d7c71905d4b1f1f8}{ARG\+\_\+\+REG\+\_\+\+MASK}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 6
+, \mbox{\hyperlink{tokens_8h_a4045669578653ba92d36a64bb9d34f75ac1b34dd6895d771471b8a341e14c7b77}{ARG\+\_\+\+RAM\+\_\+\+MASK}} = 1 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 7
+, \mbox{\hyperlink{tokens_8h_a4045669578653ba92d36a64bb9d34f75a92e8d5f899b7d7404d4992ee23352efb}{CMD\+\_\+\+MASK}} = 0x1F
+ \}
+\item 
+enum \mbox{\hyperlink{tokens_8h_a5be1ba1a69b8be798c663b965f9b1fc0}{tokens\+\_\+errors}} \{ \mbox{\hyperlink{tokens_8h_a5be1ba1a69b8be798c663b965f9b1fc0a7dcd6cff78cbdb6be7e590c52dfc0391}{PARSE\+\_\+\+TOKENS\+\_\+\+ERROR}} = 0x\+BAD104
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{tokens_8h_a952d8a7a42934b8688fe13be8a5da7a7}{parse\+\_\+my\+\_\+binary\+\_\+file}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, const char $\ast$input\+\_\+file\+\_\+name)
+\item 
+int \mbox{\hyperlink{tokens_8h_aa7ba6f56967d0e268135abc2c5c5f275}{tokens\+\_\+ctor}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, size\+\_\+t capacity)
+\item 
+void \mbox{\hyperlink{tokens_8h_aa8fbbc72027dce8c39680705ee351114}{tokens\+\_\+dtor}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens)
+\item 
+int \mbox{\hyperlink{tokens_8h_aaeb1bc2bf700c59e95f22d63c7ebbd89}{parse\+\_\+text\+\_\+for\+\_\+tokens}} (\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$bin\+\_\+code, \mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens)
+\item 
+size\+\_\+t \mbox{\hyperlink{tokens_8h_a6896953c76b2de7a40132bf52322b8ef}{init\+\_\+token}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, \mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$bin\+\_\+code, unsigned int cmd, size\+\_\+t ip)
+\item 
+void \mbox{\hyperlink{tokens_8h_a33c0ef39e4d93cb4858216fea4c88c68}{insert\+\_\+token\+\_\+args}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, unsigned int cmd, int arg)
+\item 
+uint8\+\_\+t \mbox{\hyperlink{tokens_8h_a5c357df42c98245dd08e8305475cbf16}{convert\+\_\+my\+\_\+regs2x86\+\_\+regs}} (int my\+\_\+reg)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const int \mbox{\hyperlink{tokens_8h_ad9a8ab6e85e65246fcbee50b7e795175}{AVERAGE\+\_\+\+SIZE\+\_\+\+OF\+\_\+\+TOKEN\+\_\+\+IN\+\_\+\+CHARS}} = 32
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{tokens_8h_a4045669578653ba92d36a64bb9d34f75}\label{tokens_8h_a4045669578653ba92d36a64bb9d34f75}} 
+\index{tokens.h@{tokens.h}!my\_masks@{my\_masks}}
+\index{my\_masks@{my\_masks}!tokens.h@{tokens.h}}
+\doxysubsubsection{\texorpdfstring{my\_masks}{my\_masks}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{tokens_8h_a4045669578653ba92d36a64bb9d34f75}{my\+\_\+masks}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ARG\_IMMED\_MASK@{ARG\_IMMED\_MASK}!tokens.h@{tokens.h}}\index{tokens.h@{tokens.h}!ARG\_IMMED\_MASK@{ARG\_IMMED\_MASK}}}\mbox{\Hypertarget{tokens_8h_a4045669578653ba92d36a64bb9d34f75a425b9e2bd7df83862c458159025bb6b5}\label{tokens_8h_a4045669578653ba92d36a64bb9d34f75a425b9e2bd7df83862c458159025bb6b5}} 
+ARG\+\_\+\+IMMED\+\_\+\+MASK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ARG\_REG\_MASK@{ARG\_REG\_MASK}!tokens.h@{tokens.h}}\index{tokens.h@{tokens.h}!ARG\_REG\_MASK@{ARG\_REG\_MASK}}}\mbox{\Hypertarget{tokens_8h_a4045669578653ba92d36a64bb9d34f75a0c8482068bdab248d7c71905d4b1f1f8}\label{tokens_8h_a4045669578653ba92d36a64bb9d34f75a0c8482068bdab248d7c71905d4b1f1f8}} 
+ARG\+\_\+\+REG\+\_\+\+MASK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ARG\_RAM\_MASK@{ARG\_RAM\_MASK}!tokens.h@{tokens.h}}\index{tokens.h@{tokens.h}!ARG\_RAM\_MASK@{ARG\_RAM\_MASK}}}\mbox{\Hypertarget{tokens_8h_a4045669578653ba92d36a64bb9d34f75ac1b34dd6895d771471b8a341e14c7b77}\label{tokens_8h_a4045669578653ba92d36a64bb9d34f75ac1b34dd6895d771471b8a341e14c7b77}} 
+ARG\+\_\+\+RAM\+\_\+\+MASK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMD\_MASK@{CMD\_MASK}!tokens.h@{tokens.h}}\index{tokens.h@{tokens.h}!CMD\_MASK@{CMD\_MASK}}}\mbox{\Hypertarget{tokens_8h_a4045669578653ba92d36a64bb9d34f75a92e8d5f899b7d7404d4992ee23352efb}\label{tokens_8h_a4045669578653ba92d36a64bb9d34f75a92e8d5f899b7d7404d4992ee23352efb}} 
+CMD\+\_\+\+MASK&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{tokens_8h_a5be1ba1a69b8be798c663b965f9b1fc0}\label{tokens_8h_a5be1ba1a69b8be798c663b965f9b1fc0}} 
+\index{tokens.h@{tokens.h}!tokens\_errors@{tokens\_errors}}
+\index{tokens\_errors@{tokens\_errors}!tokens.h@{tokens.h}}
+\doxysubsubsection{\texorpdfstring{tokens\_errors}{tokens\_errors}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{tokens_8h_a5be1ba1a69b8be798c663b965f9b1fc0}{tokens\+\_\+errors}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PARSE\_TOKENS\_ERROR@{PARSE\_TOKENS\_ERROR}!tokens.h@{tokens.h}}\index{tokens.h@{tokens.h}!PARSE\_TOKENS\_ERROR@{PARSE\_TOKENS\_ERROR}}}\mbox{\Hypertarget{tokens_8h_a5be1ba1a69b8be798c663b965f9b1fc0a7dcd6cff78cbdb6be7e590c52dfc0391}\label{tokens_8h_a5be1ba1a69b8be798c663b965f9b1fc0a7dcd6cff78cbdb6be7e590c52dfc0391}} 
+PARSE\+\_\+\+TOKENS\+\_\+\+ERROR&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{tokens_8h_a5c357df42c98245dd08e8305475cbf16}\label{tokens_8h_a5c357df42c98245dd08e8305475cbf16}} 
+\index{tokens.h@{tokens.h}!convert\_my\_regs2x86\_regs@{convert\_my\_regs2x86\_regs}}
+\index{convert\_my\_regs2x86\_regs@{convert\_my\_regs2x86\_regs}!tokens.h@{tokens.h}}
+\doxysubsubsection{\texorpdfstring{convert\_my\_regs2x86\_regs()}{convert\_my\_regs2x86\_regs()}}
+{\footnotesize\ttfamily uint8\+\_\+t convert\+\_\+my\+\_\+regs2x86\+\_\+regs (\begin{DoxyParamCaption}\item[{int}]{my\+\_\+reg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens_8h_a6896953c76b2de7a40132bf52322b8ef}\label{tokens_8h_a6896953c76b2de7a40132bf52322b8ef}} 
+\index{tokens.h@{tokens.h}!init\_token@{init\_token}}
+\index{init\_token@{init\_token}!tokens.h@{tokens.h}}
+\doxysubsubsection{\texorpdfstring{init\_token()}{init\_token()}}
+{\footnotesize\ttfamily size\+\_\+t init\+\_\+token (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{bin\+\_\+code,  }\item[{unsigned int}]{cmd,  }\item[{size\+\_\+t}]{ip }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens_8h_a33c0ef39e4d93cb4858216fea4c88c68}\label{tokens_8h_a33c0ef39e4d93cb4858216fea4c88c68}} 
+\index{tokens.h@{tokens.h}!insert\_token\_args@{insert\_token\_args}}
+\index{insert\_token\_args@{insert\_token\_args}!tokens.h@{tokens.h}}
+\doxysubsubsection{\texorpdfstring{insert\_token\_args()}{insert\_token\_args()}}
+{\footnotesize\ttfamily void insert\+\_\+token\+\_\+args (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{unsigned int}]{cmd,  }\item[{int}]{arg }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens_8h_a952d8a7a42934b8688fe13be8a5da7a7}\label{tokens_8h_a952d8a7a42934b8688fe13be8a5da7a7}} 
+\index{tokens.h@{tokens.h}!parse\_my\_binary\_file@{parse\_my\_binary\_file}}
+\index{parse\_my\_binary\_file@{parse\_my\_binary\_file}!tokens.h@{tokens.h}}
+\doxysubsubsection{\texorpdfstring{parse\_my\_binary\_file()}{parse\_my\_binary\_file()}}
+{\footnotesize\ttfamily int parse\+\_\+my\+\_\+binary\+\_\+file (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{const char $\ast$}]{input\+\_\+file\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens_8h_aaeb1bc2bf700c59e95f22d63c7ebbd89}\label{tokens_8h_aaeb1bc2bf700c59e95f22d63c7ebbd89}} 
+\index{tokens.h@{tokens.h}!parse\_text\_for\_tokens@{parse\_text\_for\_tokens}}
+\index{parse\_text\_for\_tokens@{parse\_text\_for\_tokens}!tokens.h@{tokens.h}}
+\doxysubsubsection{\texorpdfstring{parse\_text\_for\_tokens()}{parse\_text\_for\_tokens()}}
+{\footnotesize\ttfamily int parse\+\_\+text\+\_\+for\+\_\+tokens (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtext__t}{text\+\_\+t}} $\ast$}]{bin\+\_\+code,  }\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens_8h_aa7ba6f56967d0e268135abc2c5c5f275}\label{tokens_8h_aa7ba6f56967d0e268135abc2c5c5f275}} 
+\index{tokens.h@{tokens.h}!tokens\_ctor@{tokens\_ctor}}
+\index{tokens\_ctor@{tokens\_ctor}!tokens.h@{tokens.h}}
+\doxysubsubsection{\texorpdfstring{tokens\_ctor()}{tokens\_ctor()}}
+{\footnotesize\ttfamily int tokens\+\_\+ctor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{size\+\_\+t}]{capacity }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{tokens_8h_aa8fbbc72027dce8c39680705ee351114}\label{tokens_8h_aa8fbbc72027dce8c39680705ee351114}} 
+\index{tokens.h@{tokens.h}!tokens\_dtor@{tokens\_dtor}}
+\index{tokens\_dtor@{tokens\_dtor}!tokens.h@{tokens.h}}
+\doxysubsubsection{\texorpdfstring{tokens\_dtor()}{tokens\_dtor()}}
+{\footnotesize\ttfamily void tokens\+\_\+dtor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{tokens_8h_ad9a8ab6e85e65246fcbee50b7e795175}\label{tokens_8h_ad9a8ab6e85e65246fcbee50b7e795175}} 
+\index{tokens.h@{tokens.h}!AVERAGE\_SIZE\_OF\_TOKEN\_IN\_CHARS@{AVERAGE\_SIZE\_OF\_TOKEN\_IN\_CHARS}}
+\index{AVERAGE\_SIZE\_OF\_TOKEN\_IN\_CHARS@{AVERAGE\_SIZE\_OF\_TOKEN\_IN\_CHARS}!tokens.h@{tokens.h}}
+\doxysubsubsection{\texorpdfstring{AVERAGE\_SIZE\_OF\_TOKEN\_IN\_CHARS}{AVERAGE\_SIZE\_OF\_TOKEN\_IN\_CHARS}}
+{\footnotesize\ttfamily const int AVERAGE\+\_\+\+SIZE\+\_\+\+OF\+\_\+\+TOKEN\+\_\+\+IN\+\_\+\+CHARS = 32}
+

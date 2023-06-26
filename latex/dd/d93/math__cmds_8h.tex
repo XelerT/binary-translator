@@ -1,0 +1,49 @@
+\hypertarget{math__cmds_8h}{}\doxysection{src/include/math\+\_\+cmds.h File Reference}
+\label{math__cmds_8h}\index{src/include/math\_cmds.h@{src/include/math\_cmds.h}}
+{\ttfamily \#include \char`\"{}config.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}jit.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}mem\+\_\+cmds.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{math__cmds_8h_a9184ef2c91410449e7f9147cb055aed8}{encode\+\_\+add\+\_\+sub\+\_\+mul\+\_\+div}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmd, \mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} $\ast$info, uint8\+\_\+t $\ast$indent)
+\begin{DoxyCompactList}\small\item\em encode add/sub/mul/div commands using \mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{math__cmds_8h_a8af218cb35191e1d8304f234494e7b9e}{encode\+\_\+sqrt}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmds)
+\begin{DoxyCompactList}\small\item\em encode stack sqrt function using xmm commands \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{math__cmds_8h_a9184ef2c91410449e7f9147cb055aed8}\label{math__cmds_8h_a9184ef2c91410449e7f9147cb055aed8}} 
+\index{math\_cmds.h@{math\_cmds.h}!encode\_add\_sub\_mul\_div@{encode\_add\_sub\_mul\_div}}
+\index{encode\_add\_sub\_mul\_div@{encode\_add\_sub\_mul\_div}!math\_cmds.h@{math\_cmds.h}}
+\doxysubsubsection{\texorpdfstring{encode\_add\_sub\_mul\_div()}{encode\_add\_sub\_mul\_div()}}
+{\footnotesize\ttfamily void encode\+\_\+add\+\_\+sub\+\_\+mul\+\_\+div (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmd,  }\item[{\mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} $\ast$}]{info,  }\item[{uint8\+\_\+t $\ast$}]{indent }\end{DoxyParamCaption})}
+
+
+
+encode add/sub/mul/div commands using \mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & \\
+\hline
+{\em info} & must contain information about command \\
+\hline
+{\em indent} & show start position in cmd buffer to incode Opcode and further bytes \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{math__cmds_8h_a8af218cb35191e1d8304f234494e7b9e}\label{math__cmds_8h_a8af218cb35191e1d8304f234494e7b9e}} 
+\index{math\_cmds.h@{math\_cmds.h}!encode\_sqrt@{encode\_sqrt}}
+\index{encode\_sqrt@{encode\_sqrt}!math\_cmds.h@{math\_cmds.h}}
+\doxysubsubsection{\texorpdfstring{encode\_sqrt()}{encode\_sqrt()}}
+{\footnotesize\ttfamily void encode\+\_\+sqrt (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmds }\end{DoxyParamCaption})}
+
+
+
+encode stack sqrt function using xmm commands 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmds} & pointer to 5 cmds \\
+\hline
+\end{DoxyParams}

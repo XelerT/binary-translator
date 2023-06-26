@@ -1,0 +1,68 @@
+\hypertarget{md_README_autotoc_md1}{}\doxysection{Overview}\label{md_README_autotoc_md1}
+\hypertarget{md_README_autotoc_md2}{}\doxysection{Introduction}\label{md_README_autotoc_md2}
+This work was made for studying processes of binary translation and JIT compilation.
+
+Our binary translator is a tool to convert binary code for \href{https://github.com/XelerT/cpu}{\texttt{ my stack virtual cpu}}. For creating programs for our cpu you can use our C-\/like \href{https://github.com/XelerT/language}{\texttt{ language}}.
+
+\DoxyHorRuler{0}
+\hypertarget{md_README_autotoc_md4}{}\doxysection{Install \& Use}\label{md_README_autotoc_md4}
+Install and compile\+: \begin{DoxyVerb}    $ git clone https://github.com/XelerT/binary-translator.git
+    $ make
+\end{DoxyVerb}
+ To compile with \$int 3\$ at the start of exec buffer for debugger\+: \begin{DoxyVerb}    $ make run_debug
+\end{DoxyVerb}
+ Run\+: \begin{DoxyVerb}    $ ./jit bit_code.txt
+\end{DoxyVerb}
+ Run tests\+: \begin{DoxyVerb}    $ make test
+\end{DoxyVerb}
+ \hypertarget{md_README_autotoc_md5}{}\doxysection{x86-\/64 encode}\label{md_README_autotoc_md5}
+We will tell you about some information with was used for creating commands auto encoding.
+
+Command in x86-\/64 can consists of 5 parts (first line is size in bytes)\+:
+
+\DoxyHorRuler{0}
+ $\vert$ 0 -\/ 4 $\vert$ 1 -\/ 2 $\vert$ 1 $\vert$ 1 $\vert$ 0 -\/ 4 $\vert$ \hypertarget{md_README_autotoc_md7}{}\doxysection{$\vert$ Prefix $\vert$ Opcode    $\vert$ M.\+R.\+R/\+M  $\vert$ S.\+I.\+B  $\vert$ Data        $\vert$}\label{md_README_autotoc_md7}
+
+\begin{DoxyItemize}
+\item Prefix part is used to encode 64 bit information, such as need to use 8 byte registers, need to use r8-\/r15 in source or destination.
+\item In opcode command is encoded\+: (xxxxxx$\vert$ds). First 6 bits of this byte encode command, s-\/bit is 1 if we use 64-\/bit mode of command, d-\/bit contains information about source and destination\+: \begin{DoxyVerb}  register  -> memory   =>      d = 0
+  memory -> register    =>      d = 1
+\end{DoxyVerb}
+
+\item Mode-\/\+Register-\/\+Register/\+Memory (M.\+R.\+R/M)\+: (xx$\vert$xxx$\vert$xxx). First 2 bits show which arguments has command, 11 -\/ if 2 operands are registers, 00 -\/ if destination is memory, 10 -\/ if destination is register and source is immediate number.
+\item Scale-\/\+Index-\/\+Base (S.\+I.\+B)\+: (xx$\vert$xxx$\vert$xxx). First 2 bits indicates the scaling factor of index, next 3 bits is the index register to use, last three is the base register to use.
+\item Data field can contain immediate number or address.
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md8}{}\doxysection{Translation}\label{md_README_autotoc_md8}
+For technical details see \mbox{[}documentation\mbox{]}(). \hypertarget{md_README_autotoc_md9}{}\doxysubsection{Parsing binary file}\label{md_README_autotoc_md9}
+During parsing process array of tokens is created. Each token contains information about each command\+: command encode for our cpu, (repeating x86 encode rules) mode, need of using r8-\/r15 registers etc. After this process simple IR is created.\hypertarget{md_README_autotoc_md10}{}\doxysubsection{Creation of executed buffer}\label{md_README_autotoc_md10}
+After parsing, array of tokens is translated in x86 commands. Each token is going through some layers of check, folding stack constructions into non-\/stack logic, for example\+: \begin{DoxyVerb}    push 5
+    push rax        =>      add rax, 5
+    add                           push rax
+    ───────────────────────────────────────
+    push 5
+    pop rbx         =>      mov rbx, 5
+\end{DoxyVerb}
+ We obliged to save stack logic in order to avoid destruction of program logic therefor after math functions we push register into stack. 
+
+{\bfseries{More encoding details.}}\begin{adjustwidth}{1em}{0em}
+
+
+
+
+Jumps\textquotesingle{} and call\textquotesingle{}s addresses are fulfilled using 2 step passage.
+
+\DoxyHorRuler{0}
+ Our cpu have 2 stacks, the first is for working with numbers and the second contains returning addresses. For solving this problem we emulate our second stack. Register r15 is used as second rsp, at the beginning of buffer \$mov r15, (end of data section address)\$. Every call is changed for \char`\"{}push\char`\"{} in the second stack and jump to the address\+: \begin{DoxyVerb}    mov qword [r15], (return address)
+    sub r15, 8
+    jmp (function)
+\end{DoxyVerb}
+ Before return we need to \char`\"{}pop\char`\"{} return address\+: \begin{DoxyVerb}    add r15, 8
+    push qword [r15]
+    ret
+\end{DoxyVerb}
+ \DoxyHorRuler{0}
+ For more details see \mbox{[}documentation\mbox{]}()
+
+\end{adjustwidth}
+\hypertarget{md_README_autotoc_md12}{}\doxysubsection{Execution}\label{md_README_autotoc_md12}
+After creation of execution buffer we change rights for \char`\"{}text section\char`\"{} and \char`\"{}data section\char`\"{} for execution, read, write using \href{https://man7.org/linux/man-pages/man2/mprotect.2.html}{\texttt{ mprotect}}. Then we cast execution buffer pointer to function pointer and call this \char`\"{}function\char`\"{}. 

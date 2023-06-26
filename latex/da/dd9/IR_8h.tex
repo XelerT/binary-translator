@@ -1,0 +1,71 @@
+\hypertarget{IR_8h}{}\doxysection{src/include/\+IR.h File Reference}
+\label{IR_8h}\index{src/include/IR.h@{src/include/IR.h}}
+{\ttfamily \#include \char`\"{}tokens.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}configs.\+cmds\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{IR_8h_a36d593e5ff2f410e442f1eb5b09b4be7}{save\+\_\+tokens\+\_\+in\+\_\+text}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, const char $\ast$file\+\_\+name)
+\item 
+void \mbox{\hyperlink{IR_8h_aa6a9381bcef81e094457624b28cb4808}{parse\+\_\+memory\+\_\+indent}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, size\+\_\+t $\ast$n\+\_\+token, \mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}} $\ast$tokens\+\_\+text)
+\item 
+void \mbox{\hyperlink{IR_8h_a4d2e54be15df8a828d3dc8d1c70144bf}{parse\+\_\+memory\+\_\+access\+\_\+block}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, size\+\_\+t $\ast$n\+\_\+token, \mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}} $\ast$tokens\+\_\+text)
+\item 
+void \mbox{\hyperlink{IR_8h_a7891f4cbfd9bcab9c201a39517be60ab}{parse\+\_\+cmd}} (\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$tokens, size\+\_\+t $\ast$n\+\_\+token, \mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}} $\ast$tokens\+\_\+text)
+\item 
+void \mbox{\hyperlink{IR_8h_acec411ce7eba542757ab947906bafc40}{write\+\_\+down\+\_\+cmd}} (\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token, int place\+\_\+in\+\_\+cmds\+\_\+table, \mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}} $\ast$tokens\+\_\+text)
+\item 
+void \mbox{\hyperlink{IR_8h_ad24e2e5a2443f7ed69171f1215f50c20}{write\+\_\+down\+\_\+push\+\_\+pop\+\_\+args}} (\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token, \mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}} $\ast$tokens\+\_\+text)
+\item 
+int \mbox{\hyperlink{IR_8h_ad5fdf86695961434e42e7b0013d1f02c}{write\+\_\+buf\+\_\+in\+\_\+file}} (\mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}} $\ast$tokens\+\_\+text, const char $\ast$file\+\_\+name)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{IR_8h_a7891f4cbfd9bcab9c201a39517be60ab}\label{IR_8h_a7891f4cbfd9bcab9c201a39517be60ab}} 
+\index{IR.h@{IR.h}!parse\_cmd@{parse\_cmd}}
+\index{parse\_cmd@{parse\_cmd}!IR.h@{IR.h}}
+\doxysubsubsection{\texorpdfstring{parse\_cmd()}{parse\_cmd()}}
+{\footnotesize\ttfamily void parse\+\_\+cmd (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{size\+\_\+t $\ast$}]{n\+\_\+token,  }\item[{\mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}} $\ast$}]{tokens\+\_\+text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{IR_8h_a4d2e54be15df8a828d3dc8d1c70144bf}\label{IR_8h_a4d2e54be15df8a828d3dc8d1c70144bf}} 
+\index{IR.h@{IR.h}!parse\_memory\_access\_block@{parse\_memory\_access\_block}}
+\index{parse\_memory\_access\_block@{parse\_memory\_access\_block}!IR.h@{IR.h}}
+\doxysubsubsection{\texorpdfstring{parse\_memory\_access\_block()}{parse\_memory\_access\_block()}}
+{\footnotesize\ttfamily void parse\+\_\+memory\+\_\+access\+\_\+block (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{size\+\_\+t $\ast$}]{n\+\_\+token,  }\item[{\mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}} $\ast$}]{tokens\+\_\+text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{IR_8h_aa6a9381bcef81e094457624b28cb4808}\label{IR_8h_aa6a9381bcef81e094457624b28cb4808}} 
+\index{IR.h@{IR.h}!parse\_memory\_indent@{parse\_memory\_indent}}
+\index{parse\_memory\_indent@{parse\_memory\_indent}!IR.h@{IR.h}}
+\doxysubsubsection{\texorpdfstring{parse\_memory\_indent()}{parse\_memory\_indent()}}
+{\footnotesize\ttfamily void parse\+\_\+memory\+\_\+indent (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{size\+\_\+t $\ast$}]{n\+\_\+token,  }\item[{\mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}} $\ast$}]{tokens\+\_\+text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{IR_8h_a36d593e5ff2f410e442f1eb5b09b4be7}\label{IR_8h_a36d593e5ff2f410e442f1eb5b09b4be7}} 
+\index{IR.h@{IR.h}!save\_tokens\_in\_text@{save\_tokens\_in\_text}}
+\index{save\_tokens\_in\_text@{save\_tokens\_in\_text}!IR.h@{IR.h}}
+\doxysubsubsection{\texorpdfstring{save\_tokens\_in\_text()}{save\_tokens\_in\_text()}}
+{\footnotesize\ttfamily int save\+\_\+tokens\+\_\+in\+\_\+text (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__t}{tokens\+\_\+t}} $\ast$}]{tokens,  }\item[{const char $\ast$}]{file\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{IR_8h_ad5fdf86695961434e42e7b0013d1f02c}\label{IR_8h_ad5fdf86695961434e42e7b0013d1f02c}} 
+\index{IR.h@{IR.h}!write\_buf\_in\_file@{write\_buf\_in\_file}}
+\index{write\_buf\_in\_file@{write\_buf\_in\_file}!IR.h@{IR.h}}
+\doxysubsubsection{\texorpdfstring{write\_buf\_in\_file()}{write\_buf\_in\_file()}}
+{\footnotesize\ttfamily int write\+\_\+buf\+\_\+in\+\_\+file (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}} $\ast$}]{tokens\+\_\+text,  }\item[{const char $\ast$}]{file\+\_\+name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{IR_8h_acec411ce7eba542757ab947906bafc40}\label{IR_8h_acec411ce7eba542757ab947906bafc40}} 
+\index{IR.h@{IR.h}!write\_down\_cmd@{write\_down\_cmd}}
+\index{write\_down\_cmd@{write\_down\_cmd}!IR.h@{IR.h}}
+\doxysubsubsection{\texorpdfstring{write\_down\_cmd()}{write\_down\_cmd()}}
+{\footnotesize\ttfamily void write\+\_\+down\+\_\+cmd (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token,  }\item[{int}]{place\+\_\+in\+\_\+cmds\+\_\+table,  }\item[{\mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}} $\ast$}]{tokens\+\_\+text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{IR_8h_ad24e2e5a2443f7ed69171f1215f50c20}\label{IR_8h_ad24e2e5a2443f7ed69171f1215f50c20}} 
+\index{IR.h@{IR.h}!write\_down\_push\_pop\_args@{write\_down\_push\_pop\_args}}
+\index{write\_down\_push\_pop\_args@{write\_down\_push\_pop\_args}!IR.h@{IR.h}}
+\doxysubsubsection{\texorpdfstring{write\_down\_push\_pop\_args()}{write\_down\_push\_pop\_args()}}
+{\footnotesize\ttfamily void write\+\_\+down\+\_\+push\+\_\+pop\+\_\+args (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token,  }\item[{\mbox{\hyperlink{structtokens__text__t}{tokens\+\_\+text\+\_\+t}} $\ast$}]{tokens\+\_\+text }\end{DoxyParamCaption})}
+

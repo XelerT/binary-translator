@@ -1,0 +1,103 @@
+\hypertarget{debug_8h}{}\doxysection{src/debug/debug.h File Reference}
+\label{debug_8h}\index{src/debug/debug.h@{src/debug/debug.h}}
+{\ttfamily \#include \char`\"{}../include/config.\+h\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr,  Im here \mbox{\hyperlink{debug_8h_a58804403b04cf900f987d74238f71b74}{Files}},  \mbox{\hyperlink{debug_8h_ad353f1c88756bf9644ec221d33e6e5f4}{Linedn}},  \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}},  \+\_\+\+\_\+\+LINE\+\_\+\+\_\+)~;
+\item 
+\#define \mbox{\hyperlink{debug_8h_a58bd4eae8886220a443c1d55065ea36f}{c}}(arg)~\mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr, \char`\"{}Var\+: \textbackslash{}\char`\"{}\%s\textbackslash{}\char`\"{}, Char\+: \%c, File\+: \%\mbox{\hyperlink{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}{s}}, Line\+: \%d\textbackslash{}n\char`\"{}, \#arg, arg, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+);
+\item 
+\#define \mbox{\hyperlink{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}{s}}(arg)~\mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr, \char`\"{}String in File\+: \%s, Line\+: \%d\textbackslash{}n\%s\textbackslash{}n\char`\"{}, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+, arg);
+\item 
+\#define \mbox{\hyperlink{debug_8h_ab5e30ce66a6c6258ce90b35956c7c8ad}{d}}(arg)~\mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr, \char`\"{}Decimal \%s\+: \%d, File\+: \%\mbox{\hyperlink{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}{s}}, Line\+: \%d\textbackslash{}n\char`\"{}, \#arg, arg, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+);
+\item 
+\#define \mbox{\hyperlink{debug_8h_a2d4df511d14839878706fbc4e50fec8d}{ld}}(arg)~\mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr, \char`\"{}Var\+: \textbackslash{}\char`\"{}\%s\textbackslash{}\char`\"{}, Size\+\_\+t\+: \%ld, File\+: \%\mbox{\hyperlink{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}{s}}, Line\+: \%d\textbackslash{}n\char`\"{}, \#arg, arg, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+);
+\item 
+\#define \mbox{\hyperlink{debug_8h_a709eeadd08b18464a78670284762533f}{dbl}}(arg)~\mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr, \char`\"{}Double\+: \%llg, File\+: \%\mbox{\hyperlink{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}{s}}, Line\+: \%d\textbackslash{}n\char`\"{}, arg, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+);
+\item 
+\#define \mbox{\hyperlink{debug_8h_a1a844c7e15c7d65018535118391b965d}{p}}(arg)~\mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr, \char`\"{}Pointer\+: \%p, File\+: \%\mbox{\hyperlink{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}{s}}, Line\+: \%d\textbackslash{}n\char`\"{}, arg, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+);
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\$ \mbox{\hyperlink{debug_8h_ac876d51c7d9eb131ba58036ae9ba5e71}{\+\_\+\+\_\+pad0\+\_\+\+\_\+}}
+\item 
+\$ Im here \mbox{\hyperlink{debug_8h_a58804403b04cf900f987d74238f71b74}{Files}}
+\item 
+\$ Im here \mbox{\hyperlink{debug_8h_ad353f1c88756bf9644ec221d33e6e5f4}{Linedn}}
+\item 
+\$ Im here \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{debug_8h_a58bd4eae8886220a443c1d55065ea36f}\label{debug_8h_a58bd4eae8886220a443c1d55065ea36f}} 
+\index{debug.h@{debug.h}!c@{c}}
+\index{c@{c}!debug.h@{debug.h}}
+\doxysubsubsection{\texorpdfstring{c}{c}}
+{\footnotesize\ttfamily \#define c(\begin{DoxyParamCaption}\item[{}]{arg }\end{DoxyParamCaption})~\mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr, \char`\"{}Var\+: \textbackslash{}\char`\"{}\%s\textbackslash{}\char`\"{}, Char\+: \%c, File\+: \%\mbox{\hyperlink{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}{s}}, Line\+: \%d\textbackslash{}n\char`\"{}, \#arg, arg, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+);}
+
+\mbox{\Hypertarget{debug_8h_ab5e30ce66a6c6258ce90b35956c7c8ad}\label{debug_8h_ab5e30ce66a6c6258ce90b35956c7c8ad}} 
+\index{debug.h@{debug.h}!d@{d}}
+\index{d@{d}!debug.h@{debug.h}}
+\doxysubsubsection{\texorpdfstring{d}{d}}
+{\footnotesize\ttfamily \#define d(\begin{DoxyParamCaption}\item[{}]{arg }\end{DoxyParamCaption})~\mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr, \char`\"{}Decimal \%s\+: \%d, File\+: \%\mbox{\hyperlink{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}{s}}, Line\+: \%d\textbackslash{}n\char`\"{}, \#arg, arg, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+);}
+
+\mbox{\Hypertarget{debug_8h_a709eeadd08b18464a78670284762533f}\label{debug_8h_a709eeadd08b18464a78670284762533f}} 
+\index{debug.h@{debug.h}!dbl@{dbl}}
+\index{dbl@{dbl}!debug.h@{debug.h}}
+\doxysubsubsection{\texorpdfstring{dbl}{dbl}}
+{\footnotesize\ttfamily \#define dbl(\begin{DoxyParamCaption}\item[{}]{arg }\end{DoxyParamCaption})~\mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr, \char`\"{}Double\+: \%llg, File\+: \%\mbox{\hyperlink{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}{s}}, Line\+: \%d\textbackslash{}n\char`\"{}, arg, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+);}
+
+\mbox{\Hypertarget{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}\label{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}} 
+\index{debug.h@{debug.h}!fprintf@{fprintf}}
+\index{fprintf@{fprintf}!debug.h@{debug.h}}
+\doxysubsubsection{\texorpdfstring{fprintf}{fprintf}}
+{\footnotesize\ttfamily \#define fprintf(\begin{DoxyParamCaption}\item[{}]{stderr,  }\item[{}]{Im hereFiles,  }\item[{}]{\mbox{\hyperlink{debug_8h_ad353f1c88756bf9644ec221d33e6e5f4}{Linedn}},  }\item[{}]{\mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}},  }\item[{}]{\+\_\+\+\_\+\+LINE\+\_\+\+\_\+ }\end{DoxyParamCaption})~;}
+
+\mbox{\Hypertarget{debug_8h_a2d4df511d14839878706fbc4e50fec8d}\label{debug_8h_a2d4df511d14839878706fbc4e50fec8d}} 
+\index{debug.h@{debug.h}!ld@{ld}}
+\index{ld@{ld}!debug.h@{debug.h}}
+\doxysubsubsection{\texorpdfstring{ld}{ld}}
+{\footnotesize\ttfamily \#define ld(\begin{DoxyParamCaption}\item[{}]{arg }\end{DoxyParamCaption})~\mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr, \char`\"{}Var\+: \textbackslash{}\char`\"{}\%s\textbackslash{}\char`\"{}, Size\+\_\+t\+: \%ld, File\+: \%\mbox{\hyperlink{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}{s}}, Line\+: \%d\textbackslash{}n\char`\"{}, \#arg, arg, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+);}
+
+\mbox{\Hypertarget{debug_8h_a1a844c7e15c7d65018535118391b965d}\label{debug_8h_a1a844c7e15c7d65018535118391b965d}} 
+\index{debug.h@{debug.h}!p@{p}}
+\index{p@{p}!debug.h@{debug.h}}
+\doxysubsubsection{\texorpdfstring{p}{p}}
+{\footnotesize\ttfamily \#define p(\begin{DoxyParamCaption}\item[{}]{arg }\end{DoxyParamCaption})~\mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr, \char`\"{}Pointer\+: \%p, File\+: \%\mbox{\hyperlink{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}{s}}, Line\+: \%d\textbackslash{}n\char`\"{}, arg, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+);}
+
+\mbox{\Hypertarget{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}\label{debug_8h_afd22999fc1ee0bd3f859d7a131e0a594}} 
+\index{debug.h@{debug.h}!s@{s}}
+\index{s@{s}!debug.h@{debug.h}}
+\doxysubsubsection{\texorpdfstring{s}{s}}
+{\footnotesize\ttfamily \#define s(\begin{DoxyParamCaption}\item[{}]{arg }\end{DoxyParamCaption})~\mbox{\hyperlink{debug_8h_ae36c6d1ee3d820dea2f8b42771248af8}{fprintf}}(stderr, \char`\"{}String in File\+: \%s, Line\+: \%d\textbackslash{}n\%s\textbackslash{}n\char`\"{}, \mbox{\hyperlink{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}{\+\_\+\+\_\+\+FILE\+\_\+\+\_\+}}, \+\_\+\+\_\+\+LINE\+\_\+\+\_\+, arg);}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}\label{debug_8h_acae39db0a7d411ba04a72a7e9d05b87f}} 
+\index{debug.h@{debug.h}!\_\_FILE\_\_@{\_\_FILE\_\_}}
+\index{\_\_FILE\_\_@{\_\_FILE\_\_}!debug.h@{debug.h}}
+\doxysubsubsection{\texorpdfstring{\_\_FILE\_\_}{\_\_FILE\_\_}}
+{\footnotesize\ttfamily \$ Im here \+\_\+\+\_\+\+FILE\+\_\+\+\_\+}
+
+\mbox{\Hypertarget{debug_8h_ac876d51c7d9eb131ba58036ae9ba5e71}\label{debug_8h_ac876d51c7d9eb131ba58036ae9ba5e71}} 
+\index{debug.h@{debug.h}!\_\_pad0\_\_@{\_\_pad0\_\_}}
+\index{\_\_pad0\_\_@{\_\_pad0\_\_}!debug.h@{debug.h}}
+\doxysubsubsection{\texorpdfstring{\_\_pad0\_\_}{\_\_pad0\_\_}}
+{\footnotesize\ttfamily \$ \+\_\+\+\_\+pad0\+\_\+\+\_\+}
+
+\mbox{\Hypertarget{debug_8h_a58804403b04cf900f987d74238f71b74}\label{debug_8h_a58804403b04cf900f987d74238f71b74}} 
+\index{debug.h@{debug.h}!Files@{Files}}
+\index{Files@{Files}!debug.h@{debug.h}}
+\doxysubsubsection{\texorpdfstring{Files}{Files}}
+{\footnotesize\ttfamily \$ Im here Files}
+
+\mbox{\Hypertarget{debug_8h_ad353f1c88756bf9644ec221d33e6e5f4}\label{debug_8h_ad353f1c88756bf9644ec221d33e6e5f4}} 
+\index{debug.h@{debug.h}!Linedn@{Linedn}}
+\index{Linedn@{Linedn}!debug.h@{debug.h}}
+\doxysubsubsection{\texorpdfstring{Linedn}{Linedn}}
+{\footnotesize\ttfamily \$ Im here Linedn}
+

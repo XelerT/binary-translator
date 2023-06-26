@@ -1,0 +1,101 @@
+\hypertarget{jmp__cmds_8cpp}{}\doxysection{src/jit/jmp\+\_\+cmds.cpp File Reference}
+\label{jmp__cmds_8cpp}\index{src/jit/jmp\_cmds.cpp@{src/jit/jmp\_cmds.cpp}}
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}../include/jmp\+\_\+cmds.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/mem\+\_\+cmds.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/math\+\_\+cmds.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../include/encode\+\_\+cmd.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{jmp__cmds_8cpp_a82b35594a576b4e37671fc36ac6bae51}{encode\+\_\+call}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmd, \mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} $\ast$info)
+\item 
+void \mbox{\hyperlink{jmp__cmds_8cpp_ab31e2a309fb9832be7b5250dd97d6c0f}{encode\+\_\+ret}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmd)
+\item 
+void \mbox{\hyperlink{jmp__cmds_8cpp_abcf49e5ab0167450e51da81dfaa5c80a}{pre\+\_\+encode\+\_\+imitation\+\_\+of\+\_\+call}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmds, \mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token)
+\item 
+void \mbox{\hyperlink{jmp__cmds_8cpp_a0b296bd0add2b8972c5f6c34a217bd74}{pre\+\_\+encode\+\_\+call}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmd, \mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token)
+\item 
+void \mbox{\hyperlink{jmp__cmds_8cpp_abf0535b361661579d3cf294e6803a324}{encode\+\_\+calls\+\_\+jmps}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code, \mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$label\+\_\+table)
+\begin{DoxyCompactList}\small\item\em change offsets of jumps and calls in jit\+\_\+code buffer to final execution addresses \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{jmp__cmds_8cpp_a35968d0010aa89fdab138cb353f8a5f5}{pre\+\_\+encode\+\_\+conditional\+\_\+jmp}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmd, \mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token, size\+\_\+t table\+\_\+position, \mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$label\+\_\+table)
+\item 
+void \mbox{\hyperlink{jmp__cmds_8cpp_ae7d070d2feb34ed7f57e151344fc2907}{encode\+\_\+conditional\+\_\+jmps}} (\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$jit\+\_\+code, \mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$label\+\_\+table)
+\item 
+void \mbox{\hyperlink{jmp__cmds_8cpp_a42b7cf63d2a9839d6c03a596ac9193b7}{pre\+\_\+encode\+\_\+jmp}} (\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$cmd, \mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$token)
+\begin{DoxyCompactList}\small\item\em pre encode jumps from token with offset to jump from soft-\/cpu bit code \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{jmp__cmds_8cpp_a82b35594a576b4e37671fc36ac6bae51}\label{jmp__cmds_8cpp_a82b35594a576b4e37671fc36ac6bae51}} 
+\index{jmp\_cmds.cpp@{jmp\_cmds.cpp}!encode\_call@{encode\_call}}
+\index{encode\_call@{encode\_call}!jmp\_cmds.cpp@{jmp\_cmds.cpp}}
+\doxysubsubsection{\texorpdfstring{encode\_call()}{encode\_call()}}
+{\footnotesize\ttfamily void encode\+\_\+call (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmd,  }\item[{\mbox{\hyperlink{structcmd__info4encode__t}{cmd\+\_\+info4encode\+\_\+t}} $\ast$}]{info }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{jmp__cmds_8cpp_abf0535b361661579d3cf294e6803a324}\label{jmp__cmds_8cpp_abf0535b361661579d3cf294e6803a324}} 
+\index{jmp\_cmds.cpp@{jmp\_cmds.cpp}!encode\_calls\_jmps@{encode\_calls\_jmps}}
+\index{encode\_calls\_jmps@{encode\_calls\_jmps}!jmp\_cmds.cpp@{jmp\_cmds.cpp}}
+\doxysubsubsection{\texorpdfstring{encode\_calls\_jmps()}{encode\_calls\_jmps()}}
+{\footnotesize\ttfamily void encode\+\_\+calls\+\_\+jmps (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code,  }\item[{\mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$}]{label\+\_\+table }\end{DoxyParamCaption})}
+
+
+
+change offsets of jumps and calls in jit\+\_\+code buffer to final execution addresses 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jit\+\_\+code} & \\
+\hline
+{\em label\+\_\+table} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{jmp__cmds_8cpp_ae7d070d2feb34ed7f57e151344fc2907}\label{jmp__cmds_8cpp_ae7d070d2feb34ed7f57e151344fc2907}} 
+\index{jmp\_cmds.cpp@{jmp\_cmds.cpp}!encode\_conditional\_jmps@{encode\_conditional\_jmps}}
+\index{encode\_conditional\_jmps@{encode\_conditional\_jmps}!jmp\_cmds.cpp@{jmp\_cmds.cpp}}
+\doxysubsubsection{\texorpdfstring{encode\_conditional\_jmps()}{encode\_conditional\_jmps()}}
+{\footnotesize\ttfamily void encode\+\_\+conditional\+\_\+jmps (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structjit__code__t}{jit\+\_\+code\+\_\+t}} $\ast$}]{jit\+\_\+code,  }\item[{\mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$}]{label\+\_\+table }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{jmp__cmds_8cpp_ab31e2a309fb9832be7b5250dd97d6c0f}\label{jmp__cmds_8cpp_ab31e2a309fb9832be7b5250dd97d6c0f}} 
+\index{jmp\_cmds.cpp@{jmp\_cmds.cpp}!encode\_ret@{encode\_ret}}
+\index{encode\_ret@{encode\_ret}!jmp\_cmds.cpp@{jmp\_cmds.cpp}}
+\doxysubsubsection{\texorpdfstring{encode\_ret()}{encode\_ret()}}
+{\footnotesize\ttfamily void encode\+\_\+ret (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmd }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{jmp__cmds_8cpp_a0b296bd0add2b8972c5f6c34a217bd74}\label{jmp__cmds_8cpp_a0b296bd0add2b8972c5f6c34a217bd74}} 
+\index{jmp\_cmds.cpp@{jmp\_cmds.cpp}!pre\_encode\_call@{pre\_encode\_call}}
+\index{pre\_encode\_call@{pre\_encode\_call}!jmp\_cmds.cpp@{jmp\_cmds.cpp}}
+\doxysubsubsection{\texorpdfstring{pre\_encode\_call()}{pre\_encode\_call()}}
+{\footnotesize\ttfamily void pre\+\_\+encode\+\_\+call (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmd,  }\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{jmp__cmds_8cpp_a35968d0010aa89fdab138cb353f8a5f5}\label{jmp__cmds_8cpp_a35968d0010aa89fdab138cb353f8a5f5}} 
+\index{jmp\_cmds.cpp@{jmp\_cmds.cpp}!pre\_encode\_conditional\_jmp@{pre\_encode\_conditional\_jmp}}
+\index{pre\_encode\_conditional\_jmp@{pre\_encode\_conditional\_jmp}!jmp\_cmds.cpp@{jmp\_cmds.cpp}}
+\doxysubsubsection{\texorpdfstring{pre\_encode\_conditional\_jmp()}{pre\_encode\_conditional\_jmp()}}
+{\footnotesize\ttfamily void pre\+\_\+encode\+\_\+conditional\+\_\+jmp (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmd,  }\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token,  }\item[{size\+\_\+t}]{table\+\_\+position,  }\item[{\mbox{\hyperlink{structlabels__t}{labels\+\_\+t}} $\ast$}]{label\+\_\+table }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{jmp__cmds_8cpp_abcf49e5ab0167450e51da81dfaa5c80a}\label{jmp__cmds_8cpp_abcf49e5ab0167450e51da81dfaa5c80a}} 
+\index{jmp\_cmds.cpp@{jmp\_cmds.cpp}!pre\_encode\_imitation\_of\_call@{pre\_encode\_imitation\_of\_call}}
+\index{pre\_encode\_imitation\_of\_call@{pre\_encode\_imitation\_of\_call}!jmp\_cmds.cpp@{jmp\_cmds.cpp}}
+\doxysubsubsection{\texorpdfstring{pre\_encode\_imitation\_of\_call()}{pre\_encode\_imitation\_of\_call()}}
+{\footnotesize\ttfamily void pre\+\_\+encode\+\_\+imitation\+\_\+of\+\_\+call (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmds,  }\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{jmp__cmds_8cpp_a42b7cf63d2a9839d6c03a596ac9193b7}\label{jmp__cmds_8cpp_a42b7cf63d2a9839d6c03a596ac9193b7}} 
+\index{jmp\_cmds.cpp@{jmp\_cmds.cpp}!pre\_encode\_jmp@{pre\_encode\_jmp}}
+\index{pre\_encode\_jmp@{pre\_encode\_jmp}!jmp\_cmds.cpp@{jmp\_cmds.cpp}}
+\doxysubsubsection{\texorpdfstring{pre\_encode\_jmp()}{pre\_encode\_jmp()}}
+{\footnotesize\ttfamily void pre\+\_\+encode\+\_\+jmp (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structx86__cmd__t}{x86\+\_\+cmd\+\_\+t}} $\ast$}]{cmd,  }\item[{\mbox{\hyperlink{structtoken__t}{token\+\_\+t}} $\ast$}]{token }\end{DoxyParamCaption})}
+
+
+
+pre encode jumps from token with offset to jump from soft-\/cpu bit code 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmds} & \\
+\hline
+{\em token} & \\
+\hline
+\end{DoxyParams}

@@ -1,0 +1,99 @@
+\hypertarget{structjit__code__t}{}\doxysection{jit\+\_\+code\+\_\+t Struct Reference}
+\label{structjit__code__t}\index{jit\_code\_t@{jit\_code\_t}}
+
+
+Contains information about code for JIT compilation.  
+
+
+
+
+{\ttfamily \#include $<$jit.\+h$>$}
+
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t $\ast$ \mbox{\hyperlink{structjit__code__t_af15c02584eca0109d10918f2b824e5f8}{buf}} = nullptr
+\item 
+size\+\_\+t \mbox{\hyperlink{structjit__code__t_a8c4370f351a0d415ba99ca8b44565374}{capacity}} = 0
+\item 
+size\+\_\+t \mbox{\hyperlink{structjit__code__t_aecd221accf9384fa04c8f4eecc2d2927}{size}} = 0
+\item 
+uint8\+\_\+t $\ast$ \mbox{\hyperlink{structjit__code__t_af7104ed9a6533aef4472eff5bd0ae5a0}{exec\+\_\+memory2use}} = nullptr
+\item 
+size\+\_\+t \mbox{\hyperlink{structjit__code__t_a6125f4e775845f7571c8d946e59e529b}{exec\+\_\+memory\+\_\+capacity}} = 0
+\item 
+size\+\_\+t \mbox{\hyperlink{structjit__code__t_a44b2ee7454a66bd544b2fcf965000206}{print\+\_\+func\+\_\+offset}} = 10
+\item 
+size\+\_\+t \mbox{\hyperlink{structjit__code__t_aef0867e3df236dbf0213ba6353885bae}{print\+\_\+func\+\_\+size}} = 0
+\item 
+size\+\_\+t \mbox{\hyperlink{structjit__code__t_a96637fbb47dc06574290f430d2701a87}{scan\+\_\+func\+\_\+offset}} = 10
+\item 
+size\+\_\+t \mbox{\hyperlink{structjit__code__t_ae8ff54867a6b3c70d633a4f7b876dd2c}{scan\+\_\+func\+\_\+size}} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Contains information about code for JIT compilation. 
+
+It contains pointer to buffer with encoded x86 commands, capacity and size of buffer, exec\+\_\+memory2use is pointer to the \char`\"{}data\char`\"{} section, offsets for print and scan functions. 
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structjit__code__t_af15c02584eca0109d10918f2b824e5f8}\label{structjit__code__t_af15c02584eca0109d10918f2b824e5f8}} 
+\index{jit\_code\_t@{jit\_code\_t}!buf@{buf}}
+\index{buf@{buf}!jit\_code\_t@{jit\_code\_t}}
+\doxysubsubsection{\texorpdfstring{buf}{buf}}
+{\footnotesize\ttfamily uint8\+\_\+t$\ast$ jit\+\_\+code\+\_\+t\+::buf = nullptr}
+
+\mbox{\Hypertarget{structjit__code__t_a8c4370f351a0d415ba99ca8b44565374}\label{structjit__code__t_a8c4370f351a0d415ba99ca8b44565374}} 
+\index{jit\_code\_t@{jit\_code\_t}!capacity@{capacity}}
+\index{capacity@{capacity}!jit\_code\_t@{jit\_code\_t}}
+\doxysubsubsection{\texorpdfstring{capacity}{capacity}}
+{\footnotesize\ttfamily size\+\_\+t jit\+\_\+code\+\_\+t\+::capacity = 0}
+
+\mbox{\Hypertarget{structjit__code__t_af7104ed9a6533aef4472eff5bd0ae5a0}\label{structjit__code__t_af7104ed9a6533aef4472eff5bd0ae5a0}} 
+\index{jit\_code\_t@{jit\_code\_t}!exec\_memory2use@{exec\_memory2use}}
+\index{exec\_memory2use@{exec\_memory2use}!jit\_code\_t@{jit\_code\_t}}
+\doxysubsubsection{\texorpdfstring{exec\_memory2use}{exec\_memory2use}}
+{\footnotesize\ttfamily uint8\+\_\+t$\ast$ jit\+\_\+code\+\_\+t\+::exec\+\_\+memory2use = nullptr}
+
+\mbox{\Hypertarget{structjit__code__t_a6125f4e775845f7571c8d946e59e529b}\label{structjit__code__t_a6125f4e775845f7571c8d946e59e529b}} 
+\index{jit\_code\_t@{jit\_code\_t}!exec\_memory\_capacity@{exec\_memory\_capacity}}
+\index{exec\_memory\_capacity@{exec\_memory\_capacity}!jit\_code\_t@{jit\_code\_t}}
+\doxysubsubsection{\texorpdfstring{exec\_memory\_capacity}{exec\_memory\_capacity}}
+{\footnotesize\ttfamily size\+\_\+t jit\+\_\+code\+\_\+t\+::exec\+\_\+memory\+\_\+capacity = 0}
+
+\mbox{\Hypertarget{structjit__code__t_a44b2ee7454a66bd544b2fcf965000206}\label{structjit__code__t_a44b2ee7454a66bd544b2fcf965000206}} 
+\index{jit\_code\_t@{jit\_code\_t}!print\_func\_offset@{print\_func\_offset}}
+\index{print\_func\_offset@{print\_func\_offset}!jit\_code\_t@{jit\_code\_t}}
+\doxysubsubsection{\texorpdfstring{print\_func\_offset}{print\_func\_offset}}
+{\footnotesize\ttfamily size\+\_\+t jit\+\_\+code\+\_\+t\+::print\+\_\+func\+\_\+offset = 10}
+
+\mbox{\Hypertarget{structjit__code__t_aef0867e3df236dbf0213ba6353885bae}\label{structjit__code__t_aef0867e3df236dbf0213ba6353885bae}} 
+\index{jit\_code\_t@{jit\_code\_t}!print\_func\_size@{print\_func\_size}}
+\index{print\_func\_size@{print\_func\_size}!jit\_code\_t@{jit\_code\_t}}
+\doxysubsubsection{\texorpdfstring{print\_func\_size}{print\_func\_size}}
+{\footnotesize\ttfamily size\+\_\+t jit\+\_\+code\+\_\+t\+::print\+\_\+func\+\_\+size = 0}
+
+\mbox{\Hypertarget{structjit__code__t_a96637fbb47dc06574290f430d2701a87}\label{structjit__code__t_a96637fbb47dc06574290f430d2701a87}} 
+\index{jit\_code\_t@{jit\_code\_t}!scan\_func\_offset@{scan\_func\_offset}}
+\index{scan\_func\_offset@{scan\_func\_offset}!jit\_code\_t@{jit\_code\_t}}
+\doxysubsubsection{\texorpdfstring{scan\_func\_offset}{scan\_func\_offset}}
+{\footnotesize\ttfamily size\+\_\+t jit\+\_\+code\+\_\+t\+::scan\+\_\+func\+\_\+offset = 10}
+
+\mbox{\Hypertarget{structjit__code__t_ae8ff54867a6b3c70d633a4f7b876dd2c}\label{structjit__code__t_ae8ff54867a6b3c70d633a4f7b876dd2c}} 
+\index{jit\_code\_t@{jit\_code\_t}!scan\_func\_size@{scan\_func\_size}}
+\index{scan\_func\_size@{scan\_func\_size}!jit\_code\_t@{jit\_code\_t}}
+\doxysubsubsection{\texorpdfstring{scan\_func\_size}{scan\_func\_size}}
+{\footnotesize\ttfamily size\+\_\+t jit\+\_\+code\+\_\+t\+::scan\+\_\+func\+\_\+size = 0}
+
+\mbox{\Hypertarget{structjit__code__t_aecd221accf9384fa04c8f4eecc2d2927}\label{structjit__code__t_aecd221accf9384fa04c8f4eecc2d2927}} 
+\index{jit\_code\_t@{jit\_code\_t}!size@{size}}
+\index{size@{size}!jit\_code\_t@{jit\_code\_t}}
+\doxysubsubsection{\texorpdfstring{size}{size}}
+{\footnotesize\ttfamily size\+\_\+t jit\+\_\+code\+\_\+t\+::size = 0}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/include/\mbox{\hyperlink{jit_8h}{jit.\+h}}\end{DoxyCompactItemize}

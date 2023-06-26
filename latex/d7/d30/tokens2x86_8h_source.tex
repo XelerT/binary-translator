@@ -1,0 +1,44 @@
+\hypertarget{tokens2x86_8h_source}{}\doxysection{tokens2x86.\+h}
+\label{tokens2x86_8h_source}\index{src/include/tokens2x86.h@{src/include/tokens2x86.h}}
+\mbox{\hyperlink{tokens2x86_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TOKENS2X86\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TOKENS2X86\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{config_8h}{config.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{jit_8h}{jit.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structlabel__t}{label\_t}}\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structlabel__t_a05bf95f37b2477452fd52285e6a70d77}{my\_address}}\ \ =\ 0;}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structlabel__t_a5f985b14070bc307e88f04e96b538149}{new\_address}}\ =\ 0;}
+\DoxyCodeLine{00014\ \};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structlabels__t}{labels\_t}}\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structlabel__t}{label\_t}}\ \mbox{\hyperlink{structlabels__t_ae026425cf7775b11b9ac00e48e008aaa}{labels}}[\mbox{\hyperlink{utils_8h_a730f1d6d9923475c4189a154e9d75e60}{MAX\_N\_LABELS}}]\ =\ \{\};}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structlabels__t_a9e16d579c86c0bbecd0710dd06bbb112}{size}}\ =\ 0;}
+\DoxyCodeLine{00023\ \};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00031\ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{tokens2x86_8h_a6377bed5f52b026f1ad66e84a645a099}{insert\_nops}}\ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code,\ \textcolor{keywordtype}{size\_t}\ amount2insert);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00046\ \textcolor{keywordtype}{size\_t}\ \ \mbox{\hyperlink{tokens2x86_8h_a73a0e8314ccb8127636c74948c3a7557}{convert\_tokens2nonstack\_logic}}\ (\mbox{\hyperlink{structtokens__t}{tokens\_t}}\ *tokens,\ \textcolor{keywordtype}{size\_t}\ n\_token,\ \mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code);}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00055\ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{tokens2x86_8h_a9a5c267910e7254c237125d0a6548f8b}{find\_convert\_memory\_access}}\ \ \ \ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code,\ \mbox{\hyperlink{structtokens__t}{tokens\_t}}\ *tokens,\ \textcolor{keywordtype}{size\_t}\ n\_token);}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00064\ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{tokens2x86_8h_a83fda1275a0aa0d832a613cff8f82c7a}{change\_return\_value\_src}}\ \ \ \ \ \ \ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code,\ \mbox{\hyperlink{structtokens__t}{tokens\_t}}\ *tokens,\ \textcolor{keywordtype}{size\_t}\ n\_token);}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ uint8\_t\ \mbox{\hyperlink{tokens2x86_8h_a3485a68818ceac0d000432a329a58f1e}{get\_cmd\_from\_token}}\ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structtoken__t}{token\_t}}\ *token);}
+\DoxyCodeLine{00067\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{tokens2x86_8h_a71a2040875628c04a9f680a623e2f95d}{write\_cmds\_in\_jit\_code}}\ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code,\ \mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmds,\ uint8\_t\ max\_cmds2write);}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00076\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{tokens2x86_8h_afe4a60aee9bc1f162efc1e0abf2e4265}{find\_label}}\ \ \ (\mbox{\hyperlink{structlabels__t}{labels\_t}}\ *label\_table,\ uint32\_t\ my\_offset);}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00085\ \textcolor{keywordtype}{void}\ \ \ \mbox{\hyperlink{tokens2x86_8h_a74ad5c966702068f0780efaadb9b284c}{insert\_label}}\ (\mbox{\hyperlink{structjit__code__t}{jit\_code\_t}}\ *jit\_code,\ \mbox{\hyperlink{structtoken__t}{token\_t}}\ *token,\ \mbox{\hyperlink{structlabels__t}{labels\_t}}\ *label\_table);}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{tokens2x86_8h_ab190a70e61d3ddf131046d3ff82c4f2f}{pre\_encode\_print\_scan\_call}}\ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmd,\ \mbox{\hyperlink{structtoken__t}{token\_t}}\ *token,\ \mbox{\hyperlink{structlabels__t}{labels\_t}}\ *label\_table);}
+\DoxyCodeLine{00088\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{tokens2x86_8h_a7d44a76a25345dbc0b0aba5b4804f8db}{encode\_print}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmds,\ \mbox{\hyperlink{structtoken__t}{token\_t}}\ *token);}
+\DoxyCodeLine{00089\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{tokens2x86_8h_af50dff37edbafc0ad605439df61bd9f1}{encode\_scan}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmds,\ \mbox{\hyperlink{structtoken__t}{token\_t}}\ *token);}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00098\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{tokens2x86_8h_a06f164d0a41518ab13d22b5af71f5ca2}{encode\_token2push\_pop}}\ \ \ \ \ \ (\mbox{\hyperlink{structx86__cmd__t}{x86\_cmd\_t}}\ *cmd,\ \mbox{\hyperlink{structtoken__t}{token\_t}}\ *token,\ \textcolor{keywordtype}{size\_t}\ table\_position);}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*TOKENS2X86\_H*/}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

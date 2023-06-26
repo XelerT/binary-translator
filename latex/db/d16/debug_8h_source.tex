@@ -1,0 +1,38 @@
+\hypertarget{debug_8h_source}{}\doxysection{debug.\+h}
+\label{debug_8h_source}\index{src/debug/debug.h@{src/debug/debug.h}}
+\mbox{\hyperlink{debug_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ DEBUG\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ DEBUG\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}../include/config.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#ifdef\ DEBUG}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ \$\ fprintf(stderr,\ "{}I'm\ here\ File:\ \%s,\ Line:\ \%d\(\backslash\)n"{}},\ \_\_FILE\_\_,\ \_\_LINE\_\_);}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ \$c(arg)\ fprintf(stderr,\ "{}Var:\ \(\backslash\)"{}\%s\(\backslash\)"{},\ Char:\ \%c,\ File:\ \%s,\ Line:\ \%d\(\backslash\)n"{}},\ \#arg,\ arg,\ \_\_FILE\_\_,\ \_\_LINE\_\_);}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ \$s(arg)\ fprintf(stderr,\ "{}String\ in\ File:\ \%s,\ Line:\ \%d\(\backslash\)n\%s\(\backslash\)n"{}},\ \_\_FILE\_\_,\ \_\_LINE\_\_,\ arg);}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ \$d(arg)\ fprintf(stderr,\ "{}Decimal\ \%s:\ \%d,\ File:\ \%s,\ Line:\ \%d\(\backslash\)n"{}},\ \#arg,\ arg,\ \_\_FILE\_\_,\ \_\_LINE\_\_);}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ \$ld(arg)\ fprintf(stderr,\ "{}Var:\ \(\backslash\)"{}\%s\(\backslash\)"{},\ Size\_t:\ \%ld,\ File:\ \%s,\ Line:\ \%d\(\backslash\)n"{}},\ \#arg,\ arg,\ \_\_FILE\_\_,\ \_\_LINE\_\_);}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ \$dbl(arg)\ fprintf(stderr,\ "{}Double:\ \%llg,\ File:\ \%s,\ Line:\ \%d\(\backslash\)n"{}},\ arg,\ \_\_FILE\_\_,\ \_\_LINE\_\_);}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ \$p(arg)\ fprintf(stderr,\ "{}Pointer:\ \%p,\ File:\ \%s,\ Line:\ \%d\(\backslash\)n"{}},\ arg,\ \_\_FILE\_\_,\ \_\_LINE\_\_);}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ \$}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ \$c(arg)}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ \$s(arg)}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ \$d(arg)}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ \$lld(arg)}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ \$dbl(arg)}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ \$p(arg)}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*DEBUG*/}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*DEBUG\_H*/}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

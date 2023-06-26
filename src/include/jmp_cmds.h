@@ -12,7 +12,6 @@
  * @param cmds
  * @param token
  */
-
 void pre_encode_jmp    (x86_cmd_t *cmd, token_t *token);
 
 /**
@@ -21,7 +20,6 @@ void pre_encode_jmp    (x86_cmd_t *cmd, token_t *token);
  * @param jit_code
  * @param label_table
  */
-
 void encode_calls_jmps (jit_code_t *jit_code, labels_t *label_table);
 
 void pre_encode_imitation_of_call (x86_cmd_t *cmds, token_t *token);

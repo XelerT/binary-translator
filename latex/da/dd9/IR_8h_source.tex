@@ -1,0 +1,28 @@
+\hypertarget{IR_8h_source}{}\doxysection{IR.\+h}
+\label{IR_8h_source}\index{src/include/IR.h@{src/include/IR.h}}
+\mbox{\hyperlink{IR_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ IR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ IR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tokens_8h}{tokens.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}configs.cmds"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structtokens__text__t}{tokens\_text\_t}}\ \{}
+\DoxyCodeLine{00008\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{structtokens__text__t_aa2076e66f058a4b5b604f734cd736975}{buf}}\ \ \ \ \ \ \ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00009\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structtokens__text__t_a43ce72532be0f813016bb8769947a743}{capacity}}\ =\ 0;}
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structtokens__text__t_a68eac7192bdd6ab3d6f480a4b1878607}{size}}\ \ \ \ \ =\ 0;}
+\DoxyCodeLine{00011\ \};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{IR_8h_a36d593e5ff2f410e442f1eb5b09b4be7}{save\_tokens\_in\_text}}\ \ \ \ \ \ \ \ (\mbox{\hyperlink{structtokens__t}{tokens\_t}}\ *tokens,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *file\_name);}
+\DoxyCodeLine{00014\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{IR_8h_aa6a9381bcef81e094457624b28cb4808}{parse\_memory\_indent}}\ \ \ \ \ \ \ (\mbox{\hyperlink{structtokens__t}{tokens\_t}}\ *tokens,\ \textcolor{keywordtype}{size\_t}\ *n\_token,\ \mbox{\hyperlink{structtokens__text__t}{tokens\_text\_t}}\ *tokens\_text);}
+\DoxyCodeLine{00015\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{IR_8h_a4d2e54be15df8a828d3dc8d1c70144bf}{parse\_memory\_access\_block}}\ (\mbox{\hyperlink{structtokens__t}{tokens\_t}}\ *tokens,\ \textcolor{keywordtype}{size\_t}\ *n\_token,\ \mbox{\hyperlink{structtokens__text__t}{tokens\_text\_t}}\ *tokens\_text);}
+\DoxyCodeLine{00016\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{IR_8h_a7891f4cbfd9bcab9c201a39517be60ab}{parse\_cmd}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structtokens__t}{tokens\_t}}\ *tokens,\ \textcolor{keywordtype}{size\_t}\ *n\_token,\ \mbox{\hyperlink{structtokens__text__t}{tokens\_text\_t}}\ *tokens\_text);}
+\DoxyCodeLine{00017\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{IR_8h_acec411ce7eba542757ab947906bafc40}{write\_down\_cmd}}\ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structtoken__t}{token\_t}}\ *token,\ \ \ \textcolor{keywordtype}{int}\ place\_in\_cmds\_table,\ \mbox{\hyperlink{structtokens__text__t}{tokens\_text\_t}}\ *tokens\_text);}
+\DoxyCodeLine{00018\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{IR_8h_ad24e2e5a2443f7ed69171f1215f50c20}{write\_down\_push\_pop\_args}}\ \ (\mbox{\hyperlink{structtoken__t}{token\_t}}\ *token,\ \ \ \mbox{\hyperlink{structtokens__text__t}{tokens\_text\_t}}\ *tokens\_text);}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{IR_8h_ad5fdf86695961434e42e7b0013d1f02c}{write\_buf\_in\_file}}\ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{structtokens__text__t}{tokens\_text\_t}}\ *tokens\_text,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *file\_name);}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*IR\_H*/}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}
